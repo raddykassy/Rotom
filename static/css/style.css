@@ -1,0 +1,59 @@
+/* fonts */
+@import url('https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@700&display=swap');
+@import url('http://fonts.cdnfonts.com/css/ink-free');
+/* end fonts */
+
+
+/* header */
+
+.navbar-collapseEdit {
+    flex-grow: 0;
+}
+
+.hd-container {
+    padding: 0 7vw;
+}
+
+ul li.item:not(:first-of-type) {
+    padding-left: .8vw;
+}
+
+.catch-phrase {
+    font-family: 'Zen Old Mincho', serif;
+}
+
+.catch-copy {
+    font-family: 'Ink Free', sans-serif;
+    font-size: 8vw;
+}
+/* end header */
+
+/* main */
+.mainContents {
+    width: 100%;
+    height: auto;
+    padding: 30vh 0;
+    text-align: center;
+    align-items: center;
+    background-image: url("../img/bg-img01.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+/* .mainContents:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+} */
+/*
+.headline {
+    position: absolute;
+    width: 100%;
+} */
+
