@@ -1,10 +1,22 @@
 /* fonts */
 @import url('https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@700&display=swap');
 @import url('http://fonts.cdnfonts.com/css/ink-free');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap');
 /* end fonts */
 
+/* common */
+ul {
+    list-style-type: none;
+}
+/* common end */
 
 /* header */
+
+header {
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+}
 
 .navbar-collapseEdit {
     flex-grow: 0;
@@ -20,6 +32,7 @@ ul li.item:not(:first-of-type) {
 
 .catch-phrase {
     font-family: 'Zen Old Mincho', serif;
+    margin-bottom: 2rem;
 }
 
 .catch-copy {
@@ -51,9 +64,44 @@ ul li.item:not(:first-of-type) {
     bottom: 0;
     background-color: rgba(0,0,0,0.5);
 } */
-/*
+
+
 .headline {
+    z-index: 10;
+}
+
+.bg-img-blur {
     position: absolute;
+    z-index: 1;
     width: 100%;
-} */
+    height: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.btn-search {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 1.25rem;
+    background: linear-gradient(to right, #f173d6, #0468ff);
+    padding: 0.5rem 2.95rem;
+    border-color: aliceblue;
+}
+
+/* main end */
+
+
+/* form-search */
+.form-search {
+    text-align: center;
+}
+/* form-search end */
+
+/* footer */
+
+/* footer end */
 
