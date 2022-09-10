@@ -13,9 +13,9 @@
 <body>
     <!-- header -->
     <header class="header">
-        <nav class="navbar navbar-expand-lg navbar-light bg-secondary text-white">
+        <nav class="navbar navbar-expand-lg navbar-light .bg-transparent text-white">
             <div class="container-fluid hd-container">
-                <a class="navbar-brand text-white fs-4" href="#">T-log</a>
+                <a class="navbar-brand text-white fs-4 logo-" href="#">T-log</a>
                 <img src="" alt="">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -26,7 +26,7 @@
                             <a class="nav-link active text-white" aria-current="page" href="#">TOP</a>
                         </li>
                         <li class="nav-item item">
-                            <a class="nav-link text-white" href="#">SEARCH</a>
+                            <a class="nav-link text-white" href="#search">SEARCH</a>
                         </li>
                         <li class="nav-item item">
                             <a class="nav-link text-white" href="#">FAQ</a>
@@ -56,31 +56,81 @@
 
     <!-- main -->
     <main role="main" class="d-flex flex-column align-items-center mainContents">
+        <div class="bg-img-blur"></div>
         <div class="headline">
             <h1 class="catch-copy text-white">Vlog × Travel</h1>
             <p class="catch-phrase text-white fs-4">最高の旅行体験を、あなたに。</p>
-            <p class="text-white p-4">ここに検索BOXを表示</p>
+            <a href="#search"><button type="button" class="btn btn-search">プランを探す</button></a>
         </div>
     </main>
     <!-- end main -->
 
     <!-- showPlan -->
-    <section class="showPlan">
-        <div class="popularPlan">
-            <h2>人気の旅行プラン</h2>
-            <ul>
-                <li class="plan">旅行プラン1</li>
-                <li class="plan">旅行プラン2</li>
-                <li class="plan">旅行プラン3</li>
-                <li class="plan">旅行プラン4</li>
-            </ul>
+    <section class="mt-5 showPlan d-flex flex-column align-items-center">
+        <h2>人気の旅行プラン</h2>
+        <div class="container mt-4 popularPlan">
+            <div class="row row-cols-3 text-center">
+                <div class="col plan-item">Column</div>
+                <div class="col plan-item">Column</div>
+                <div class="col plan-item">Column</div>
+            </div>
         </div>
     </section>
     <!-- showPlan -->
 
-    <footer>
+    <section class="mt-5 d-flex flex-column align-items-center search" id="search">
+        <h2>さがす</h2>
+        <div class="container my-5">
+            <form class="form-search" method="POST" action="">
+                <div class="mb-4 form-group">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <p class="text-center">都道府県からさがす</p>
+                    </div>
+                    <div class="col-md-8">
+                      <input type="email" name="email" class="form-control" placeholder="">
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-4 form-group">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <p class="text-center">vlogのurl</p>
+                    </div>
+                    <div class="col-md-8">
+                      <input type="text" name="name" class="form-control" placeholder="">
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-4 form-group">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <p class="text-center">タグ</p>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" name="name" class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-4 form-group">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <p class="text-center">行きたい場所</p>
+                      </div>
+                      <div class="col-md-8">
+                        <input type="text" name="name" class="form-control" placeholder="">
+                      </div>
+                    </div>
+                  </div>
+                <button type="submit" class="btn btn-outline-primary">送信</button>
+              </form>
+        </div>
+    </section>
+
+
+    <footer class="text-center bg-dark p-3">
         <div class="copyright">
-           <p>T-log © Holdings Inc. All Rights Reserved.</p>
+           <span class="text-white">T-log © Holdings Inc. All Rights Reserved.</span>
         </div>
     </footer>
 
