@@ -72,7 +72,7 @@ def register():
         USERLIST[email]=password
         # print(USERLIST)
         return redirect ("/")
-    
+
 
     else:
         return render_template("register.html")
