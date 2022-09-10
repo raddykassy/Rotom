@@ -4,15 +4,15 @@ app = Flask(__name__)
 app.secret_key = "123456789rotom"
 
 USERLIST = {
-    'kaito':'112',
-    'ryoga':'066',
-    'kosuke':'114',
+    'kaito@gmail.com':'114',
+    'ryoga@gmail.com':'066',
+    'kosuke@gmail.com':'112',
     'h.kawara1717@gmail.com':'126'
 }
 
 @app.route('/')
 def index():
-    print(USERLIST)
+    # print(USERLIST)
     return render_template('index.html')
 
 
@@ -35,7 +35,7 @@ def login():
         session[email] = email
 
         return """
-        <h1>ログイン済みです</h1>
+        <h1>ログインに成功しました</h1>
         <p><a href='/'> ⇒top page</p>
         """
 
@@ -54,13 +54,13 @@ def logout():
 def register():
     """
     GET: register.htmlの表示
-    POST: ユーザの追加（未完成）
+    POST: ユーザの追加
     """
 
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
-        confirmation = request.form.get('confirmation')
+        confirmation = request.form.get('confirm-password')
 
         if email in USERLIST:
             return """<h1>このemailは登録済みです<h1>"""
