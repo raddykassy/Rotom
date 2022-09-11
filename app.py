@@ -67,7 +67,6 @@ def register():
         if password != confirmation:
             return """<h1>passwordが一致しません</h1>"""
 
-        
         # 辞書に追加(flask終了するごとにUSERLISTはリセット)
         USERLIST[email]=password
         # print(USERLIST)
@@ -76,3 +75,7 @@ def register():
 
     else:
         return render_template("register.html")
+
+@app.route("/post", methods=["GET", "POST"])
+def post():
+    return render_template("post.html")
