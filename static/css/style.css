@@ -18,6 +18,12 @@ header {
     z-index: 999;
 }
 
+/* excepted index.html */
+.normal-hd {
+    position: relative !important;
+}
+/* excepted index.html */
+
 .navbar-collapseEdit {
     flex-grow: 0;
 }
@@ -95,7 +101,7 @@ ul li.item:not(:first-of-type) {
 /* main end */
 
 
-/* form-search */
+/* form-search(index.html) */
 .form-search {
     text-align: center;
 }
