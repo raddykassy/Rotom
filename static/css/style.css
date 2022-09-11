@@ -5,10 +5,16 @@
 /* end fonts */
 
 /* common */
+.wrapper {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+    box-sizing: border-box;
+}
+
 ul {
     list-style-type: none;
 }
-/* common end */
 
 /* header */
 
@@ -16,11 +22,14 @@ header {
     position: fixed;
     width: 100%;
     z-index: 999;
+    letter-spacing: 2px;
 }
 
 /* excepted index.html */
 .normal-hd {
     position: relative !important;
+    border-bottom: 2px solid;
+    border-color: #efefef;
 }
 /* excepted index.html */
 
@@ -47,7 +56,17 @@ ul li.item:not(:first-of-type) {
 }
 /* end header */
 
-/* main */
+/* footer */
+footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+/* footer end */
+
+/* common end */
+
+/* main(index.html) */
 .mainContents {
     width: 100%;
     height: auto;
@@ -60,17 +79,6 @@ ul li.item:not(:first-of-type) {
     background-repeat: no-repeat;
     position: relative;
 }
-
-/* .mainContents:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5);
-} */
-
 
 .headline {
     z-index: 10;
@@ -107,7 +115,21 @@ ul li.item:not(:first-of-type) {
 }
 /* form-search end */
 
-/* footer */
+/* post(post.html) */
+.planning {
+    margin-top: 30px;
+}
 
-/* footer end */
+.planning-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
+
+.post-plan-form > input {
+    display: block;
+    width: 100%;
+    margin: 20px;
+}
+/* end post(post.html) */
+
 
