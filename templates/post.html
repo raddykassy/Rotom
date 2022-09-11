@@ -27,7 +27,7 @@
                       <a class="nav-link" href="#">REGISTER</a>
                   </li>
                   <li class="nav-item dropdown item">
-                      <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                           DROPDOWN
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -48,22 +48,22 @@
 {% block content %}
 
 <main class="planning">
-
+  <div class="planning-wrapper">
     <div class="plan-form">
         <div class="add-btn-container">
           <button class="add-btn"></button>
         </div>
-        <form action="" method="POST">
+        <form class="post-plan-form" action="" method="POST">
             <input type="text" name="location1">
             <input type="text" name="location2">
             <input type="text" name="location3">
             <button type="submit" name="submit" value="確定">
         </form>
     </div>
-
     <div class="plan-location">
         <div>地図を表示</div>
     </div>
+  </div>
 </main>
 
 {% endblock %}
