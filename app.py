@@ -29,3 +29,7 @@ def plan():
 @app.route('/serach')
 def search():
     return render_template('search.html')
+
+@app.route('/content')
+def content():
+    return render_template('content.html')

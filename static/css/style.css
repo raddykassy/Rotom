@@ -105,3 +105,191 @@ ul li.item:not(:first-of-type) {
 
 /* footer end */
 
+.video-container{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    background: #000;
+    padding-top: 70px;
+
+}
+
+/* 縦横比率をレスポンシブに */
+iframe {aspect-ratio:16 / 9;width:100%;height:100%}
+
+.youtube-video {
+    position: relative;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.column{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+
+/* 境界線 */
+.title{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.title h1{
+    padding-left: 20px;
+    padding-bottom: 15px;
+}
+
+.user_info{
+    border-top: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.trip-route{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+/* 
+.user_name{
+    color: #545454;
+} */
+
+/* プロフィール */
+.profile__img {
+    display: block;
+    width: 70px;
+    height: 70px;
+    border-radius:50%;
+    /* margin: 0 auto; */
+  }
+
+  .user_info {
+    display: flex;
+    flex-direction: row;
+    background: #FFF;
+    padding: 2rem;
+  }
+
+  .user_name{
+    margin-left: 20px;
+    padding:20px 0;
+    align-items: center;
+  }
+  
+  .destination-num{
+    position: absolute;
+    left: 51px;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 3;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+    pointer-events: none;
+    background: #B8FFCC;
+  }
+
+
+.content-facade {
+    position: absolute;
+    height: 44px;
+    cursor: pointer;
+}
+
+
+/* ここからcontentのlist */
+ol {
+    counter-reset: item;
+    list-style-type: none;
+    line-height: 2.2;
+    margin-left: -40px;
+  }
+
+ol li {
+display: block;
+position: relative;
+}
+
+ol li span {
+margin-left: 40px;
+}
+
+
+ol li:before {
+    content: counter(item) " ";
+    counter-increment: item;
+    color: white;
+    position: absolute;
+    top: 50%;
+    margin-top: -1em;
+    background: linear-gradient(90deg, hsla(145, 84%, 73%, 1) 0%, hsla(150, 61%, 48%, 1) 100%);
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    border-radius: 2em;
+    font-weight: 700;
+  }
+
+.line{
+    margin-left: 15px;
+    position: relative;
+}
+
+.start-point li::marker{
+    content: "🚩";
+    font-size: 35px;
+}
+.end-point li::marker{
+    content: "🚩";
+    font-size: 35px;
+
+}
+
+
+
+/* ここまでcontentのlist */
+
+
+.plan-page-map {
+    /* width: 80%; */
+    margin: auto;
+    width: 90%;
+    height: 500px;
+    border: 3px solid;
+    padding: 10px;
+  
+}
+
+
+.map-container{
+    margin-top: 20px;
+}
+
+  /* マップとスケジュールを2分割 */
+@media ( min-width : 600px ){
+
+    .flexbox {
+    width: 100%;
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: flex;
+    }
+    
+.schedule-container,
+.map-container  
+{
+    -webkit-flex: 1;
+    flex: 1;
+    background: none;
+}
+}
+  
