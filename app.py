@@ -79,3 +79,19 @@ def register():
 @app.route("/post", methods=["GET", "POST"])
 def post():
     return render_template("post.html")
+
+@app.route('/inquiry')
+def inquiry():
+    return render_template('inquiry.html')
+
+@app.route('/plan')
+def plan():
+    return render_template('plan.html')
+
+@app.route('/serach')
+def search():
+    return render_template('search.html')
+
+@app.route('/content')
+def content():
+    return render_template('content.html')
