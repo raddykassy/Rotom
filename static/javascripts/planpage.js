@@ -70,6 +70,7 @@ function markerEvent(i) {
   }
 }
 
+
 //windowの表示、非表示
 function open_or_close_window(i){
     if (open_or_close[i] == null || open_or_close[i] == "close"){
@@ -98,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
             //対応する動画の部分を再生させる。
             let youtube_video = document.querySelector('.youtube-video');
             youtube_video.setAttribute("src", `https://www.youtube.com/embed/kQpssznrf-g?autoplay=1&start=${50*index}`);
-            console.log(youtube_video.getAttribute('src'));
         }
     })
 })
