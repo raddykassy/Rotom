@@ -143,6 +143,7 @@ footer {
 
 .post-wrapper {
     display: flex;
+    margin-bottom: 3rem;
 }
 
 .planning, .mapping {
@@ -194,11 +195,18 @@ footer {
     padding: .475rem 1.1rem;
 }
 
+.plan-map-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
 #map {
-    width: 90%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     margin: 0 auto;
 }
+
+
 
 
 /* -------end post(post.html)------- */

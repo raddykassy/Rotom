@@ -89,24 +89,18 @@
                 <label for="vlog-url" class="form-label">YouTubeのURL</label>
                 <input type="text" class="form-control" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力">
             </div>
-            <div class="place-container">
+            <div class="plan-places">
                 <div class="mt-5 mb-3 fs-4 fw-bold">
                     <p>場所を選択</p>
                 </div>
-                <div class="mb-3">
-                    <label for="place" class="form-label">1番目</label>
-                    <input type="text" class="form-control" id="place" name="place01" placeholder="YouTubeのURLを入力">
-                </div>
-                <div class="mb-3">
-                    <label for="place" class="form-label">2番目</label>
-                    <input type="text" class="form-control" id="place" name="place02" placeholder="YouTubeのURLを入力">
-                </div>
-                <div class="mb-3">
-                    <label for="place" class="form-label">3番目</label>
-                    <input type="text" class="form-control" id="place" name="place03" placeholder="YouTubeのURLを入力">
+                <div class="place-container" id="place-container">
+                    <div class="mb-3">
+                        <label for="place" class="form-label">1番目</label>
+                        <input type="text" class="form-control" id="place" name="place01" placeholder="場所を入力し、選択して下さい">
+                    </div>
                 </div>
                 <div class="mt-5 mb-5 d-flex justify-content-evenly btn_wrapper">
-                    <button type="button" class="btn btn-primary add-plan-btn">場所を追加</button>
+                    <button type="button" class="btn btn-primary add-plan-btn" id="add-plan-btn">場所を追加</button>
                     <button type="button" class="btn delete-plan-btn">場所を削除</button>
                 </div>
             </div>
@@ -116,14 +110,16 @@
         </form>
     </section>
     <section class="mapping">
-        <h2 class="mb-4">MAP</h2>
-        <div id="map"></div>
+        <div class="plan-map-wrapper">
+            <div id="map"></div>
+        </div>
     </section>
     </section>
 </main>
 
 
 <!-- load scripts relate to maps -->
+<script type="text/javascript" src="../static/javascripts/addplan.js"></script>
 <script type="text/javascript" src="../static/javascripts/search.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
 
