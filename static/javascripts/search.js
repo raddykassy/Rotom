@@ -35,7 +35,7 @@ function initMap() {
 
         // place.キー名で情報受け取れる
         console.log(place);
-        console.log(place.website);
+        // console.log(place.website);
         // console.log(document.getElementById("site_url").getAttribute("src"))
 
         // geometryがあるかどうか（場所が実在するか否か）
@@ -45,12 +45,12 @@ function initMap() {
         } else {
             // 場所が存在している場合
             // 場所の名前表示
-            document.getElementById("details").innerHTML = place.name;
+            // document.getElementById("details").innerHTML = place.name;
             // webサイトを取ってきて、aタグに入れる
-            var website = document.getElementById("site_url");
+            // var website = document.getElementById("site_url");
             // website.setAttribute("href", place.website);
             // website.innerHTML = place.website;
-            // console.log("details")
+            console.log(place.name);
         }
     }
 }
