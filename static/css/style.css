@@ -115,7 +115,7 @@ footer {
 }
 /* form-search end */
 
-/* post(post.html) */
+/*------ post(post.html)------- */
 .planning {
     margin-top: 30px;
 }
@@ -130,7 +130,17 @@ footer {
     width: 100%;
     margin: 20px;
 }
-/* end post(post.html) */
+
+#map {
+    width: 40vw;
+    height: 50vh;
+    margin: 0 auto;
+}
+
+.input_geo_name {
+    width: 500px;
+}
+/* -------end post(post.html)------- */
 
 
 .video-container{
