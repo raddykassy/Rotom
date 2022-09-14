@@ -116,7 +116,7 @@ footer {
 /* form-search end */
 
 /*------ post(post.html)------- */
-.planning {
+/* .planning {
     margin-top: 30px;
 }
 
@@ -139,7 +139,76 @@ footer {
 
 .input_geo_name {
     width: 500px;
+} */
+
+.post-wrapper {
+    display: flex;
+    margin-bottom: 3rem;
 }
+
+.planning, .mapping {
+    padding: 20px;
+}
+
+.planning {
+    text-align: center;
+    background: pink;
+    width: 60%;
+    margin-right: 20px;
+}
+
+.mapping {
+    text-align: center;
+    background: skyblue;
+    width: 40%;
+}
+
+.planning-form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.mapping ul {
+    background-color: #f0f0f0;
+    padding: 30px;
+}
+
+.add-plan-btn {
+    padding: .475rem 1.1rem;
+}
+
+.delete-plan-btn {
+    color: #FFFFFF;
+    background-color: #ff0505e0;
+    border-color: #ff0505e0;
+    padding: .475rem 1.1rem;
+}
+
+.delete-plan-btn:hover {
+    color: #FFFFFF;
+    background-color: #b40d0de0;
+    border-color: #b40d0de0;
+    padding: .475rem 1.1rem;
+}
+
+.submit-plan-btn {
+    padding: .475rem 1.1rem;
+}
+
+.plan-map-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+
+
+
 /* -------end post(post.html)------- */
 
 
