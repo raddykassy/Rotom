@@ -174,10 +174,12 @@ footer {
 }
 
 .add-plan-btn {
+    border-radius: 1.5rem;
     padding: .475rem 1.1rem;
 }
 
 .delete-plan-btn {
+    border-radius: 1.5rem;
     color: #FFFFFF;
     background-color: #ff0505e0;
     border-color: #ff0505e0;
@@ -192,6 +194,7 @@ footer {
 }
 
 .submit-plan-btn {
+    border-radius: 1.5rem;
     padding: .475rem 1.1rem;
 }
 
@@ -206,6 +209,10 @@ footer {
     margin: 0 auto;
 }
 
+.btn:focus {
+    outline: 0;
+    box-shadow: none;
+}
 
 
 

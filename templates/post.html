@@ -79,7 +79,7 @@
 
 <main class="post-wrapper">
     <section class="planning">
-        <h2 class="mb-3">プランを作成</h2>
+        <h2 class="mb-3">プランを投稿する</h2>
         <form action="" method="POST" class="planning-form">
             <div class="mb-3">
                 <label for="plan-title" class="form-label">プランタイトル</label>
@@ -95,8 +95,8 @@
                 </div>
                 <div class="place-container" id="place-container">
                     <div class="mb-3">
-                        <label for="place" class="form-label">1番目</label>
-                        <input type="text" class="form-control" id="place" name="place01" placeholder="場所を入力し、選択して下さい">
+                        <!-- <label for="place" class="form-label">1番目</label> -->
+                        <input type="text" class="form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい">
                     </div>
                 </div>
                 <div class="mt-5 mb-5 d-flex justify-content-evenly btn_wrapper">
@@ -104,7 +104,11 @@
                     <button type="button" class="btn delete-plan-btn">場所を削除</button>
                 </div>
             </div>
-            <div class="submit-container">
+            <div class="description_wrapper">
+                <label for="description" class="form-label">旅行の概要</label>
+                <textarea class="form-control" id="description" name="vlog-url" placeholder="旅行の概要を入力" wrap="soft"></textarea>
+            </div>
+            <div class="mt-5 submit-container">
                 <button type="submit" class="btn btn-primary submit-plan-btn">投稿する</button>
             </div>
         </form>

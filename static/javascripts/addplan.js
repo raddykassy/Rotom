@@ -17,8 +17,7 @@ addPlanBtn.addEventListener('click', function() {
 function getInputTag() {
     placeCount++;
     var elements = '<div class="mb-3">\
-                        <label for="place" class="form-label">' + placeCount + '番目</label>\
-                        <input type="text" class="form-control" id="place" name="place0' + placeCount + '"placeholder="場所を入力し、選択して下さい">\
+                        <input type="text" class="form-control" id="autpcomplete" name="place0' + placeCount + '"placeholder="場所を入力し、選択して下さい">\
                     </div>';
     return elements;
 }
