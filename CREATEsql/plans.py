@@ -4,8 +4,18 @@ import sqlite3
 
 dbname = ".\Rotom.db"
 conn = sqlite3.connect(dbname)
-
 cur = conn.cursor()
+
+"""
+plansテーブル
+・id 主キー
+・user_id usersテーブルの外部キー
+・title プランのタイトル
+・description プランの説明　null許容
+・schedule スケジュールを格納 null許容
+・url 動画のurlを格納 null許容
+・date 登録日
+"""
 
 cur.execute(
     """CREATE TABLE plans(

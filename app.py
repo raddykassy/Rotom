@@ -89,17 +89,30 @@ def register():
         con.commit()
         con.close()
 
+<<<<<<< HEAD
         # 新規登録後はlogin画面へ
         return redirect ("/login")
+=======
+        # 辞書に追加(flask終了するごとにUSERLISTはリセット)
+        USERLIST[email]=password
+        # print(USERLIST)
+        return redirect ("/")
+>>>>>>> cea3e8429f4d1c7d5671a46eea32c287e07ffedc
 
 
     else:
         return render_template("register.html")
 
+<<<<<<< HEAD
 @app.route('/post')
 @login_required
 def post():
     return render_template('post.html')
+=======
+@app.route("/post", methods=["GET", "POST"])
+def post():
+    return render_template("post.html")
+>>>>>>> cea3e8429f4d1c7d5671a46eea32c287e07ffedc
 
 @app.route('/inquiry')
 def inquiry():
@@ -113,3 +126,9 @@ def plan():
 def search():
     return render_template('search.html')
 
+<<<<<<< HEAD
+=======
+@app.route('/content')
+def content():
+    return render_template('content.html')
+>>>>>>> cea3e8429f4d1c7d5671a46eea32c287e07ffedc
