@@ -41,25 +41,39 @@ function initMap() {
         input_num = countPlaces.length; //autocompleteクラスを持つ要素の数を取得
         num = input_num - 1; //autocompleteのインスタンスをinputの順番に応じたキーに対して配列に格納するので、配列のゼロインデックスに合わせるため1を引く
         // console.log(countPlaces[num]);
-        autocomplete[num] = new google.maps.places.Autocomplete(countPlaces[num], option);
+        autocomplete[num] = new google.maps.places.Autocomplete(countPlaces[num], option); //autocomplete機能をinputタグに付加
+
+        // autocompleteはオブジェクトなので、forEachを使うためにこのような記述が必要?
+        // Object.keys(autocomplete).forEach(key => {
+        //     // console.log(key);
+        //     console.log(autocomplete[key]);
+        //     autocomplete[key].addListener("place_changed", onPlaceChanged(autocomplete[key]));
+        // });
+
+        // console.log(autocomplete[num]);
+
+        autocomplete[num].addListener("place_changed", onPlaceChanged(autocomplete[num]));
     });
 
 
 
-    // autocomplete.forEach((elm) => {
-    //     elm.addListener("place_changed", console.log([].slice.call(autocomplete).indexOf(elm)));
-    // });
+
+    // autocomplete.forEach(function(elem) {
+    //     console.log(elem)
+    // }
+        // elm.addListener("place_changed", console.log([].slice.call(autocomplete).indexOf(elm)));
 
     // https://developers.google.com/maps/documentation/javascript/reference/places-widget#Autocomplete.place_changed
     // autocomplete.addListener("place_changed", onPlaceChanged); //event
 
     // // 検索候補がクリックされた際のイベントの定義
-    // function onPlaceChanged(key) {
-    //     // 選択された場所の情報を取得
-    //     var place = autocomplete[key].getPlace();
+    function onPlaceChanged(content) {
+        // 選択された場所の情報を取得
+        // console.log(content.getPlace());
+        var place = content.getPlace();
 
     //     // place.キー名で情報受け取れる
-    //     console.log(place);
+        // console.log(place);
     //     // console.log(place.website);
     //     // console.log(document.getElementById("site_url").getAttribute("src"))
 
@@ -77,7 +91,7 @@ function initMap() {
     //         // website.innerHTML = place.website;
     //         console.log(place.name);
     //     }
-    // }
+    }
 }
 
 
