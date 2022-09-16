@@ -1,11 +1,10 @@
 // callback function
-var input_num;
-let autocomplete = {};
-let autocp = [];
+const autocomplete = [];
+const place_info = {};
 
 function initMap() {
     const test_place = { lat: 34.6460706, lng: 135.5134771 };
-    let opts = {
+    const opts = {
         zoom: 15,
         center: test_place,
     }
@@ -19,51 +18,61 @@ function initMap() {
     })
 
 
-    let countPlaces;
-
     // Autocompleteのインスタンスを作成する際に使用するOPTIONの指定（施設、日本地域限定に設定）
-    var option = {
+    const option = {
         types: ["establishment"],
         componentRestrictions: {"country": ["jp"]},
     };
 
     // https://developers.google.com/maps/documentation/javascript/reference/places-widget#SearchBox
     // 1番目のinputタグにautocomplete機能を搭載（1番目の要素のみid = "autocomplete"をもつため）
-    first_input = document.getElementById("autocomplete");
-    // autocomplete[0] = new google.maps.places.Autocomplete(first_input, option);
-    autocomplete = new google.maps.places.Autocomplete(first_input, option);
+    const first_input = document.getElementById("autocomplete");
+    autocomplete[0] = new google.maps.places.Autocomplete(first_input, option);
+    autocomplete[0].addListener("place_changed", function() {
+        const first_info = autocomplete[0].getPlace();
+        console.log(first_info);
+    })
 
-    // let autocp = [];
 
     //ボタンが押された回数だけautocompleteクラスを持ったinputタグができる(addplan.js)→2番目の要素を持ったものを取得
-    var addPlanBtn = document.getElementById('add-plan-btn');
+    const addPlanBtn = document.getElementById('add-plan-btn');
 
     // 後でdocument全体からクラス検索ではなく、あるidをもつ親要素を指定して検索範囲を限定する（リファクタリングで実装）https://www.sejuku.net/blog/68588
     addPlanBtn.addEventListener('click', function() {
-        ac_class = document.getElementsByClassName("autocomplete"); //autocompleteクラスを持つ要素を取得
-        num_ac_class = ac_class.length; //autocompleteクラスを持つ要素の数を取得
-        // num = input_num - 1; //autocompleteのインスタンスをinputの順番に応じたキーに対して配列に格納するので、配列のゼロインデックスに合わせるため1を引く
-        specific_ac = "autocomplete_" + num_ac_class;
-
-        ac_input = document.getElementById(specific_ac); //autocompleteクラスを持つ要素を取得
-        // console.log(auto_input);
+        const countPlaces = document.getElementsByClassName("autocomplete"); //autocompleteクラスを持つ要素を取得
+        const input_num = countPlaces.length; //autocompleteクラスを持つ要素の数を取得
+        const num = input_num - 1; //autocompleteのインスタンスをinputの順番に応じたキーに対して配列に格納するので、配列のゼロインデックスに合わせるため1を引く
         // console.log(countPlaces[num]);
-        autocp[num_ac_class] = new google.maps.places.Autocomplete(ac_input, option);//autocomplete機能をinputタグに付加
-        ac_output = autocp[num_ac_class]; //配列に入れたものを別の変数に移したものをaddListenerすればできる。演算子の優先順位？？
-
-        ac_output.addListener("place_changed", onPlaceChanged);
-
+        const ac = new google.maps.places.Autocomplete(countPlaces[num], option); //autocomplete機能をinputタグに付加
+        autocomplete[num] = ac; //autocomplete機能をinputタグに付加 (クロージャのため一度変数に格納し、代入ている(ac))
 
         // console.log(autocomplete[num]);
+
+        ac.addListener("place_changed", function() {
+            const place = ac.getPlace();
+            console.log(place);
+        });
     });
 
 
-    // 検索候補がクリックされた際のイベントの定義
-    function onPlaceChanged() {
 
-        var place = ac_output.getPlace();
 
-        console.log(place);
+    // autocomplete.forEach(function(elem) {
+    //     console.log(elem)
+    // }
+        // elm.addListener("place_changed", console.log([].slice.call(autocomplete).indexOf(elm)));
+
+    // https://developers.google.com/maps/documentation/javascript/reference/places-widget#Autocomplete.place_changed
+    // autocomplete.addListener("place_changed", onPlaceChanged); //event
+
+    // // 検索候補がクリックされた際のイベントの定義
+    // function onPlaceChanged(content) {
+    //     // 選択された場所の情報を取得
+    //     // console.log(content.getPlace());
+    //     var place = content.getPlace();
+
+    //     // place.キー名で情報受け取れる
+        // console.log(place);
     //     // console.log(place.website);
     //     // console.log(document.getElementById("site_url").getAttribute("src"))
 
@@ -81,7 +90,7 @@ function initMap() {
     //         // website.innerHTML = place.website;
     //         console.log(place.name);
     //     }
-    }
+    // }
 }
 
 
