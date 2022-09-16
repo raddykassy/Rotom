@@ -1,10 +1,10 @@
 // callback function
-var input_num;
-let autocomplete = {};
+const autocomplete = [];
+const place_info = {};
 
 function initMap() {
     const test_place = { lat: 34.6460706, lng: 135.5134771 };
-    let opts = {
+    const opts = {
         zoom: 15,
         center: test_place,
     }
@@ -18,48 +18,61 @@ function initMap() {
     })
 
 
-    let countPlaces;
-
     // Autocompleteのインスタンスを作成する際に使用するOPTIONの指定（施設、日本地域限定に設定）
-    var option = {
+    const option = {
         types: ["establishment"],
         componentRestrictions: {"country": ["jp"]},
     };
 
     // https://developers.google.com/maps/documentation/javascript/reference/places-widget#SearchBox
     // 1番目のinputタグにautocomplete機能を搭載（1番目の要素のみid = "autocomplete"をもつため）
-    first_input = document.getElementById("autocomplete");
+    const first_input = document.getElementById("autocomplete");
     autocomplete[0] = new google.maps.places.Autocomplete(first_input, option);
+    autocomplete[0].addListener("place_changed", function() {
+        const first_info = autocomplete[0].getPlace();
+        console.log(first_info);
+    })
 
 
     //ボタンが押された回数だけautocompleteクラスを持ったinputタグができる(addplan.js)→2番目の要素を持ったものを取得
-    var addPlanBtn = document.getElementById('add-plan-btn');
+    const addPlanBtn = document.getElementById('add-plan-btn');
 
     // 後でdocument全体からクラス検索ではなく、あるidをもつ親要素を指定して検索範囲を限定する（リファクタリングで実装）https://www.sejuku.net/blog/68588
     addPlanBtn.addEventListener('click', function() {
-        countPlaces = document.getElementsByClassName("autocomplete"); //autocompleteクラスを持つ要素を取得
-        input_num = countPlaces.length; //autocompleteクラスを持つ要素の数を取得
-        num = input_num - 1; //autocompleteのインスタンスをinputの順番に応じたキーに対して配列に格納するので、配列のゼロインデックスに合わせるため1を引く
+        const countPlaces = document.getElementsByClassName("autocomplete"); //autocompleteクラスを持つ要素を取得
+        const input_num = countPlaces.length; //autocompleteクラスを持つ要素の数を取得
+        const num = input_num - 1; //autocompleteのインスタンスをinputの順番に応じたキーに対して配列に格納するので、配列のゼロインデックスに合わせるため1を引く
         // console.log(countPlaces[num]);
-        autocomplete[num] = new google.maps.places.Autocomplete(countPlaces[num], option);
+        const ac = new google.maps.places.Autocomplete(countPlaces[num], option); //autocomplete機能をinputタグに付加
+        autocomplete[num] = ac; //autocomplete機能をinputタグに付加 (クロージャのため一度変数に格納し、代入ている(ac))
+
+        // console.log(autocomplete[num]);
+
+        ac.addListener("place_changed", function() {
+            const place = ac.getPlace();
+            console.log(place);
+        });
     });
 
 
 
-    // autocomplete.forEach((elm) => {
-    //     elm.addListener("place_changed", console.log([].slice.call(autocomplete).indexOf(elm)));
-    // });
+
+    // autocomplete.forEach(function(elem) {
+    //     console.log(elem)
+    // }
+        // elm.addListener("place_changed", console.log([].slice.call(autocomplete).indexOf(elm)));
 
     // https://developers.google.com/maps/documentation/javascript/reference/places-widget#Autocomplete.place_changed
     // autocomplete.addListener("place_changed", onPlaceChanged); //event
 
     // // 検索候補がクリックされた際のイベントの定義
-    // function onPlaceChanged(key) {
+    // function onPlaceChanged(content) {
     //     // 選択された場所の情報を取得
-    //     var place = autocomplete[key].getPlace();
+    //     // console.log(content.getPlace());
+    //     var place = content.getPlace();
 
     //     // place.キー名で情報受け取れる
-    //     console.log(place);
+        // console.log(place);
     //     // console.log(place.website);
     //     // console.log(document.getElementById("site_url").getAttribute("src"))
 
