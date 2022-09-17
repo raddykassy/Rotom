@@ -1,0 +1,32 @@
+{% extends "layout-2.html" %}
+
+{% block content %}
+
+
+
+<main class="site-content">
+    <div class="plan-grid-layout">
+        {% for plan in plans %}
+            <div class="plan-grid-item">
+                <!-- 以下に値を渡す -->     
+                <a href="{{ url_for('plan_content',username=plan["user_id"],post_id=plan["id"]) }}">
+                    <div class="thumbnail">
+                        <img src="https://img.youtube.com/vi/{{ plan["url"] }}/hqdefault.jpg" alt="picture">
+                    </div>
+                    <div class="plan-info">
+                        <div class="plan-user-info">
+                            <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                        </div>
+                        <div class="plan-details">
+                            <h3>{{ plan["title"] }}</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+
+</main>
+
+{% endblock %}
