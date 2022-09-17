@@ -15,15 +15,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 # Session(app)
 # ---------------------------------------------------------------------
 
-"""
-USERLIST = {
-    'kaito@gmail.com':'114',
-    'ryoga@gmail.com':'066',
-    'kosuke@gmail.com':'112',
-    'h.kawara1717@gmail.com':'126'
-}
-"""
-
 @app.route('/')
 def index():
     # print(USERLIST)
@@ -42,11 +33,6 @@ def login():
         password = request.form.get('password')
         hash = generate_password_hash(password)
 
-        """if not email in USERLIST:
-            return "<h1>email または password が間違っています</h1>"
-        if USERLIST[email] != password:
-            return "<h1>email または password が間違っています</h1>"
-        """
         con = sqlite3.connect('.\Rotom.db')
         cur = con.cursor()
         cur.execute("SELECT* FROM users WHERE email = ?", (email,))
@@ -93,17 +79,6 @@ def register():
 
         if password != confirmation:
             return """<h1>passwordが一致しません</h1>"""
-
-        """
-        if email in USERLIST:
-            return "<h1>このemailは登録済みです<h1>"
-        if password != confirmation:
-            return "<h1>passwordが一致しません</h1>"
-        
-        # 辞書に追加(flask終了するごとにUSERLISTはリセット)
-        USERLIST[email]=password
-        # print(USERLIST)
-        """
         
         con = sqlite3.connect('.\Rotom.db')
         cur = con.cursor()
