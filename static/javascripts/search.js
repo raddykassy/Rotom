@@ -1,6 +1,7 @@
 // callback function
 const autocomplete = [];
-const place_info = {};
+let places_info = [];
+let specific_place_info = {};
 
 function initMap() {
     const test_place = { lat: 34.6460706, lng: 135.5134771 };
@@ -30,7 +31,27 @@ function initMap() {
     autocomplete[0] = new google.maps.places.Autocomplete(first_input, option);
     autocomplete[0].addListener("place_changed", function() {
         const first_info = autocomplete[0].getPlace();
-        console.log(first_info);
+        const place_name = first_info.name;
+        const place_id = first_info.place_id;
+
+        // console.log(first_info);
+        // console.log(first_info.geometry.viewport.Bb.hi);
+        // console.log(first_info.geometry.viewport.Va.hi);
+
+
+        specific_place_info = { place_name : place_name,
+                                place_id : place_id
+                            };
+        places_info[0] = specific_place_info;
+
+        // place_id = first_info.place_id;
+        // place_info = {"name" : place_name, "place_id" : place_id};
+        console.log(places_info);
+        // console.log(place_info.place_name);
+        // console.log(first_info.name);
+        // console.log(place_name);
+        // console.log(first_info.place_id);
+        // console.log(first_info.website);
     })
 
 
@@ -42,7 +63,6 @@ function initMap() {
         const countPlaces = document.getElementsByClassName("autocomplete"); //autocompleteクラスを持つ要素を取得
         const input_num = countPlaces.length; //autocompleteクラスを持つ要素の数を取得
         const num = input_num - 1; //autocompleteのインスタンスをinputの順番に応じたキーに対して配列に格納するので、配列のゼロインデックスに合わせるため1を引く
-        // console.log(countPlaces[num]);
         const ac = new google.maps.places.Autocomplete(countPlaces[num], option); //autocomplete機能をinputタグに付加
         autocomplete[num] = ac; //autocomplete機能をinputタグに付加 (クロージャのため一度変数に格納し、代入ている(ac))
 
@@ -50,7 +70,14 @@ function initMap() {
 
         ac.addListener("place_changed", function() {
             const place = ac.getPlace();
-            console.log(place);
+            place_name = place.name;
+            place_id = place.place_id;
+            specific_place_info = { place_name : place_name,
+                                    place_id : place_id
+                        };
+            places_info[num] = specific_place_info;
+            console.log(places_info);
+            // console.log(place);
         });
     });
 
