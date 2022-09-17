@@ -436,16 +436,14 @@ ol li:before {
     box-sizing: border-box;
 }
 
-.thumbnail img {aspect-ratio:16 / 9;width:100%;height:100%}
-
-
 .thumbnail img {
     width: 100%;
+    height: 250px;
 }
 
 .plan-user-info{
-    width: 45px;
-    height: 45px;
+    width: 15%;
+    height: 15%;
 }
 
 
@@ -459,29 +457,24 @@ ol li:before {
     border-radius:50%;
 }
 
+.plan-details {
+    height: 15%;
+}
 
+.plan-details h3 {
+    padding-left: 0px;
+    font-size: medium;
+    margin: auto;
+    table-layout: fixed;
+}
 
 .plan-details{
-    height: 80px;
     margin-left: 20px;
     margin-top: 10px;
 }
 
-.plan-details h3 {
-    display: block;
-    text-align:left;
-    margin-left: 0%;
-    font-size: medium;
-    margin: auto;
-    table-layout: fixed;
-    /* height: 50%; */
-}
-
 .plan-details p{
     color: gray;
-    font-size: small;
-    padding-top: 8px;
-    /* height: 50%; */
 }
 
 /* ここまでプランページ一覧のcss */

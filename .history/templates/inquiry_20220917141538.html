@@ -3,35 +3,6 @@
 {% block content %}
   <div class="container">
 
-    <form>
-      <h1>問い合わせフォーム (サンプル)</h1>
-      <div class="row mb-3">
-        <label class="col-sm-3 col-form-label">お名前 <span class="badge bg-danger">必須</span></label>
-        <div class="col-sm-9">
-
-          <div class="row">
-            <label class="col-form-label col-sm-1">姓</label>
-            <div class="col-sm">
-              <input type="text"
-                     name="family-name"
-                     autocomplete="family-name"
-                     class="form-control"
-                     placeholder="田中"
-                     required/>
-            </div>
-            <label class="col-form-label col-sm-1">名</label>
-            <div class="col-sm">
-              <input type="text"
-                     name="given-name"
-                     autocomplete="given-name"
-                     class="form-control"
-                     placeholder="太郎"
-                     required/>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="row">
         <label class="col-sm-3 col-form-label">電話番号 <span class="badge bg-danger">必須</span></label>
         <div class="col-sm-9">
@@ -66,6 +37,7 @@
 
     </form>
   </div>
+
 {% endblock %}
 </body>
 </html>

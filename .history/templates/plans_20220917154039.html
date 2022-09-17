@@ -9,7 +9,7 @@
                 <!-- 以下に値を渡す -->
                 <a href="{{ url_for('plan_content',username=plan["user_id"],post_id=plan["id"]) }}">
                     <div class="thumbnail">
-                        <img src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
+                        <img src="../static/img/mare-fa-bene-2.jpeg" alt="picture">
                     </div>
                 </a>
                     <div class="plan-info">
@@ -20,7 +20,6 @@
                         <a href="{{ url_for('plan_content',username=plan["user_id"],post_id=plan["id"]) }}">
                             <h3>{{ plan["title"] }}</h3>
                         </a>
-                        <p>ユーザーネーム</p>
                         </div>
                     </div>
             </div>

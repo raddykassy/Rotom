@@ -118,9 +118,7 @@ def plans():
     #plansを全て取得
     plans = list(cur.execute("SELECT * FROM plans"))
 
-        #urlからyoutubeIDを取得
-    for index, plan in enumerate(plans):
-        plan["video_id"] = plan["url"].split("/")[3]
+    print(plans)
     return render_template('plans.html',plans=plans)
 
 
@@ -135,8 +133,13 @@ def plan_content(username, post_id):
     cur = conn.cursor()
 
     place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
-    plan_info = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
+    plan_info_li = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
+
+    #urlからyoutubeIDを取得
+    for plan_info in plan_info_li:
+        plan_info["url"].split("/")[3]
+        print(plan_info["url"].split("/")[3])
 
     print()
-    return render_template('content.html', plan_info = plan_info, username = username, place_info_li = place_info_li)
+    return render_template('content.html', plan_info = plan_info_li, username = username, place_info_li = place_info_li)
 

@@ -119,8 +119,11 @@ def plans():
     plans = list(cur.execute("SELECT * FROM plans"))
 
         #urlからyoutubeIDを取得
-    for index, plan in enumerate(plans):
-        plan["video_id"] = plan["url"].split("/")[3]
+    for plan in plans:
+        plan["url"].split("/")[3]
+        print(plan["url"].split("/")[3])
+
+    print(plans)
     return render_template('plans.html',plans=plans)
 
 

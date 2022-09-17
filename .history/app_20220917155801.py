@@ -120,7 +120,8 @@ def plans():
 
         #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
-        plan["video_id"] = plan["url"].split("/")[3]
+        plan["youtube-key"] = plan["url"].split("/")[3]
+        print(plan["youtube-key"])
     return render_template('plans.html',plans=plans)
 
 
