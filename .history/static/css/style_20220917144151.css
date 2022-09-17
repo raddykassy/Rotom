@@ -224,7 +224,7 @@ footer {
     overflow: hidden;
     width: 100%;
     background: #000;
-    /* margin-top: 70px; */
+    padding-top: 70px;
 
 }
 
@@ -241,6 +241,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
     right: 0;
     width: 100%;
     height: 100%;
+    padding-top: 70px;
 
 }
 
@@ -436,16 +437,14 @@ ol li:before {
     box-sizing: border-box;
 }
 
-.thumbnail img {aspect-ratio:16 / 9;width:100%;height:100%}
-
-
 .thumbnail img {
     width: 100%;
+    height: 250px;
 }
 
 .plan-user-info{
-    width: 45px;
-    height: 45px;
+    width: 15%;
+    height: 15%;
 }
 
 
@@ -454,34 +453,26 @@ ol li:before {
     margin-top:10px;
     /* display: block; */
     /* height: ; */
-    width: 45px;
-    height: 45px;
+    width: 100%;
+    height: 100%;
     border-radius:50%;
 }
 
+.plan-details {
+    height: 15%;
+}
 
+.plan-details h3 {
+    table-layout: fixed;
+}
 
 .plan-details{
-    height: 80px;
     margin-left: 20px;
     margin-top: 10px;
 }
 
-.plan-details h3 {
-    display: block;
-    text-align:left;
-    margin-left: 0%;
-    font-size: medium;
-    margin: auto;
-    table-layout: fixed;
-    /* height: 50%; */
-}
-
 .plan-details p{
     color: gray;
-    font-size: small;
-    padding-top: 8px;
-    /* height: 50%; */
 }
 
 /* ここまでプランページ一覧のcss */

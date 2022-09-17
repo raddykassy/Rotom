@@ -1,10 +1,20 @@
-{% extends "layout-2.html" %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>
+</head>
+<body>
   <div class="container">
+    <div class="navbar">
+      <h1>問い合わせフォーム (サンプル)</h1>
+    </div>
 
     <form>
-      <h1>問い合わせフォーム (サンプル)</h1>
+
       <div class="row mb-3">
         <label class="col-sm-3 col-form-label">お名前 <span class="badge bg-danger">必須</span></label>
         <div class="col-sm-9">
@@ -66,6 +76,5 @@
 
     </form>
   </div>
-{% endblock %}
 </body>
 </html>
