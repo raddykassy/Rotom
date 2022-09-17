@@ -1,0 +1,56 @@
+{% extends "layout-2.html" %}
+
+{% block content %}
+
+<div class="main">
+    <div class="video-container">
+        <iframe width="560" height="315" class="youtube-video"src="https://www.youtube.com/embed/kQpssznrf-g?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="column">
+        <div class="flexbox">
+            <div class="schedule-container">
+                <div class="title">
+                    <h1>軽井沢＆長野温泉旅</h1>
+                </div>
+                <div class="user_info">
+                    <img class="profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                    <h3 class="user_name">ユーザーネーム</h3>
+                </div>
+                <div class="trip-route">
+                    <div class="start-point">
+                        <li><span>東京</span></li>
+                    </div>
+                    <ol class="list">
+                        <div class="line" style="background-color:#dedede; width:2px; height:30px;"></div>
+                        <li class="list-item one" name="list-item-0"><span>善光寺</span></li>
+                        <div class="line" style="background-color:#dedede; width:2px; height:30px;"></div>
+                        <li class="list-item two"><span>地獄谷野猿公苑</span></li>
+                        <div class="line" style="background-color:#dedede; width:2px; height:30px;"></div>
+                        <li class="list-item three"><span>旧軽井沢銀座</span></li>
+                        <div class="line" style="background-color:#dedede; width:2px; height:30px;"></div>
+                        <li class="list-item four"><span>白糸の滝</span></li>
+                        <div class="line" style="background-color:#dedede; width:2px; height:30px;"></div>
+                    </ol>
+                    <div class="end-point">
+                        <li><span>東京</span></li>
+                    </div>
+                </div>
+            </div>
+            <div class="map-container">
+                <div id="map" class="plan-page-map"></div>
+            </div>
+            </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="../static/javascripts/planpage.js">
+</script>
+<!--Google map -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI&callback=initMap">
+</script>
+</body>
+</html>
+
+{% endblock %}

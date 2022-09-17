@@ -1,0 +1,56 @@
+{% extends "layout-2.html" %}
+
+{% block content %}
+
+
+<script>
+    try {
+        plan_info = {{ plans | tojson}}
+    } catch (error) {
+        console.error(error);
+    }
+
+    // let youtube_id = youtube_url.split("/")[3]
+    let youtube_url = plan_info[0]["url"];
+    let youtube_id = youtube_url.split("/")[3]
+    // console.log(plan_info)
+    // console.log(youtube_id)
+
+    for (const plan of plan_info){
+        let youtube_url = plan["url"];
+        let youtube_id = youtube_url.split("/")[3]
+        console.log(youtube_id)
+        //youtube動画を反映
+        document.addEventListener('DOMContentLoaded', function() {
+            let thumbnail = document.querySelector('.thumbnail_pic');
+            thumbnail.src = `https://www.youtube.com/embed/${ youtube_id }?autoplay=1`
+        })
+    }
+
+</script>
+<main class="site-content">
+    <div class="plan-grid-layout">
+        {% for plan in plans %}
+            <div class="plan-grid-item">
+                <!-- 以下に値を渡す -->     
+                <a href="{{ url_for('plan_content',username=plan["user_id"],post_id=plan["id"]) }}">
+                    <div class="thumbnail">
+                        <img class = "thumbnail_pic" src="" alt="picture">
+                    </div>
+                    <div class="plan-info">
+                        <div class="plan-user-info">
+                            <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                        </div>
+                        <div class="plan-details">
+                            <h3>{{ plan["title"] }}</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+
+</main>
+
+{% endblock %}
