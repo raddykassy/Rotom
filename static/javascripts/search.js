@@ -2,6 +2,7 @@
 const autocomplete = [];
 let places_info = [];
 let specific_place_info = {};
+// var zoo;
 
 function initMap() {
     const test_place = { lat: 34.6460706, lng: 135.5134771 };
@@ -33,6 +34,13 @@ function initMap() {
         const first_info = autocomplete[0].getPlace();
         const place_name = first_info.name;
         const place_id = first_info.place_id;
+        const name_1 = document.getElementById("place_name_1");
+        const id_1 = document.getElementById("place_id_1");
+
+        name_1.value = place_name;
+        id_1.value = place_id;
+
+        
 
         // console.log(first_info);
         // console.log(first_info.geometry.viewport.Bb.hi);
@@ -43,15 +51,22 @@ function initMap() {
                                 place_id : place_id
                             };
         places_info[0] = specific_place_info;
-
-        // place_id = first_info.place_id;
-        // place_info = {"name" : place_name, "place_id" : place_id};
         console.log(places_info);
-        // console.log(place_info.place_name);
-        // console.log(first_info.name);
-        // console.log(place_name);
-        // console.log(first_info.place_id);
-        // console.log(first_info.website);
+        const hiddenField = document.getElementById("places_data");
+        // console.log(places_info.join());
+
+        // places_info.forEach(function(value){
+        //     var property = Object.entries(value);
+
+
+        //     property.forEach(function(v) {
+        //         zoo += v.join(':');
+        //         zoo += ',';
+        //     });
+        // });
+        // console.log(zoo);
+        // hiddenField.value = places_info;
+
     })
 
 
@@ -76,6 +91,29 @@ function initMap() {
                                     place_id : place_id
                         };
             places_info[num] = specific_place_info;
+
+            const name_tag = document.getElementById("place_name_" + input_num);
+            const id_tag = document.getElementById("place_id_" + input_num);
+
+            name_tag.value = place_name;
+            id_tag.value = place_id;
+
+
+            // places_info.forEach(function(value){
+            //     var property = Object.entries(value);
+
+
+            //     property.forEach(function(v) {
+            //         zoo += v.join(':');
+            //         zoo += ',';
+            //     });
+            // });
+            // console.log(zoo);
+
+
+            // hiddenField = document.getElementById("places_data");
+            // hiddenField.value = places_info;
+
             console.log(places_info);
             // console.log(place);
         });
