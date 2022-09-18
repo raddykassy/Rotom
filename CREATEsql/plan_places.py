@@ -21,10 +21,10 @@ cur.execute(
     """CREATE TABLE plan_places(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     plan_id INTEGER NOT NULL,
-    place TEXT NOT NULL,
+    place_id TEXT NOT NULL,
+    place_name TEXT NOT NULL,
+    number INTEGER,
     description TEXT,
-    latitude REAL,
-    longitude REAL,
     FOREIGN KEY(plan_id) REFERENCES plans(id));"""
 )
 

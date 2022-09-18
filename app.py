@@ -111,24 +111,28 @@ def post():
 
         # plan_placesテーブル
         # place01 = request.form.get("place01")
-        places = []
-        for i in range(2):
-            tmp = ("place0%s" %str(i+1))
+        place_names = []
+        place_id = []
+
+        for i in range(5):
+            name = ("place_name_%s" %str(i+1))
+            id = ("place_id_%s" %str(i+1))
             # print(tmp str(i))
             # t = request.form.get(tmp, i)
 
-            print("--------------")
-            print(tmp)
-            # print(t)
-            places.append(tmp)
-         
+            tmp_name = request.form.get(name)
+            tmp_id = request.form.get(id)
+
+            place_names.append(tmp_name)
+            place_id.append(tmp_id)
+        
         print("-----------")
-        print(places)
+        print(place_names)
+        print(place_id)
         print("-----------")
-        """
-        place01 = request.form.get("place01")
-        place02 = request.form.get("place02")
-        """
+
+        place_names = list(filter(None, place_names))
+        place_id = list(filter(None, place_id))
 
         """
         for i in places:
@@ -159,14 +163,11 @@ def post():
         for row in cur.fetchall():
             plan_id = row
 
-        for s in (len(places)):
-            cur.execute("INSERT INTO plan_places(plan_id, place, number) VALUES(?,?,?)", (plan_id[0], places[s], 1))
+        for n  in range(len(place_names)):
+            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number) VALUES(?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1))
         
         # for i in range():
-        """
-        cur.execute("INSERT INTO plan_places(plan_id, place, number) VALUES(?,?,?)", (plan_id[0], place01, 1))
-        cur.execute("INSERT INTO plan_places(plan_id, place, number) VALUES(?,?,?)", (plan_id[0], place02, 1))
-        """
+        
         con.commit()
         con.close()
 
