@@ -219,8 +219,8 @@ def plans():
     return render_template('plans.html',plans=plans)
 
 
-@app.route('/plan_content/<username>/<int:post_id>')
-def plan_content(username, post_id):
+@app.route('/plan_content/<user_id>/<int:post_id>')
+def plan_content(user_id, post_id):
     #データベースから情報を取ってきて、content.htmlに渡す。
 
     dbname = "Rotom.db"
@@ -232,8 +232,8 @@ def plan_content(username, post_id):
     place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
     plan_info = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
 
-    print()
-    return render_template('content.html', plan_info = plan_info, username = username, place_info_li = place_info_li)
+    print(plan_info[0]["title"])
+    return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
 if __name__ == '__main__':
     app.debug = True

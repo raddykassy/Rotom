@@ -52,7 +52,7 @@ function initMap() {
                             };
         places_info[0] = specific_place_info;
         console.log(places_info);
-        const hiddenField = document.getElementById("places_data");
+        // const hiddenField = document.getElementById("places_data");
         // console.log(places_info.join());
 
         // places_info.forEach(function(value){
@@ -98,37 +98,9 @@ function initMap() {
             name_tag.value = place_name;
             id_tag.value = place_id;
 
-
-            // places_info.forEach(function(value){
-            //     var property = Object.entries(value);
-
-
-            //     property.forEach(function(v) {
-            //         zoo += v.join(':');
-            //         zoo += ',';
-            //     });
-            // });
-            // console.log(zoo);
-
-
-            // hiddenField = document.getElementById("places_data");
-            // hiddenField.value = places_info;
-
             console.log(places_info);
-            // console.log(place);
         });
     });
-
-
-
-
-    // autocomplete.forEach(function(elem) {
-    //     console.log(elem)
-    // }
-        // elm.addListener("place_changed", console.log([].slice.call(autocomplete).indexOf(elm)));
-
-    // https://developers.google.com/maps/documentation/javascript/reference/places-widget#Autocomplete.place_changed
-    // autocomplete.addListener("place_changed", onPlaceChanged); //event
 
     // // 検索候補がクリックされた際のイベントの定義
     // function onPlaceChanged(content) {
