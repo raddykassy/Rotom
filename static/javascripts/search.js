@@ -40,8 +40,6 @@ function initMap() {
         name_1.value = place_name;
         id_1.value = place_id;
 
-        
-
         // console.log(first_info);
         // console.log(first_info.geometry.viewport.Bb.hi);
         // console.log(first_info.geometry.viewport.Va.hi);
