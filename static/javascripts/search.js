@@ -5,7 +5,7 @@ let specific_place_info = {};
 // var zoo;
 
 function initMap() {
-    const test_place = { lat: 34.6460706, lng: 135.5134771 };
+    const test_place = { lat: 34.665442, lng: 135.4323382 };
     const opts = {
         zoom: 15,
         center: test_place,
@@ -40,7 +40,9 @@ function initMap() {
         name_1.value = place_name;
         id_1.value = place_id;
 
-        // console.log(first_info);
+        console.log(first_info);
+        console.log(first_info.geometry.location.lat());
+        console.log(first_info.geometry.location.lng());
         // console.log(first_info.geometry.viewport.Bb.hi);
         // console.log(first_info.geometry.viewport.Va.hi);
 
