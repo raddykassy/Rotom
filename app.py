@@ -1,16 +1,19 @@
 from turtle import title
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
+from werkzeug.security import generate_password_hash
+from helpers import login_required
+import secrets
 
 app = Flask(__name__)
-app.secret_key = "123456789rotom"
+app.secret_key = secrets.token_hex(16)
 
-USERLIST = {
-    'kaito@gmail.com':'114',
-    'ryoga@gmail.com':'066',
-    'kosuke@gmail.com':'112',
-    'h.kawara1717@gmail.com':'126'
-}
+# -------------------------------------------------------------------
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+# Session(app)
+# ---------------------------------------------------------------------
 
 @app.route('/')
 def index():
@@ -28,13 +31,19 @@ def login():
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
+        hash = generate_password_hash(password)
 
-        if not email in USERLIST:
-            return """<h1>email または password が間違っています</h1>"""
-        if USERLIST[email] != password:
-            return """<h1>email または password が間違っています</h1>"""
-        
-        session[email] = email
+        con = sqlite3.connect('.\Rotom.db')
+        cur = con.cursor()
+        cur.execute("SELECT* FROM users WHERE email = ?", (email,))
+        for row in cur.fetchall():
+            if row == hash:
+                break
+        con.commit()
+        con.close()        
+
+
+        session["email"] = email
 
         return """
         <h1>ログインに成功しました</h1>
@@ -47,9 +56,13 @@ def login():
 
 # logout
 @app.route("/logout")
+@login_required
 def logout():
     session.clear()
-    return redirect('/')
+    return """
+           <h1>ログアウトしました</h1>
+           <p><a href="/"> ⇒top page</p>
+    """
 
 # register
 @app.route("/register", methods=["GET", "POST"])
@@ -64,23 +77,105 @@ def register():
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
 
-        if email in USERLIST:
-            return """<h1>このemailは登録済みです<h1>"""
         if password != confirmation:
             return """<h1>passwordが一致しません</h1>"""
-
-        # 辞書に追加(flask終了するごとにUSERLISTはリセット)
-        USERLIST[email]=password
-        # print(USERLIST)
-        return redirect ("/")
-
+        
+        con = sqlite3.connect('.\Rotom.db')
+        cur = con.cursor()
+        try:
+            cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
+        except:
+            return False
+        con.commit()
+        con.close()
+        # 新規登録後はlogin画面へ
+        return redirect ("/login")
 
     else:
         return render_template("register.html")
 
 @app.route("/post", methods=["GET", "POST"])
 def post():
-    return render_template("post.html")
+    """
+    GET: post.htmlの表示
+    POST: planの追加
+    """
+    if request.method == 'POST':
+
+        user = session["email"]
+        # plansテーブル
+        plan_title = request.form.get("plan-title")
+        plan_description = request.form.get("description")
+        # schedule = request.form.get("schedule")
+        url = request.form.get("vlog-url")
+
+        # plan_placesテーブル
+        # place01 = request.form.get("place01")
+        place_names = []
+        place_id = []
+
+        for i in range(5):
+            name = ("place_name_%s" %str(i+1))
+            id = ("place_id_%s" %str(i+1))
+            # print(tmp str(i))
+            # t = request.form.get(tmp, i)
+
+            tmp_name = request.form.get(name)
+            tmp_id = request.form.get(id)
+
+            place_names.append(tmp_name)
+            place_id.append(tmp_id)
+        
+        print("-----------")
+        print(place_names)
+        print(place_id)
+        print("-----------")
+
+        place_names = list(filter(None, place_names))
+        place_id = list(filter(None, place_id))
+
+        """
+        for i in places:
+            if (" ") in places[i]:
+                places[i].split()
+                print("------------")
+                print(places[i][0])
+                print(places[i][1])
+                print("-------------")
+        """
+
+        # plansテーブルにinsert
+        con = sqlite3.connect('.\Rotom.db')
+        cur = con.cursor()
+        cur.execute("""SELECT id FROM users WHERE email = ?""", (user,) )
+        for row in cur.fetchall():
+            user_id = row
+
+        cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id[0], plan_title, plan_description, url))
+
+        con.commit()
+        con.close()
+
+        # plan_detailテーブルにinsert
+        con = sqlite3.connect('./Rotom.db')
+        cur = con.cursor()
+        cur.execute("""SELECT id FROM plans WHERE title = ?""", (plan_title,))
+        for row in cur.fetchall():
+            plan_id = row
+
+        for n  in range(len(place_names)):
+            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number) VALUES(?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1))
+        
+        # for i in range():
+        
+        con.commit()
+        con.close()
+
+        return redirect("/")
+        
+    else:
+        return render_template("post.html")
+
 
 @app.route('/inquiry')
 def inquiry():
@@ -140,3 +235,6 @@ def plan_content(user_id, post_id):
     print(plan_info[0]["title"])
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host='127.0.0.1')

@@ -25,7 +25,6 @@ cur.execute(
     user_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
-    schedule TEXT,
     url TEXT,
     time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES users(id));"""
