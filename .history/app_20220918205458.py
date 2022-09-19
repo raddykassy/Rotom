@@ -1,16 +1,12 @@
 from turtle import title
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from helpers import login_required
 import secrets
-import requests
-import json
-
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-login = []
 
 # -------------------------------------------------------------------
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -35,44 +31,25 @@ def login():
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
-        # hash = generate_password_hash(password)
+        hash = generate_password_hash(password)
 
-        error_message = ""
-
-        con = sqlite3.connect('Rotom.db')
+        con = sqlite3.connect('.\Rotom.db')
         cur = con.cursor()
-        # SELECT * より修正
-        cur.execute("SELECT password FROM users WHERE email = ?", (email,))
-        user_data = cur.fetchall()
+        cur.execute("SELECT* FROM users WHERE email = ?", (email,))
+        for row in cur.fetchall():
+            if row == hash:
+                break
+        con.commit()
+        con.close()        
 
-        # メールアドレス：ユーザーデータは1:1でないといけない（新規登録画面でその処理書いてくれると嬉しいです！（既に同じメールアドレスが存在している場合はエラーメッセージを渡す等））
-        if len(user_data) == 1:
-            for row in user_data:
-                if check_password_hash(row[0], password):
-                    con.close()
-                    session["email"] = email
-                    return render_template("index.html")
-                else:
-                    con.close()
-                    error_message = "パスワードが異なります"
-                    return render_template("login.html", error_message=error_message)
-        else:
-            con.close()
-            # ↓現段階では登録されていない or メールアドレスが重複して登録されている
-            error_message = "入力されたメールアドレスは登録されていません"
-            return render_template("login.html", error_message=error_message)
 
         session["email"] = email
-        login.append(session["email"])
-
 
         return """
         <h1>ログインに成功しました</h1>
         <p><a href='/'> ⇒top page</p>
         """
-# commitいらんかも？↓
-        # con.commit()
-        # con.close()
+
     else:
         return render_template("login.html")
 
@@ -168,7 +145,7 @@ def post():
         """
 
         # plansテーブルにinsert
-        con = sqlite3.connect('Rotom.db')
+        con = sqlite3.connect('.\Rotom.db')
         cur = con.cursor()
         cur.execute("""SELECT id FROM users WHERE email = ?""", (user,) )
         for row in cur.fetchall():
@@ -180,7 +157,7 @@ def post():
         con.close()
 
         # plan_detailテーブルにinsert
-        con = sqlite3.connect('Rotom.db')
+        con = sqlite3.connect('./Rotom.db')
         cur = con.cursor()
         cur.execute("""SELECT id FROM plans WHERE title = ?""", (plan_title,))
         for row in cur.fetchall():
@@ -255,16 +232,7 @@ def plan_content(user_id, post_id):
     place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
     plan_info = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
 
-    #place_idから緯度経度を取得
-    #place_info_liにlat, lngをappend
-    # place_info_li = [{}, {}, ...]
-    for index, place_info in enumerate(place_info_li):
-        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
-        place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
-        place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
-
-    print(response)
-
+    print(plan_info[0]["title"])
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
 if __name__ == '__main__':

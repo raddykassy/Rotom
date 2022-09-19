@@ -4,13 +4,9 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
 import secrets
-import requests
-import json
-
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-login = []
 
 # -------------------------------------------------------------------
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -39,7 +35,7 @@ def login():
 
         error_message = ""
 
-        con = sqlite3.connect('Rotom.db')
+        con = sqlite3.connect('.\Rotom.db')
         cur = con.cursor()
         # SELECT * より修正
         cur.execute("SELECT password FROM users WHERE email = ?", (email,))
@@ -62,17 +58,10 @@ def login():
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
 
-        session["email"] = email
-        login.append(session["email"])
-
-
-        return """
-        <h1>ログインに成功しました</h1>
-        <p><a href='/'> ⇒top page</p>
-        """
 # commitいらんかも？↓
         # con.commit()
         # con.close()
+
     else:
         return render_template("login.html")
 
@@ -103,7 +92,7 @@ def register():
         if password != confirmation:
             return """<h1>passwordが一致しません</h1>"""
         
-        con = sqlite3.connect('Rotom.db')
+        con = sqlite3.connect('.\Rotom.db')
         cur = con.cursor()
         try:
             cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
@@ -168,7 +157,7 @@ def post():
         """
 
         # plansテーブルにinsert
-        con = sqlite3.connect('Rotom.db')
+        con = sqlite3.connect('.\Rotom.db')
         cur = con.cursor()
         cur.execute("""SELECT id FROM users WHERE email = ?""", (user,) )
         for row in cur.fetchall():
@@ -180,7 +169,7 @@ def post():
         con.close()
 
         # plan_detailテーブルにinsert
-        con = sqlite3.connect('Rotom.db')
+        con = sqlite3.connect('./Rotom.db')
         cur = con.cursor()
         cur.execute("""SELECT id FROM plans WHERE title = ?""", (plan_title,))
         for row in cur.fetchall():
@@ -255,16 +244,7 @@ def plan_content(user_id, post_id):
     place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
     plan_info = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
 
-    #place_idから緯度経度を取得
-    #place_info_liにlat, lngをappend
-    # place_info_li = [{}, {}, ...]
-    for index, place_info in enumerate(place_info_li):
-        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
-        place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
-        place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
-
-    print(response)
-
+    print(plan_info[0]["title"])
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
 if __name__ == '__main__':

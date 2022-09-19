@@ -273,12 +273,11 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 .user_info{
     border-top: 1px solid rgba(0,0,0,0.1);
     border-bottom: 1px solid rgba(0,0,0,0.1);
-
 }
 
 .trip-route{
-    margin-top: 30px;
-    padding-bottom: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 

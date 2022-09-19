@@ -10,7 +10,6 @@ import json
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-login = []
 
 # -------------------------------------------------------------------
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -62,17 +61,10 @@ def login():
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
 
-        session["email"] = email
-        login.append(session["email"])
-
-
-        return """
-        <h1>ログインに成功しました</h1>
-        <p><a href='/'> ⇒top page</p>
-        """
 # commitいらんかも？↓
         # con.commit()
         # con.close()
+
     else:
         return render_template("login.html")
 

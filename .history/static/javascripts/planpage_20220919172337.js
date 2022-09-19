@@ -30,7 +30,7 @@ let open_or_close = Array(markerData.length);
 function initMap() {
     let opts = {
         center: center, // 地図の中心を指定
-        zoom: 13,
+        zoom: 50,
         center: new google.maps.LatLng({lat: markerData[0]['lat'], lng: markerData[0]['lng']})
     };
     let map = new google.maps.Map(document.getElementById("map"), opts);
