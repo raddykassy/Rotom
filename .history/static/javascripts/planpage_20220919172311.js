@@ -1,9 +1,5 @@
 let map;
 let infoWindow = [];
-let center = {
-  lat: 34.7019399, // 緯度
-  lng: 135.51002519999997 // 経度
-};
 let youtube_url = plan_info[0]["url"];
 let youtube_id = youtube_url.split("/")[3]
 
@@ -30,7 +26,7 @@ let open_or_close = Array(markerData.length);
 function initMap() {
     let opts = {
         center: center, // 地図の中心を指定
-        zoom: 10,
+        zoom: 15,
         center: new google.maps.LatLng({lat: markerData[0]['lat'], lng: markerData[0]['lng']})
     };
     let map = new google.maps.Map(document.getElementById("map"), opts);

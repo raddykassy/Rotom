@@ -237,13 +237,11 @@ def plan_content(user_id, post_id):
 
     #place_idから緯度経度を取得
     #place_info_liにlat, lngをappend
-    # place_info_li = [{}, {}, ...]
-    for index, place_info in enumerate(place_info_li):
-        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
-        place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
-        place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
-
-    print(place_info_li)
+    for place_info in place_info_li:
+        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI')
+        print(place_info)
+        print(response.json)
+    
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
