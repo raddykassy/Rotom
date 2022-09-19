@@ -7,6 +7,7 @@ import secrets
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
+login = []
 
 # -------------------------------------------------------------------
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -44,6 +45,8 @@ def login():
 
 
         session["email"] = email
+        login.append(session["email"])
+
 
         return """
         <h1>ログインに成功しました</h1>
