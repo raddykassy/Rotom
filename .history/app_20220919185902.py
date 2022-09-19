@@ -255,7 +255,7 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
-    print(response)
+    print(response["reviews"]["website"])
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
