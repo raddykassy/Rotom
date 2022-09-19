@@ -45,10 +45,10 @@ def login():
 
         session["email"] = email
 
-        print("------------------")
-        print(session["email"])
-
-        return redirect("/")
+        return """
+        <h1>ログインに成功しました</h1>
+        <p><a href='/'> ⇒top page</p>
+        """
 
     else:
         return render_template("login.html")
