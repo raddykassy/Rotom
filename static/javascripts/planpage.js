@@ -4,7 +4,6 @@ let center = {
   lat: 34.7019399, // 緯度
   lng: 135.51002519999997 // 経度
 };
-
 let youtube_url = plan_info[0]["url"];
 let youtube_id = youtube_url.split("/")[3]
 
@@ -15,9 +14,9 @@ let markerData = [ // マーカーを立てる場所名・緯度・経度
 for (const place_data of place_info_li){
     place_array = {
 
-    name: place_data['place'],
-    lat: place_data['latitude'],
-    lng: place_data['longitude'],
+    name: place_data['place_name'],
+    lat: place_data['lat'],
+    lng: place_data['lng'],
 
     }
     markerData.push(place_array)
@@ -31,7 +30,7 @@ let open_or_close = Array(markerData.length);
 function initMap() {
     let opts = {
         center: center, // 地図の中心を指定
-        zoom: 15,
+        zoom: 13,
         center: new google.maps.LatLng({lat: markerData[0]['lat'], lng: markerData[0]['lng']})
     };
     let map = new google.maps.Map(document.getElementById("map"), opts);
