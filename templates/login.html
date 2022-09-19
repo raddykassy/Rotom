@@ -2,6 +2,9 @@
 
 {% block content %}
 
+{% if error_message %}
+    <h2>{{ error_message }}</h2>
+{% endif %}
     <!-- form -->
     <main class="form-wrapper mt-5">
         <form method="POST" class="mx-auto" style="width: 50%;">
