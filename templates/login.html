@@ -7,7 +7,11 @@
 {% endif %}
     <!-- form -->
     <main class="form-wrapper mt-5">
-        <form method="POST" class="mx-auto" style="width: 50%;">
+        <form method="POST" class="mx-auto user-form">
+            <h1 class="text-center heading">ログイン</h1>
+            <div class="line-container">
+                <hr class="text-center heading-line">
+            </div>
             <div class="mb-4">
                 <label for="email" class="form-label">メールアドレス</label>
                 <input type="email" name="email" class="form-control" id="email" placeholder="example@xxxxx.com">
@@ -17,7 +21,7 @@
                 <input type="password" name="password" class="form-control" id="password">
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">ログイン</button>
+                <button type="submit" class="btn btn-primary post-btn">ログイン</button>
             </div>
         </form>
     </main>
