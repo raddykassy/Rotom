@@ -2,6 +2,7 @@
 
 {% block header %}
 {% if status is true %}
+
 <header class="header">
   <nav class="navbar navbar-expand-lg navbar-light .bg-transparent text-white">
       <div class="container-fluid hd-container">
@@ -31,7 +32,7 @@
                   </li>
                   <!-- My page へのリンク（自分の投稿一覧が見れる、、とか） -->
                   <li class="nav-item item">
-                    <a class="nav-link text-white" href="#">My page</a>
+                    <a class="nav-link text-white" href="#">{{ email }}さ</a>
                 </li>
                   <li class="nav-item dropdown item">
                       <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">

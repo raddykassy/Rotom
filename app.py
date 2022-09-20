@@ -1,5 +1,5 @@
 from turtle import title
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -26,7 +26,19 @@ app.config["SESSION_TYPE"] = "filesystem"
 def index():
     # グローバル変数を宣言
     global status
-    return render_template('index2.html', status=status)
+    if status == True:
+        user_id = session["id"]
+        con = sqlite3.connect('Rotom.db')
+        cur = con.cursor()
+        # ここnameにしてもいいかも
+        cur.execute("SELECT email FROM users WHERE id = ?", (user_id,))
+        user_info =  cur.fetchall()
+        con.close()
+
+        return render_template('index2.html', status=status, email=user_info[0][0])
+
+    else:
+        return render_template('index2.html', status=status)
 
 
 # loginページ
@@ -57,7 +69,8 @@ def login():
                     con.close()
                     session["id"] = row[1]
                     status = True
-                    return render_template("index2.html", status=status)
+                    return redirect("/")
+                    # return render_template("index2.html", status=status)
                 else:
                     con.close()
                     error_message = "パスワードが異なります"
@@ -79,7 +92,7 @@ def login():
 
 # logout
 @app.route("/logout")
-@login_required
+# @login_required
 def logout():
     # セッション情報をクリア
     session.clear()
