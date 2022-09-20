@@ -82,13 +82,14 @@
                     <button type="button" class="btn btn-primary add-plan-btn" id="add-plan-btn">場所を追加</button>
                     <button type="button" class="btn delete-plan-btn">場所を削除</button>
                 </div>
+                <input type="hidden" id="place_sum" name="place_sum" value="">
             </div>
             <div class="description_wrapper">
                 <label for="description" class="form-label">旅行の概要</label>
                 <textarea class="form-control" id="description" name="description" placeholder="旅行の概要を入力" wrap="soft"></textarea>
             </div>
             <div class="mt-5 submit-container">
-                <button type="submit" class="btn btn-primary submit-plan-btn">投稿する</button>
+                <button type="submit" id="submit-plan-btn" class="btn btn-primary submit-plan-btn">投稿する</button>
             </div>
         </form>
     </section>
