@@ -220,6 +220,23 @@ footer {
 
 /* ----------login.html---------- */
 
+.heading {
+    font-size: 24px;
+    letter-spacing: 0.1em;
+}
+
+.line-container {
+    width: 20%;
+    margin: 0 auto;
+}
+
+.post-btn {
+    padding: .475rem 1.1rem;
+}
+
+.user-form {
+    width: 40%;
+}
 
 /* ----------end login.html---------- */
 
