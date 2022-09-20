@@ -10,7 +10,10 @@ import json
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-login = []
+
+# ログインしているかどうか判別するグローバル変数
+# False = logout状態, True = login状態
+status = False
 
 # -------------------------------------------------------------------
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -21,8 +24,9 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 @app.route('/')
 def index():
-    # print(USERLIST)
-    return render_template('index.html')
+    # グローバル変数を宣言
+    global status
+    return render_template('index2.html', status=status)
 
 
 # loginページ
@@ -36,6 +40,7 @@ def login():
         email = request.form.get("email")
         password = request.form.get('password')
         # hash = generate_password_hash(password)
+        global status
 
         error_message = ""
 
@@ -51,7 +56,8 @@ def login():
                 if check_password_hash(row[0], password):
                     con.close()
                     session["email"] = email
-                    return render_template("index.html")
+                    status = True
+                    return render_template("index2.html", status=status)
                 else:
                     con.close()
                     error_message = "パスワードが異なります"
@@ -62,17 +68,17 @@ def login():
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
 
-        session["email"] = email
-        login.append(session["email"])
+        # session["email"] = email
+        
+        # status = True
 
+        # return redirect("/") 
+        
+        # """
+        # <h1>ログインに成功しました</h1>
+        # <p><a href='/'> ⇒top page</p>
+        # """
 
-        return """
-        <h1>ログインに成功しました</h1>
-        <p><a href='/'> ⇒top page</p>
-        """
-# commitいらんかも？↓
-        # con.commit()
-        # con.close()
     else:
         return render_template("login.html")
 
@@ -81,7 +87,11 @@ def login():
 @app.route("/logout")
 @login_required
 def logout():
+    # セッション情報をクリア
     session.clear()
+    # グローバル変数をlogout状態に
+    global status 
+    status = False
     return """
            <h1>ログアウトしました</h1>
            <p><a href="/"> ⇒top page</p>
@@ -157,15 +167,6 @@ def post():
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
-        """
-        for i in places:
-            if (" ") in places[i]:
-                places[i].split()
-                print("------------")
-                print(places[i][0])
-                print(places[i][1])
-                print("-------------")
-        """
 
         # plansテーブルにinsert
         con = sqlite3.connect('Rotom.db')
