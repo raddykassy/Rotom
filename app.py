@@ -26,6 +26,9 @@ app.config["SESSION_TYPE"] = "filesystem"
 def index():
     # グローバル変数を宣言
     global status
+
+    # statusがTrue(login状態)ならusersテーブルからemailを取得
+    # index2.htmlにemailを渡して、表示する
     if status == True:
         user_id = session["id"]
         con = sqlite3.connect('Rotom.db')
