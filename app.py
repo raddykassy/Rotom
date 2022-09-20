@@ -169,8 +169,7 @@ def post():
         place_id = []
 
         # place_sum分place_nameとplace_idを取得し、リストに入れる
-        # for i in range(int(place_sum)):
-        for i in range(5):
+        for i in range(int(place_sum)):
             name = ("place_name_%s" %str(i+1))
             id = ("place_id_%s" %str(i+1))
             # print(tmp str(i))
