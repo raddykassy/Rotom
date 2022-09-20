@@ -46,8 +46,8 @@ def login():
 
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        # SELECT * より修正
-        cur.execute("SELECT password FROM users WHERE email = ?", (email,))
+        # SELECT * より修正 9/20 passwordのみからpassword, idに変更
+        cur.execute("SELECT password, id FROM users WHERE email = ?", (email,))
         user_data = cur.fetchall()
 
         # メールアドレス：ユーザーデータは1:1でないといけない（新規登録画面でその処理書いてくれると嬉しいです！（既に同じメールアドレスが存在している場合はエラーメッセージを渡す等））
@@ -55,7 +55,7 @@ def login():
             for row in user_data:
                 if check_password_hash(row[0], password):
                     con.close()
-                    session["email"] = email
+                    session["id"] = row[1]
                     status = True
                     return render_template("index2.html", status=status)
                 else:
@@ -68,12 +68,6 @@ def login():
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
 
-        # session["email"] = email
-        
-        # status = True
-
-        # return redirect("/") 
-        
         # """
         # <h1>ログインに成功しました</h1>
         # <p><a href='/'> ⇒top page</p>
@@ -109,16 +103,28 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
+        
+        error_message = ""
 
         if password != confirmation:
-            return """<h1>passwordが一致しません</h1>"""
+            error_message = "確認用パスワードと一致しませんでした。"
+            # エラーメッセージ付きでregister.htmlに渡す
+            return render_template("register.html", error_message=error_message)
         
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        try:
-            cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
-        except:
-            return False
+        cur.execute("SELECT email FROM users")
+        email_data = cur.fetchall()
+        
+        # emailが登録済みか確認する
+        for row in email_data:
+            if row[0] == email:
+                con.close
+                error_message = "そのemailアドレスは登録済みです"
+                # エラーメッセージ付きでregister.htmlに渡す
+                return render_template("register.html", error_message=error_message)
+        # ユーザ情報をusersテーブルに登録
+        cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
         con.commit()
         con.close()
         # 新規登録後はlogin画面へ
@@ -135,15 +141,13 @@ def post():
     """
     if request.method == 'POST':
 
-        user = session["email"]
+        user = session["id"]
         # plansテーブル
         plan_title = request.form.get("plan-title")
         plan_description = request.form.get("description")
-        # schedule = request.form.get("schedule")
         url = request.form.get("vlog-url")
 
-        # plan_placesテーブル
-        # place01 = request.form.get("place01")
+        # place_names と place_idに情報を追加していく
         place_names = []
         place_id = []
 
@@ -158,12 +162,13 @@ def post():
 
             place_names.append(tmp_name)
             place_id.append(tmp_id)
-        
+        """
         print("-----------")
         print(place_names)
         print(place_id)
         print("-----------")
-
+        """
+        # リストからNoneを削除する
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
@@ -171,12 +176,11 @@ def post():
         # plansテーブルにinsert
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""SELECT id FROM users WHERE email = ?""", (user,) )
+        cur.execute("""SELECT id FROM users WHERE id = ?""", (user,) )
+        
         for row in cur.fetchall():
             user_id = row
-
         cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id[0], plan_title, plan_description, url))
-
         con.commit()
         con.close()
 
