@@ -5,6 +5,8 @@ let specific_place_info = {};
 // var zoo;
 
 function initMap() {
+
+    // ---------------------Map表示部分-------------------------------
     const test_place = { lat: 34.665442, lng: 135.4323382 };
     const opts = {
         zoom: 15,
@@ -18,6 +20,7 @@ function initMap() {
         position: test_place,
         map: map,
     })
+    // -----------------------------------------------------------------
 
 
     // Autocompleteのインスタンスを作成する際に使用するOPTIONの指定（施設、日本地域限定に設定）
@@ -36,13 +39,14 @@ function initMap() {
         const place_id = first_info.place_id;
         const name_1 = document.getElementById("place_name_1");
         const id_1 = document.getElementById("place_id_1");
+        const place_sum = document.getElementById("place_sum");
 
         name_1.value = place_name;
         id_1.value = place_id;
 
-        console.log(first_info);
-        console.log(first_info.geometry.location.lat());
-        console.log(first_info.geometry.location.lng());
+        // console.log(first_info);
+        // console.log(first_info.geometry.location.lat());
+        // console.log(first_info.geometry.location.lng());
         // console.log(first_info.geometry.viewport.Bb.hi);
         // console.log(first_info.geometry.viewport.Va.hi);
 
@@ -69,6 +73,8 @@ function initMap() {
 
     })
 
+    var input_num = 1;
+
 
     //ボタンが押された回数だけautocompleteクラスを持ったinputタグができる(addplan.js)→2番目の要素を持ったものを取得
     const addPlanBtn = document.getElementById('add-plan-btn');
@@ -76,7 +82,7 @@ function initMap() {
     // 後でdocument全体からクラス検索ではなく、あるidをもつ親要素を指定して検索範囲を限定する（リファクタリングで実装）https://www.sejuku.net/blog/68588
     addPlanBtn.addEventListener('click', function() {
         const countPlaces = document.getElementsByClassName("autocomplete"); //autocompleteクラスを持つ要素を取得
-        const input_num = countPlaces.length; //autocompleteクラスを持つ要素の数を取得
+        input_num = countPlaces.length; //autocompleteクラスを持つ要素の数を取得
         const num = input_num - 1; //autocompleteのインスタンスをinputの順番に応じたキーに対して配列に格納するので、配列のゼロインデックスに合わせるため1を引く
         const ac = new google.maps.places.Autocomplete(countPlaces[num], option); //autocomplete機能をinputタグに付加
         autocomplete[num] = ac; //autocomplete機能をinputタグに付加 (クロージャのため一度変数に格納し、代入ている(ac))
@@ -100,6 +106,14 @@ function initMap() {
 
             console.log(places_info);
         });
+    });
+
+
+    // 場所の数をinputタグ(hidden)に挿入
+    const place_sum = document.getElementById('place_sum');
+    const post_btn = document.getElementById('submit-plan-btn');
+    post_btn.addEventListener('click', function() {
+        place_sum.value = input_num;
     });
 
     // // 検索候補がクリックされた際のイベントの定義
