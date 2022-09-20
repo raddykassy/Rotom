@@ -162,12 +162,14 @@ def post():
         plan_title = request.form.get("plan-title")
         plan_description = request.form.get("description")
         url = request.form.get("vlog-url")
+        place_sum = request.form.get("place_sum")
 
         # place_names と place_idに情報を追加していく
         place_names = []
         place_id = []
 
-        for i in range(5):
+        # place_sum分place_nameとplace_idを取得し、リストに入れる
+        for i in range(int(place_sum)):
             name = ("place_name_%s" %str(i+1))
             id = ("place_id_%s" %str(i+1))
             # print(tmp str(i))
