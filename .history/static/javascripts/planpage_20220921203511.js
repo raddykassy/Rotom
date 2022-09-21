@@ -68,19 +68,13 @@ function initMap() {
          position: markerLatLng, // マーカーを立てる位置を指定
             map: map // マーカーを立てる地図を指定
        });
-
-     //マップに表示させるWindowの内容
-     const contentString = 
-     '<div class="window">'+
-     `${markerData[i]['name']}`+
-     '<br>'+
-     `<a href=${markerData[i]['url']}>` +
-     `${markerData[i]['url']}`+
-     '</a>'+
-     '</div>';
  
      infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
-         content:contentString,
+         content: 
+         '<div class="window">' + markerData[i]['name'] + markerData[i]['url'] + 
+         
+         '</div>' // 吹き出しに表示する内容
+        
        });
  
      markerEvent(i); // マーカーにクリックイベントを追加

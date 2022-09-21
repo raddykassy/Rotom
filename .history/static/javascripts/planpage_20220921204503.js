@@ -73,7 +73,6 @@ function initMap() {
      const contentString = 
      '<div class="window">'+
      `${markerData[i]['name']}`+
-     '<br>'+
      `<a href=${markerData[i]['url']}>` +
      `${markerData[i]['url']}`+
      '</a>'+

@@ -72,10 +72,9 @@ function initMap() {
      //マップに表示させるWindowの内容
      const contentString = 
      '<div class="window">'+
-     `${markerData[i]['name']}`+
-     '<br>'+
+     `${markerData[i]['name']}`
      `<a href=${markerData[i]['url']}>` +
-     `${markerData[i]['url']}`+
+     `${markerData[i]['url']}`
      '</a>'+
      '</div>';
  

@@ -284,15 +284,13 @@ def plan_content(user_id, post_id):
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
         response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
-        place_info_li[index]["url"] = response["result"]["website"]
+        print(response["result"]["website"])
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
-    photo = requests.get('https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI')
-    print(photo)
+    print(response)
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
-
 
 if __name__ == '__main__':
     app.debug = True

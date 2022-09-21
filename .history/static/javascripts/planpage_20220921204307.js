@@ -72,11 +72,8 @@ function initMap() {
      //マップに表示させるWindowの内容
      const contentString = 
      '<div class="window">'+
-     `${markerData[i]['name']}`+
-     '<br>'+
-     `<a href=${markerData[i]['url']}>` +
-     `${markerData[i]['url']}`+
-     '</a>'+
+    //  `<a href=${markerData[i]['url']}>` +
+    //  '</a>'+
      '</div>';
  
      infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
