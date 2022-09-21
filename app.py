@@ -100,7 +100,7 @@ def logout():
     # セッション情報をクリア
     session.clear()
     # グローバル変数をlogout状態に
-    global status 
+    global status
     status = False
     return """
            <h1>ログアウトしました</h1>
@@ -119,19 +119,19 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
-        
+
         error_message = ""
 
         if password != confirmation:
             error_message = "確認用パスワードと一致しませんでした。"
             # エラーメッセージ付きでregister.htmlに渡す
             return render_template("register.html", error_message=error_message)
-        
+
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
         cur.execute("SELECT email FROM users")
         email_data = cur.fetchall()
-        
+
         # emailが登録済みか確認する
         for row in email_data:
             if row[0] == email:
@@ -195,7 +195,7 @@ def post():
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
         cur.execute("""SELECT id FROM users WHERE id = ?""", (user,) )
-        
+
         for row in cur.fetchall():
             user_id = row
         cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id[0], plan_title, plan_description, url))
@@ -211,14 +211,14 @@ def post():
 
         for n  in range(len(place_names)):
             cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number) VALUES(?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1))
-        
+
         # for i in range():
-        
+
         con.commit()
         con.close()
 
         return redirect("/")
-        
+
     else:
         return render_template("post.html")
 
@@ -241,10 +241,10 @@ def content():
 
 #データベースから取ってきた値を辞書形式で扱えるように
 def user_lit_factory(cursor, row):
-   d = {}
-   for idx, col in enumerate(cursor.description):
-       d[col[0]] = row[idx]
-   return d
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 @app.route('/plans')
 def plans():
