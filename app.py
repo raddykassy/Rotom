@@ -1,5 +1,5 @@
 from turtle import title
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -11,6 +11,10 @@ import json
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
+# ログインしているかどうか判別するグローバル変数
+# False = logout状態, True = login状態
+status = False
+
 # -------------------------------------------------------------------
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["SESSION_PERMANENT"] = False
@@ -20,8 +24,24 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 @app.route('/')
 def index():
-    # print(USERLIST)
-    return render_template('index.html')
+    # グローバル変数を宣言
+    global status
+
+    # statusがTrue(login状態)ならusersテーブルからemailを取得
+    # index2.htmlにemailを渡して、表示する
+    if status == True:
+        user_id = session["id"]
+        con = sqlite3.connect('Rotom.db')
+        cur = con.cursor()
+        # ここnameにしてもいいかも
+        cur.execute("SELECT email FROM users WHERE id = ?", (user_id,))
+        user_info =  cur.fetchall()
+        con.close()
+
+        return render_template('index2.html', status=status, email=user_info[0][0])
+
+    else:
+        return render_template('index2.html', status=status)
 
 
 # loginページ
@@ -35,13 +55,14 @@ def login():
         email = request.form.get("email")
         password = request.form.get('password')
         # hash = generate_password_hash(password)
+        global status
 
         error_message = ""
 
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        # SELECT * より修正
-        cur.execute("SELECT password FROM users WHERE email = ?", (email,))
+        # SELECT * より修正 9/20 passwordのみからpassword, idに変更
+        cur.execute("SELECT password, id FROM users WHERE email = ?", (email,))
         user_data = cur.fetchall()
 
         # メールアドレス：ユーザーデータは1:1でないといけない（新規登録画面でその処理書いてくれると嬉しいです！（既に同じメールアドレスが存在している場合はエラーメッセージを渡す等））
@@ -49,8 +70,10 @@ def login():
             for row in user_data:
                 if check_password_hash(row[0], password):
                     con.close()
-                    session["email"] = email
-                    return render_template("index.html")
+                    session["id"] = row[1]
+                    status = True
+                    return redirect("/")
+                    # return render_template("index2.html", status=status)
                 else:
                     con.close()
                     error_message = "パスワードが異なります"
@@ -61,9 +84,10 @@ def login():
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
 
-# commitいらんかも？↓
-        # con.commit()
-        # con.close()
+        # """
+        # <h1>ログインに成功しました</h1>
+        # <p><a href='/'> ⇒top page</p>
+        # """
 
     else:
         return render_template("login.html")
@@ -71,9 +95,13 @@ def login():
 
 # logout
 @app.route("/logout")
-@login_required
+# @login_required
 def logout():
+    # セッション情報をクリア
     session.clear()
+    # グローバル変数をlogout状態に
+    global status
+    status = False
     return """
            <h1>ログアウトしました</h1>
            <p><a href="/"> ⇒top page</p>
@@ -92,15 +120,27 @@ def register():
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
 
+        error_message = ""
+
         if password != confirmation:
-            return """<h1>passwordが一致しません</h1>"""
-        
+            error_message = "確認用パスワードと一致しませんでした。"
+            # エラーメッセージ付きでregister.htmlに渡す
+            return render_template("register.html", error_message=error_message)
+
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        try:
-            cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
-        except:
-            return False
+        cur.execute("SELECT email FROM users")
+        email_data = cur.fetchall()
+
+        # emailが登録済みか確認する
+        for row in email_data:
+            if row[0] == email:
+                con.close
+                error_message = "そのemailアドレスは登録済みです"
+                # エラーメッセージ付きでregister.htmlに渡す
+                return render_template("register.html", error_message=error_message)
+        # ユーザ情報をusersテーブルに登録
+        cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
         con.commit()
         con.close()
         # 新規登録後はlogin画面へ
@@ -117,19 +157,19 @@ def post():
     """
     if request.method == 'POST':
 
-        user = session["email"]
+        user = session["id"]
         # plansテーブル
         plan_title = request.form.get("plan-title")
         plan_description = request.form.get("description")
-        # schedule = request.form.get("schedule")
         url = request.form.get("vlog-url")
+        place_sum = request.form.get("place_sum")
 
-        # plan_placesテーブル
-        # place01 = request.form.get("place01")
+        # place_names と place_idに情報を追加していく
         place_names = []
         place_id = []
 
-        for i in range(5):
+        # place_sum分place_nameとplace_idを取得し、リストに入れる
+        for i in range(int(place_sum)):
             name = ("place_name_%s" %str(i+1))
             id = ("place_id_%s" %str(i+1))
             # print(tmp str(i))
@@ -140,34 +180,25 @@ def post():
 
             place_names.append(tmp_name)
             place_id.append(tmp_id)
-        
+        """
         print("-----------")
         print(place_names)
         print(place_id)
         print("-----------")
-
+        """
+        # リストからNoneを削除する
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
-        """
-        for i in places:
-            if (" ") in places[i]:
-                places[i].split()
-                print("------------")
-                print(places[i][0])
-                print(places[i][1])
-                print("-------------")
-        """
 
         # plansテーブルにinsert
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""SELECT id FROM users WHERE email = ?""", (user,) )
+        cur.execute("""SELECT id FROM users WHERE id = ?""", (user,) )
+
         for row in cur.fetchall():
             user_id = row
-
         cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id[0], plan_title, plan_description, url))
-
         con.commit()
         con.close()
 
@@ -180,14 +211,14 @@ def post():
 
         for n  in range(len(place_names)):
             cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number) VALUES(?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1))
-        
+
         # for i in range():
-        
+
         con.commit()
         con.close()
 
         return redirect("/")
-        
+
     else:
         return render_template("post.html")
 
@@ -210,10 +241,10 @@ def content():
 
 #データベースから取ってきた値を辞書形式で扱えるように
 def user_lit_factory(cursor, row):
-   d = {}
-   for idx, col in enumerate(cursor.description):
-       d[col[0]] = row[idx]
-   return d
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 @app.route('/plans')
 def plans():
@@ -255,7 +286,7 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
-    print(place_info_li)
+    print(response)
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
