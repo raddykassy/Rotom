@@ -11,6 +11,15 @@ let markerData = [ // マーカーを立てる場所名・緯度・経度
 
 ];
 
+function showBlobImage() {
+    fetch("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI").then(response => {
+      response.blob().then(blobResponse => {
+        const fileUrl = URL.createObjectURL(blobResponse)
+        document.querySelector('.image_result').innerHTML = `<img src='${fileUrl}' />`
+      })
+    })
+  }
+
 for (const place_data of place_info_li){
     place_array = {
 
@@ -74,7 +83,7 @@ function initMap() {
      '<div class="window">'+
      `${markerData[i]['name']}`+
      '<br>'+
-     `<a href=${markerData[i]['url']} target="_blank" rel="noopener noreferrer">` +
+     `<a href=${markerData[i]['url']}>` +
      `${markerData[i]['url']}`+
      '</a>'+
      '</div>';
@@ -155,20 +164,6 @@ follow.addEventListener('click',
   }
 )
 })
-
-// 画像取得の実験
-// showBlobImage()
-// function showBlobImage() {
-//     fetch("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI"
-//     ).then(response => {
-//       response.blob().then(blobResponse => {
-//         const fileUrl = URL.createObjectURL(blobResponse)
-//         document.querySelector('.image_result').innerHTML = `<img src='${fileUrl}' />`
-//         console.log(fileUrl)
-//       })
-//     })
-//   }
-
 
 
 

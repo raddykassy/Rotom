@@ -288,8 +288,8 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
-    # photo = requests.get('https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI')
-    # print('photo')
+    photo = requests.get('https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI')
+    print('photo' + photo)
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
