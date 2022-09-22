@@ -119,7 +119,6 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
-        username = request.form.get('user-name')
 
         error_message = ""
 
@@ -141,7 +140,7 @@ def register():
                 # エラーメッセージ付きでregister.htmlに渡す
                 return render_template("register.html", error_message=error_message)
         # ユーザ情報をusersテーブルに登録
-        cur.execute("""INSERT INTO users (email, password, name) values (?,?,?)""", (email, generate_password_hash(password), username,))
+        cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
         con.commit()
         con.close()
         # 新規登録後はlogin画面へ

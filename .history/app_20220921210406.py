@@ -119,7 +119,6 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
-        username = request.form.get('user-name')
 
         error_message = ""
 
@@ -141,7 +140,7 @@ def register():
                 # エラーメッセージ付きでregister.htmlに渡す
                 return render_template("register.html", error_message=error_message)
         # ユーザ情報をusersテーブルに登録
-        cur.execute("""INSERT INTO users (email, password, name) values (?,?,?)""", (email, generate_password_hash(password), username,))
+        cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
         con.commit()
         con.close()
         # 新規登録後はlogin画面へ
@@ -288,6 +287,9 @@ def plan_content(user_id, post_id):
         place_info_li[index]["url"] = response["result"]["website"]
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
+
+    # photo = requests.get('https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI')
+    # print('photo')
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 

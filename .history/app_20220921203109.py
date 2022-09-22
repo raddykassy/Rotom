@@ -119,7 +119,6 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
-        username = request.form.get('user-name')
 
         error_message = ""
 
@@ -141,7 +140,7 @@ def register():
                 # エラーメッセージ付きでregister.htmlに渡す
                 return render_template("register.html", error_message=error_message)
         # ユーザ情報をusersテーブルに登録
-        cur.execute("""INSERT INTO users (email, password, name) values (?,?,?)""", (email, generate_password_hash(password), username,))
+        cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
         con.commit()
         con.close()
         # 新規登録後はlogin画面へ
@@ -285,12 +284,11 @@ def plan_content(user_id, post_id):
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
         response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
-        place_info_li[index]["url"] = response["result"]["website"]
+        place_info_li[index]["url"] = response["result"]["website"])
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
-
 
 if __name__ == '__main__':
     app.debug = True

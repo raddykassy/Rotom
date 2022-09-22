@@ -17,7 +17,6 @@ for (const place_data of place_info_li){
     name: place_data['place_name'],
     lat: place_data['lat'],
     lng: place_data['lng'],
-    url: place_data['url'],
 
     }
     markerData.push(place_array)
@@ -38,28 +37,28 @@ function initMap() {
         map: map // マーカーを立てる地図を指定
    });
 
-//    //線で結ぶための配列
-//    //place_arrayからnameを削除して
-//    const flightPlanCoordinates = [
+   //線で結ぶための配列
+   //place_arrayからnameを削除して
+   const flightPlanCoordinates = [
 
-//   ];
-//   for (const elem of markerData) {
-//     // delete marker_data["name"];
-//     delete elem["name"]
-//     flightPlanCoordinates.push(elem);
-//   }
+  ];
+  for (const elem of markerData) {
+    // delete marker_data["name"];
+    dele elem["name"]
+    flightPlanCoordinates.push(marker_data);
+  }
 
 //   console.log(flightPlanCoordinates);
 
-//   const flightPath = new google.maps.Polyline({
-//     path: flightPlanCoordinates,
-//     geodesic: true,
-//     strokeColor: "#FF0000",
-//     strokeOpacity: 1.0,
-//     strokeWeight: 2,
-//   });
+  const flightPath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+    geodesic: true,
+    strokeColor: "#FF0000",
+    strokeOpacity: 1.0,
+    strokeWeight: 2,
+  });
 
-//   flightPath.setMap(map);
+  flightPath.setMap(map);
 
  // マーカー毎の処理
  for (let i = 0; i < markerData.length; i++) {
@@ -68,19 +67,9 @@ function initMap() {
          position: markerLatLng, // マーカーを立てる位置を指定
             map: map // マーカーを立てる地図を指定
        });
-
-     //マップに表示させるWindowの内容
-     const contentString = 
-     '<div class="window">'+
-     `${markerData[i]['name']}`+
-     '<br>'+
-     `<a href=${markerData[i]['url']} target="_blank" rel="noopener noreferrer">` +
-     `${markerData[i]['url']}`+
-     '</a>'+
-     '</div>';
  
      infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
-         content:contentString,
+         content: '<div class="sample">' + markerData[i]['name'] + '</div>' // 吹き出しに表示する内容
        });
  
      markerEvent(i); // マーカーにクリックイベントを追加
@@ -134,8 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     })
 })
-
-//フォローボタンが押されたときの処理
 document.addEventListener('DOMContentLoaded', function() {
 let is_clicked = false
 let follow = document.querySelector('.follow-button')
@@ -155,20 +142,6 @@ follow.addEventListener('click',
   }
 )
 })
-
-// 画像取得の実験
-// showBlobImage()
-// function showBlobImage() {
-//     fetch("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI"
-//     ).then(response => {
-//       response.blob().then(blobResponse => {
-//         const fileUrl = URL.createObjectURL(blobResponse)
-//         document.querySelector('.image_result').innerHTML = `<img src='${fileUrl}' />`
-//         console.log(fileUrl)
-//       })
-//     })
-//   }
-
 
 
 

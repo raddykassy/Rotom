@@ -78,6 +78,20 @@ footer {
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
+    animation-name: fadeInAnime;
+    animation-duration: 3.5s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInAnime {
+    from {
+    opacity: 0;
+    }
+
+    to {
+    opacity: 1;
+    }
 }
 
 .headline {
@@ -113,6 +127,7 @@ footer {
 .form-search {
     text-align: center;
 }
+
 
 
 /* form-search end */

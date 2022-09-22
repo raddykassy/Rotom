@@ -68,19 +68,13 @@ function initMap() {
          position: markerLatLng, // マーカーを立てる位置を指定
             map: map // マーカーを立てる地図を指定
        });
-
-     //マップに表示させるWindowの内容
-     const contentString = 
-     '<div class="window">'+
-     `${markerData[i]['name']}`+
-     '<br>'+
-     `<a href=${markerData[i]['url']} target="_blank" rel="noopener noreferrer">` +
-     `${markerData[i]['url']}`+
-     '</a>'+
-     '</div>';
  
      infoWindow[i] = new google.maps.InfoWindow({ // 吹き出しの追加
-         content:contentString,
+         content: 
+         '<div class="sample">' + markerData[i]['name'] + markerData[i]['url'] + 
+         
+         '</div>' // 吹き出しに表示する内容
+        
        });
  
      markerEvent(i); // マーカーにクリックイベントを追加
@@ -155,20 +149,6 @@ follow.addEventListener('click',
   }
 )
 })
-
-// 画像取得の実験
-// showBlobImage()
-// function showBlobImage() {
-//     fetch("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI"
-//     ).then(response => {
-//       response.blob().then(blobResponse => {
-//         const fileUrl = URL.createObjectURL(blobResponse)
-//         document.querySelector('.image_result').innerHTML = `<img src='${fileUrl}' />`
-//         console.log(fileUrl)
-//       })
-//     })
-//   }
-
 
 
 
