@@ -627,6 +627,7 @@ ol li:before {
 
 
 
+
 .plan-details{
     height: 80px;
     margin-left: 20px;
@@ -674,20 +675,34 @@ form {
     display: block;
   }
 
-  input[type="text"],
-  input[type="url"],
-  textarea,
-  fieldset {
+  /*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
+input[type="text"],
+input[type="url"],
+textarea,
+fieldset {
     width: 100%;
     border: 1px solid #333;
     box-sizing: border-box;
-  }
+}
 
-  input:invalid {
-    box-shadow: 0 0 5px 1px red;
-  }
+/*投稿画面で未入力のところに赤線を引く*/
+input:invalid {
+    box-shadow: 0 0 5px 1px #ff9393;
+}
+textarea:invalid {
+    box-shadow: 0 0 5px 1px #ff9393;
+}
 
-  input:focus:invalid {
+/*エラー検出時　https://code-kitchen.dev/css/invalid/*/
+input:focus:invalid {
     box-shadow: none;
-  }
+}
+textarea:focus:invalid {
+    box-shadow: none;
+}
+
+/*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
+input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px white inset;
+}
 
