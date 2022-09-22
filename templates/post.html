@@ -60,11 +60,11 @@
         <form action="" method="POST" class="planning-form">
             <div class="mt-5 mb-3">
                 <label for="plan-title" class="form-label">プランタイトル</label>
-                <input type="text" class="form-control" id="plan-title" name="plan-title" placeholder="プランのタイトルを入力">
+                <input type="text" class="form-control" id="plan-title" name="plan-title" placeholder="プランのタイトルを入力" required>
             </div>
             <div class="mb-3">
                 <label for="vlog-url" class="form-label">YouTubeのURL</label>
-                <input type="text" class="form-control" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力">
+                <input type="url" class="form-control" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力" required>
             </div>
             <div class="plan-places">
                 <div class="mt-5 mb-3">
@@ -73,7 +73,7 @@
                 <div class="place-container" id="place-container">
                     <div class="mb-3">
                         <!-- <label for="place" class="form-label">1番目</label> -->
-                        <input type="text" class="form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい">
+                        <input type="text" class="form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい" required>
                         <input type="hidden" id="place_name_1" name="place_name_1" value="">
                         <input type="hidden" id="place_id_1" name="place_id_1" value="">
                     </div>
