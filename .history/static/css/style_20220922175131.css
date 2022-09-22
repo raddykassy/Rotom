@@ -657,15 +657,13 @@ ol li:before {
 
 
 .pagination{
-    margin-top: 30px;
-    margin-bottom: 50px;
+    /* margin-top: 50px;
+    margin-bottom: 50px; */
 
 }
 
 .plans-body{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
 }

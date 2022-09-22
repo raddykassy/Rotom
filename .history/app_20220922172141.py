@@ -270,16 +270,14 @@ def plans():
     #ここからページネーション機能
     
     # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
+	page = request.args.get(get_page_parameter(), type=int, default=1)
 
     # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
+	PageData = plans[(page - 1)*6: page*6]
 
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
-    
-    print(len(plans))
-    print(MaxPage)
+	MaxPage = (- len(Data_List) // 3) * -1
+
     
     return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
 

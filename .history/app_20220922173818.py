@@ -276,9 +276,8 @@ def plans():
     PageData = plans[(page - 1)*6: page*6]
 
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
-    
-    print(len(plans))
+    MaxPage = (- len(plans) // 3) * -1
+
     print(MaxPage)
     
     return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)

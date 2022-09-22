@@ -33,16 +33,15 @@
         <div class="pagination">
             <!--(1)前のページ-->
             {% if (CurPage - 1) > 0 %}
-            <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
+            <a href="plans?page={{ CurPage - 1}}" class="btn btn-light">{{ CurPage - 1}}</a>
             {% endif %}
 
             <!--(1)現在のページ-->
-            <li class="page-item active">
-                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
-            </li>
+            <a href="#" class="btn btn-secondary">{{ CurPage }}</a>
+
             <!--(2)次のページ-->
             {% if (CurPage + 1) <= MaxPage %}
-            <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+            <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-secondary">{{ CurPage + 1}}</a>
             {% endif %}
         </div>
 

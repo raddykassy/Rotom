@@ -38,11 +38,13 @@
 
             <!--(1)現在のページ-->
             <li class="page-item active">
-                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
+                <a href="#" class="btn btn-outline-primary current-page">{{ CurPage }}</a>
             </li>
             <!--(2)次のページ-->
             {% if (CurPage + 1) <= MaxPage %}
-            <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+            <button type="button" class="btn btn-outline-primary" active>
+                <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+            </button>
             {% endif %}
         </div>
 
