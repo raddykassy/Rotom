@@ -37,9 +37,8 @@
             {% endif %}
 
             <!--(1)現在のページ-->
-            <li class="page-item active">
-                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
-            </li>
+            <a href="#" class="btn btn-outline-primary">{{ CurPage }}</a>
+
             <!--(2)次のページ-->
             {% if (CurPage + 1) <= MaxPage %}
             <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>

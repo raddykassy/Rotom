@@ -6,8 +6,7 @@ from helpers import login_required
 import secrets
 import requests
 import json
-# import flask_paginate
-from flask_paginate import Pagination, get_page_parameter
+from flask_pagination import Pagination, get_page_parameter
 
 
 
@@ -266,22 +265,7 @@ def plans():
         #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
-
-    #ここからページネーション機能
-    
-    # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-
-    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
-
-    # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
-    
-    print(len(plans))
-    print(MaxPage)
-    
-    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
+    return render_template('plans.html',plans=plans)
 
 
 @app.route('/plan_content/<user_id>/<int:post_id>')

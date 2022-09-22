@@ -652,20 +652,3 @@ ol li:before {
 
 /* ここまでプランページ一覧のcss */
 
-
-/* ここからページネーション */
-
-
-.pagination{
-    margin-top: 30px;
-    margin-bottom: 50px;
-
-}
-
-.plans-body{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-}

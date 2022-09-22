@@ -669,3 +669,8 @@ ol li:before {
     align-items: center;
 
 }
+
+.current-page :active{
+    color: #0468ff;
+
+}
