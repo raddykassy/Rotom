@@ -308,13 +308,11 @@ def plan_content(user_id, post_id):
         like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
         
         is_liked = False
-        #過去にlikeしていない場合
         if like_info == []:
             pass
         #過去にlikeしている場合
         else:
             is_liked = True
-        #過去のlike状況をフロント側に伝える
         return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked,)
 
     else:
@@ -353,7 +351,7 @@ def like():
             conn.commit()
             conn.close()
 
-    return "いいねボタン押後のデータベースの処理が完了しました"
+    return "データベースの処理が完了しました"
 
 if __name__ == '__main__':
     app.debug = True

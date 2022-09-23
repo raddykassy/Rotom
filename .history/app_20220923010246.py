@@ -6,8 +6,12 @@ from helpers import login_required
 import secrets
 import requests
 import json
+# import flask_paginate
 from flask_paginate import Pagination, get_page_parameter
 import datetime
+from flask_login import LoginManager
+
+login_manager = LoginManager()
 
 
 app = Flask(__name__)
@@ -277,6 +281,9 @@ def plans():
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
     MaxPage = (- len(plans) // 6) * -1
     
+    print(len(plans))
+    print(MaxPage)
+    
     return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
 
 
@@ -294,7 +301,9 @@ def plan_content(user_id, post_id):
     place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
     plan_info = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
 
-    #place_idから緯度経度、URLを取得
+        #place_idから緯度経度を取得
+    #place_info_liにlat, lngをappend
+    # place_info_li = [{}, {}, ...]
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
         response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
@@ -302,24 +311,23 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
     
-    #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
+    #ログインしている場合、ライクの処理を行う
     is_liked = False
     if status:
         like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
         
+        #ライクの処理
         is_liked = False
-        #過去にlikeしていない場合
         if like_info == []:
             pass
-        #過去にlikeしている場合
         else:
             is_liked = True
-        #過去のlike状況をフロント側に伝える
+        print("ログインしています")  
         return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked,)
 
     else:
+        print("ログインしていません")  
         return render_template('content.html', plan_info = plan_info, place_info_li = place_info_li,)
-
 
 @app.route('/like', methods=['GET', 'POST'])
 def like():
@@ -353,7 +361,9 @@ def like():
             conn.commit()
             conn.close()
 
-    return "いいねボタン押後のデータベースの処理が完了しました"
+
+
+    return redirect("/")
 
 if __name__ == '__main__':
     app.debug = True

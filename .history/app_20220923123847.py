@@ -353,7 +353,7 @@ def like():
             conn.commit()
             conn.close()
 
-    return "いいねボタン押後のデータベースの処理が完了しました"
+    return "データベースの処理が完了しました"
 
 if __name__ == '__main__':
     app.debug = True

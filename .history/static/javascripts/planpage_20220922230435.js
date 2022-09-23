@@ -11,7 +11,6 @@ let markerData = [ // マーカーを立てる場所名・緯度・経度
 
 ];
 
-
 for (const place_data of place_info_li){
     place_array = {
 
@@ -159,43 +158,36 @@ follow.addEventListener('click',
 
 
 // ここからいいね機能の実装
-//現状、ログインしていないと#likeで取得できるおジブジェクトがないためUncaught TypeError: Cannot read properties of nullがでる。
+
+// オブジェクトを取得
 
 document.addEventListener('DOMContentLoaded', function() {
-    
+
     const is_liked=false;
     const liked_obj = document.querySelector('#like')
+    liked_obj.addEventListener('click', 
+    function () {
 
-        liked_obj.addEventListener('click',
-        function like_post() {
+        //conten_idをapp.pyに渡す
+        const data = JSON.stringify({"plan_id":plan_info[0][id]})
+        $.ajax({
+            dataType: "json",
+            type: 'POST',
+            url: '/like',
+            data: data,
+            success: function(){  
+                console.log("success");  
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+            }  
 
-            //conten_idをapp.pyに渡す
-            const data = JSON.stringify({"plan_id":plan_info[0]["id"]})
-            $.ajax({
-                type: 'POST',
-                url: '/like',
-                data: data,
-                contentType:'application/json',
-                success: function(){  
-                    console.log("success");  
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                }
-
-            }).done(function(data){
-
-                // ajax通信終了後
-                console.log(data)
-                
-
-            }).fail(function(msgg){
-                console.log('Ajax Error')
-            });
-
-        })
-
+    })
 })
+
+
+
+
 
 
 
@@ -211,3 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //       })
 //     })
 //   }
+
+
+
+

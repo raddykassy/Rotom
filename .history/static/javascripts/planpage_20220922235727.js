@@ -11,7 +11,6 @@ let markerData = [ // マーカーを立てる場所名・緯度・経度
 
 ];
 
-
 for (const place_data of place_info_li){
     place_array = {
 
@@ -159,15 +158,17 @@ follow.addEventListener('click',
 
 
 // ここからいいね機能の実装
-//現状、ログインしていないと#likeで取得できるおジブジェクトがないためUncaught TypeError: Cannot read properties of nullがでる。
+
+// オブジェクトを取得
 
 document.addEventListener('DOMContentLoaded', function() {
     
     const is_liked=false;
     const liked_obj = document.querySelector('#like')
+    if (!notplan_info[0]["id"]){
 
         liked_obj.addEventListener('click',
-        function like_post() {
+        function () {
 
             //conten_idをapp.pyに渡す
             const data = JSON.stringify({"plan_id":plan_info[0]["id"]})
@@ -183,19 +184,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert("Status: " + textStatus); alert("Error: " + errorThrown); 
                 }
 
-            }).done(function(data){
-
-                // ajax通信終了後
-                console.log(data)
-                
-
-            }).fail(function(msgg){
-                console.log('Ajax Error')
-            });
+            })
 
         })
-
+    } else {
+        
+    }
 })
+
+
+
+
 
 
 

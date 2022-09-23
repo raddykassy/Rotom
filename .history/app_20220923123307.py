@@ -8,6 +8,8 @@ import requests
 import json
 from flask_paginate import Pagination, get_page_parameter
 import datetime
+# from flask_login import LoginManager, UserMixin
+
 
 
 app = Flask(__name__)
@@ -302,19 +304,17 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
     
-    #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
+    #ログインしている場合、ライクの処理を行う
     is_liked = False
     if status:
         like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
         
+        #ライクの処理
         is_liked = False
-        #過去にlikeしていない場合
         if like_info == []:
             pass
-        #過去にlikeしている場合
         else:
             is_liked = True
-        #過去のlike状況をフロント側に伝える
         return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked,)
 
     else:
@@ -353,7 +353,7 @@ def like():
             conn.commit()
             conn.close()
 
-    return "いいねボタン押後のデータベースの処理が完了しました"
+    return "データベースの処理が完了しました"
 
 if __name__ == '__main__':
     app.debug = True

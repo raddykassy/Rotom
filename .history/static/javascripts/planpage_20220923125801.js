@@ -186,8 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }).done(function(data){
 
                 // ajax通信終了後
-                console.log(data)
-                
+
 
             }).fail(function(msgg){
                 console.log('Ajax Error')

@@ -159,7 +159,8 @@ follow.addEventListener('click',
 
 
 // ここからいいね機能の実装
-//現状、ログインしていないと#likeで取得できるおジブジェクトがないためUncaught TypeError: Cannot read properties of nullがでる。
+
+// オブジェクトを取得
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -167,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const liked_obj = document.querySelector('#like')
 
         liked_obj.addEventListener('click',
-        function like_post() {
+        function () {
 
             //conten_idをapp.pyに渡す
             const data = JSON.stringify({"plan_id":plan_info[0]["id"]})
@@ -183,19 +184,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert("Status: " + textStatus); alert("Error: " + errorThrown); 
                 }
 
-            }).done(function(data){
-
-                // ajax通信終了後
-                console.log(data)
-                
-
-            }).fail(function(msgg){
-                console.log('Ajax Error')
-            });
+            })
 
         })
+})
+
+
+//いいねボタンの処理
+document.addEventListener('DOMContentLoaded', function() {
+
+    if (user_id && is_liked){
+        console.log(user_id)
+        console.log(is_liked)
+
+        // const like = document.querySelector('#like');
+        // like.setAttribute("checked", checked);
+    }
 
 })
+
+
+
 
 
 

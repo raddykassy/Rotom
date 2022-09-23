@@ -11,6 +11,31 @@ let markerData = [ // マーカーを立てる場所名・緯度・経度
 
 ];
 
+try {
+    place_info_li = {{ place_info_li | tojson}}
+    console.log(place_info_li)
+} catch (error) {
+    console.error(error);
+}
+
+try {
+    plan_info = {{ plan_info | tojson}}
+    console.log(plan_info);
+} catch (error) {
+    console.error(error);
+}
+
+try {
+    user_id = {{ user_id | tojson}}
+} catch (error) {
+    console.error(error);
+}
+
+try {
+    is_liked = {{ is_liked | tojson}}
+} catch (error) {
+    console.error(error);
+}
 
 for (const place_data of place_info_li){
     place_array = {
@@ -159,7 +184,8 @@ follow.addEventListener('click',
 
 
 // ここからいいね機能の実装
-//現状、ログインしていないと#likeで取得できるおジブジェクトがないためUncaught TypeError: Cannot read properties of nullがでる。
+
+// オブジェクトを取得
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -167,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const liked_obj = document.querySelector('#like')
 
         liked_obj.addEventListener('click',
-        function like_post() {
+        function () {
 
             //conten_idをapp.pyに渡す
             const data = JSON.stringify({"plan_id":plan_info[0]["id"]})
@@ -183,19 +209,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert("Status: " + textStatus); alert("Error: " + errorThrown); 
                 }
 
-            }).done(function(data){
-
-                // ajax通信終了後
-                console.log(data)
-                
-
-            }).fail(function(msgg){
-                console.log('Ajax Error')
-            });
+            })
 
         })
+})
+
+
+//いいねボタンの処理
+document.addEventListener('DOMContentLoaded', function() {
+
+    console.log(user_id)
+    console.log(is_liked)
+
+
+    if (user_id && is_liked==true){
+        console.log("liked")
+        const like = document.querySelector('#like');
+        like.setAttribute("checked", checked);
+    }
 
 })
+
+
+
 
 
 
