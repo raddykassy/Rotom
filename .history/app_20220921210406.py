@@ -6,9 +6,6 @@ from helpers import login_required
 import secrets
 import requests
 import json
-# import flask_paginate
-from flask_paginate import Pagination, get_page_parameter
-
 
 
 app = Flask(__name__)
@@ -98,7 +95,7 @@ def login():
 
 # logout
 @app.route("/logout")
-@login_required
+# @login_required
 def logout():
     # セッション情報をクリア
     session.clear()
@@ -122,7 +119,6 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
-        username = request.form.get('user-name')
 
         error_message = ""
 
@@ -144,7 +140,7 @@ def register():
                 # エラーメッセージ付きでregister.htmlに渡す
                 return render_template("register.html", error_message=error_message)
         # ユーザ情報をusersテーブルに登録
-        cur.execute("""INSERT INTO users (email, password, name) values (?,?,?)""", (email, generate_password_hash(password), username,))
+        cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
         con.commit()
         con.close()
         # 新規登録後はlogin画面へ
@@ -154,7 +150,6 @@ def register():
         return render_template("register.html")
 
 @app.route("/post", methods=["GET", "POST"])
-@login_required
 def post():
     """
     GET: post.htmlの表示
@@ -236,75 +231,20 @@ def inquiry():
 def plan():
     return render_template('plan.html')
 
+@app.route('/serach')
+def search():
+    return render_template('search.html')
+
+@app.route('/content')
+def content():
+    return render_template('content.html')
+
 #データベースから取ってきた値を辞書形式で扱えるように
 def user_lit_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
-
-@app.route('/search', methods=["GET", "POST"])
-def search():
-    if request.method == 'POST':
-
-        url = request.form.get("vlog-url")
-        place = request.form.get("place")
-        place_id = request.form.get("place_id_box")
-
-        # 同時に複数項目が入力されている場合
-        if url and place_id:
-            error_message = "複数欄を同時に入力することはできません。"
-            return render_template('plans.html', error_message=error_message)
-        # VlogのURLから検索
-        elif url:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
-
-            cur = con.cursor()
-
-            plans = list(cur.execute("SELECT * FROM plans WHERE url = ?", (url,)))
-
-            if not plans:
-                error_message = url + "に関するプランは存在しません"
-                return render_template('plans.html', error_message=error_message)
-
-            for index, plan in enumerate(plans):
-                plan["video_id"] = plan["url"].split("/")[3]
-
-            con.close()
-
-            return render_template('plans.html', plans=plans)
-        # 場所から検索
-        elif place_id:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
-
-            cur = con.cursor()
-
-            # 入力された場所が含まれるプランを取得
-            plans = list(cur.execute("SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time FROM plans JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?", (place_id,)))
-
-            if not plans:
-                error_message = place + "を含んだプランは存在しません"
-                return render_template('plans.html', error_message=error_message)
-
-            for index, plan in enumerate(plans):
-                plan["video_id"] = plan["url"].split("/")[3]
-
-            con.close()
-
-            return render_template('plans.html', plans=plans)
-
-    # GET methods
-    else:
-        return render_template('search.html')
-
-@app.route('/content')
-def content():
-    return render_template('content.html')
-
 
 @app.route('/plans')
 def plans():
@@ -322,22 +262,7 @@ def plans():
         #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
-
-    #ここからページネーション機能
-    
-    # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-
-    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
-
-    # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
-    
-    print(len(plans))
-    print(MaxPage)
-    
-    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
+    return render_template('plans.html',plans=plans)
 
 
 @app.route('/plan_content/<user_id>/<int:post_id>')
@@ -362,6 +287,9 @@ def plan_content(user_id, post_id):
         place_info_li[index]["url"] = response["result"]["website"]
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
+
+    # photo = requests.get('https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI')
+    # print('photo')
 
     return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 

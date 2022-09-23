@@ -6,8 +6,7 @@ from helpers import login_required
 import secrets
 import requests
 import json
-# import flask_paginate
-from flask_paginate import Pagination, get_page_parameter
+from flask-paginate import Pagination, get_page_parameter
 
 
 
@@ -98,7 +97,7 @@ def login():
 
 # logout
 @app.route("/logout")
-@login_required
+# @login_required
 def logout():
     # セッション情報をクリア
     session.clear()
@@ -154,7 +153,6 @@ def register():
         return render_template("register.html")
 
 @app.route("/post", methods=["GET", "POST"])
-@login_required
 def post():
     """
     GET: post.htmlの表示
@@ -236,75 +234,20 @@ def inquiry():
 def plan():
     return render_template('plan.html')
 
+@app.route('/serach')
+def search():
+    return render_template('search.html')
+
+@app.route('/content')
+def content():
+    return render_template('content.html')
+
 #データベースから取ってきた値を辞書形式で扱えるように
 def user_lit_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
-
-@app.route('/search', methods=["GET", "POST"])
-def search():
-    if request.method == 'POST':
-
-        url = request.form.get("vlog-url")
-        place = request.form.get("place")
-        place_id = request.form.get("place_id_box")
-
-        # 同時に複数項目が入力されている場合
-        if url and place_id:
-            error_message = "複数欄を同時に入力することはできません。"
-            return render_template('plans.html', error_message=error_message)
-        # VlogのURLから検索
-        elif url:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
-
-            cur = con.cursor()
-
-            plans = list(cur.execute("SELECT * FROM plans WHERE url = ?", (url,)))
-
-            if not plans:
-                error_message = url + "に関するプランは存在しません"
-                return render_template('plans.html', error_message=error_message)
-
-            for index, plan in enumerate(plans):
-                plan["video_id"] = plan["url"].split("/")[3]
-
-            con.close()
-
-            return render_template('plans.html', plans=plans)
-        # 場所から検索
-        elif place_id:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
-
-            cur = con.cursor()
-
-            # 入力された場所が含まれるプランを取得
-            plans = list(cur.execute("SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time FROM plans JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?", (place_id,)))
-
-            if not plans:
-                error_message = place + "を含んだプランは存在しません"
-                return render_template('plans.html', error_message=error_message)
-
-            for index, plan in enumerate(plans):
-                plan["video_id"] = plan["url"].split("/")[3]
-
-            con.close()
-
-            return render_template('plans.html', plans=plans)
-
-    # GET methods
-    else:
-        return render_template('search.html')
-
-@app.route('/content')
-def content():
-    return render_template('content.html')
-
 
 @app.route('/plans')
 def plans():
@@ -322,22 +265,7 @@ def plans():
         #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
-
-    #ここからページネーション機能
-    
-    # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-
-    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
-
-    # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
-    
-    print(len(plans))
-    print(MaxPage)
-    
-    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
+    return render_template('plans.html',plans=plans)
 
 
 @app.route('/plan_content/<user_id>/<int:post_id>')

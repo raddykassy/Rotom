@@ -3,11 +3,6 @@
 {% block content %}
 
 <main class="site-content">
-    {% if error_message %}
-        <div class="error-container">
-            <p>{{ error_message }}</p>
-        </div>
-    {% endif %}
     <div class="plans-body">
         <div class="plan-grid-layout">
             {% for plan in plans %}
@@ -43,45 +38,38 @@
 
             <!--(1)現在のページ-->
             <li class="page-item active">
-                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
+                <a href="#" class="btn btn-outline-primary">{{ CurPage }}</a>
             </li>
             <!--(2)次のページ-->
             {% if (CurPage + 1) <= MaxPage %}
             <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
             {% endif %}
+
+
+
         </div>
 
-        <div class="pagination">
-            <!--(1)前のページ-->
-            {% if (CurPage - 1) > 0 %}
-            <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
-            {% endif %}
+        <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+              </li>
 
-            <!--(1)現在のページ-->
-            <li class="page-item active">
-                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
-            </li>
-            <!--(2)次のページ-->
-            {% if (CurPage + 1) <= MaxPage %}
-            <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
-            {% endif %}
-        </div>
 
-        <div class="pagination">
-            <!--(1)前のページ-->
-            {% if (CurPage - 1) > 0 %}
-            <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
-            {% endif %}
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item active">
+                <span class="page-link">
+                  2
+                  <span class="sr-only">(current)</span>
+                </span>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
 
-            <!--(1)現在のページ-->
-            <li class="page-item active">
-                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
-            </li>
-            <!--(2)次のページ-->
-            {% if (CurPage + 1) <= MaxPage %}
-            <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
-            {% endif %}
-        </div>
 
     </div>
 
