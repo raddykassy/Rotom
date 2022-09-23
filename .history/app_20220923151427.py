@@ -346,8 +346,9 @@ def plans():
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id;
     """))
-    
-    #urlからyoutubeIDを取得
+
+    print(plans)
+        #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
@@ -381,8 +382,9 @@ def plan_content(user_id, post_id):
         """
         SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
         FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
-        """
-        , (post_id,)))
+        """, (post_id,)))
+
+    print("post_id = " + str(post_id))
     
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):

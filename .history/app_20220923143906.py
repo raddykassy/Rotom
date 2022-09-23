@@ -342,12 +342,10 @@ def plans():
     cur = conn.cursor()
 
     #plansを全て取得
-    plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
-    FROM plans INNER JOIN users ON plans.user_id = users.id;
-    """))
-    
-    #urlからyoutubeIDを取得
+    # plans = list(cur.execute("SELECT * FROM plans"))
+    plans = list(cur.execute("SELECT * FROM plans INNER JOIN users ON plans.user_id = users.id;"))
+
+        #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
@@ -377,13 +375,8 @@ def plan_content(user_id, post_id):
     cur = conn.cursor()
 
     place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
-    plan_info = list(cur.execute(
-        """
-        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
-        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
-        """
-        , (post_id,)))
-    
+    plan_info = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
+
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得

@@ -346,8 +346,9 @@ def plans():
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id;
     """))
-    
-    #urlからyoutubeIDを取得
+
+    print(plans)
+        #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
