@@ -413,7 +413,7 @@ def plan_content(user_id, post_id):
         else:
             is_liked = True
         #過去のlike状況をフロント側に伝える
-        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked,)
+        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked, status=status, user_name=session["user_name"])
 
     else:
         return render_template('content.html', plan_info = plan_info, place_info_li = place_info_li,)
