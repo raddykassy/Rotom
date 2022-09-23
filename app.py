@@ -98,7 +98,7 @@ def login():
 
 # logout
 @app.route("/logout")
-# @login_required
+@login_required
 def logout():
     # セッション情報をクリア
     session.clear()
@@ -252,6 +252,7 @@ def user_lit_factory(cursor, row):
 
 @app.route('/plans')
 def plans():
+    global status
     #データベースから情報を取ってきて、plans.htmlに渡す。
     #渡す情報　plan_places, plans
     dbname = "Rotom.db"
@@ -281,7 +282,7 @@ def plans():
     print(len(plans))
     print(MaxPage)
     
-    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
+    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
 
 
 @app.route('/plan_content/<user_id>/<int:post_id>')
