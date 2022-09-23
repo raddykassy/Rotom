@@ -252,7 +252,7 @@ def search():
         place_id = request.form.get("place_id_box")
 
         # 同時に複数項目が入力されている場合
-        if url and place_id:
+        if url and place:
             error_message = "複数欄を同時に入力することはできません。"
             return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
 
@@ -290,7 +290,7 @@ def search():
             return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
 
         # 場所から検索
-        elif place_id:
+        elif place:
             dbname = "Rotom.db"
             con = sqlite3.connect(dbname)
             con.row_factory = user_lit_factory
