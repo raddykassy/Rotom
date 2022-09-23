@@ -1,4 +1,4 @@
-{% extends "layout-3.html" %}
+{% extends "layout-2.html" %}
 
 {% block content %}
 
@@ -26,7 +26,7 @@
                             <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
                                 <h3>{{ plan["title"] }}</h3>
                             </a>
-                            <p>{{plan["name"]}}</p>
+                            <p>{{plan['name']}}</p>
                             </div>
                         </div>
                 </div>

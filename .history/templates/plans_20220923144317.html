@@ -1,4 +1,4 @@
-{% extends "layout-3.html" %}
+{% extends "layout-2.html" %}
 
 {% block content %}
 
@@ -11,6 +11,7 @@
     <div class="plans-body">
         <div class="plan-grid-layout">
             {% for plan in plans %}
+                <script>console.log(plan)</script>
                 <div class="plan-grid-item">
                     <!-- 以下に値を渡す -->
                     <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">

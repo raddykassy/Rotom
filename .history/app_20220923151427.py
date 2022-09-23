@@ -31,17 +31,16 @@ def index():
 
     # statusがTrue(login状態)ならusersテーブルからemailを取得
     # index2.htmlにemailを渡して、表示する
-    if status:
+    if status == True:
         user_id = session["id"]
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
         # ここnameにしてもいいかも
-        cur.execute("SELECT name FROM users WHERE id = ?", (user_id,))
+        cur.execute("SELECT email FROM users WHERE id = ?", (user_id,))
         user_info =  cur.fetchall()
         con.close()
 
-        session["user_name"] = user_info[0][0]
-        return render_template('index2.html', status=status, user_name=session["user_name"])
+        return render_template('index2.html', status=status, email=user_info[0][0])
 
     else:
         return render_template('index2.html', status=status)
@@ -54,12 +53,11 @@ def login():
     GET: loginページの表示
     POST: username, passwordの取得, sesion情報の登録
     """
-    global status
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
         # hash = generate_password_hash(password)
-        # global status
+        global status
 
         error_message = ""
 
@@ -161,7 +159,6 @@ def post():
     GET: post.htmlの表示
     POST: planの追加
     """
-    global status
     if request.method == 'POST':
 
         user = session["id"]
@@ -227,7 +224,7 @@ def post():
         return redirect("/")
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"])
+        return render_template("post.html")
 
 
 @app.route('/inquiry')
@@ -336,7 +333,6 @@ def content():
 
 @app.route('/plans')
 def plans():
-    global status
     #データベースから情報を取ってきて、plans.htmlに渡す。
     #渡す情報　plan_places, plans
     dbname = "Rotom.db"
@@ -350,8 +346,9 @@ def plans():
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id;
     """))
-    
-    #urlからyoutubeIDを取得
+
+    print(plans)
+        #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
@@ -366,10 +363,8 @@ def plans():
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
     MaxPage = (- len(plans) // 6) * -1
     
-    if status:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
-    else:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
+    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
+
 
 #下二行のパラメーターのuser_idは、動画を投稿した人のuser_id
 @app.route('/plan_content/<user_id>/<int:post_id>')
@@ -387,8 +382,9 @@ def plan_content(user_id, post_id):
         """
         SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
         FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
-        """
-        , (post_id,)))
+        """, (post_id,)))
+
+    print("post_id = " + str(post_id))
     
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
@@ -413,7 +409,7 @@ def plan_content(user_id, post_id):
         else:
             is_liked = True
         #過去のlike状況をフロント側に伝える
-        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked, status=status, user_name=session["user_name"])
+        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked,)
 
     else:
         return render_template('content.html', plan_info = plan_info, place_info_li = place_info_li,)
