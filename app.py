@@ -385,7 +385,10 @@ def plan_content(user_id, post_id):
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
         response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
-        place_info_li[index]["url"] = response["result"]["website"]
+        try:
+            place_info_li[index]["url"] = response["result"]["website"]
+        except KeyError:
+            place_info_li[index]["url"] = "WEBサイトが見つかりません"
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
