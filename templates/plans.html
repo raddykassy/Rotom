@@ -4,6 +4,11 @@
 
 <main class="site-content">
     <div class="plan-grid-layout">
+        {% if error_message %}
+        <div class="error-container">
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
         {% for plan in plans %}
             <div class="plan-grid-item">
                 <!-- 以下に値を渡す -->
