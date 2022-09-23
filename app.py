@@ -254,7 +254,8 @@ def search():
         # 同時に複数項目が入力されている場合
         if url and place_id:
             error_message = "複数欄を同時に入力することはできません。"
-            return render_template('plans.html', error_message=error_message)
+            return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
+
         # VlogのURLから検索
         elif url:
             dbname = "Rotom.db"
@@ -265,16 +266,29 @@ def search():
 
             plans = list(cur.execute("SELECT * FROM plans WHERE url = ?", (url,)))
 
+            con.close()
+
             if not plans:
                 error_message = url + "に関するプランは存在しません"
-                return render_template('plans.html', error_message=error_message)
+                return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
 
             for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
 
-            con.close()
+            #ここからページネーション機能
 
-            return render_template('plans.html', plans=plans)
+            # (1) 表示されているページ番号を取得(初期ページ1)
+            page = request.args.get(get_page_parameter(), type=int, default=1)
+
+            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+            PageData = plans[(page - 1)*6: page*6]
+
+            # (3) 表示するデータリストの最大件数から最大ページ数を算出
+            MaxPage = (- len(plans) // 6) * -1
+
+
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+
         # 場所から検索
         elif place_id:
             dbname = "Rotom.db"
@@ -286,16 +300,28 @@ def search():
             # 入力された場所が含まれるプランを取得
             plans = list(cur.execute("SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time FROM plans JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?", (place_id,)))
 
+            con.close()
+
             if not plans:
                 error_message = place + "を含んだプランは存在しません"
-                return render_template('plans.html', error_message=error_message)
+                return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
 
             for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
 
-            con.close()
+            #ここからページネーション機能
 
-            return render_template('plans.html', plans=plans)
+            # (1) 表示されているページ番号を取得(初期ページ1)
+            page = request.args.get(get_page_parameter(), type=int, default=1)
+
+            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+            PageData = plans[(page - 1)*6: page*6]
+
+            # (3) 表示するデータリストの最大件数から最大ページ数を算出
+            MaxPage = (- len(plans) // 6) * -1
+
+
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
 
     # GET methods
     else:
