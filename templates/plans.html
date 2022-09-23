@@ -3,6 +3,11 @@
 {% block content %}
 
 <main class="site-content">
+    {% if error_message %}
+        <div class="error-container">
+            <p>{{ error_message }}</p>
+        </div>
+    {% endif %}
     <div class="plans-body">
         <div class="plan-grid-layout">
             {% for plan in plans %}
