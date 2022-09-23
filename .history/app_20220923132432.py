@@ -388,10 +388,11 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
     
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
+    is_liked = False
     if status:
-        is_liked = False
         like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
         
+        is_liked = False
         #過去にlikeしていない場合
         if like_info == []:
             pass
