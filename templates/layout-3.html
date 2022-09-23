@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-log index</title>
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
     <!-- bootstrap(css)-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- end bootstrap(css) -->
@@ -15,80 +19,79 @@
     <div class="wrapper">
         <!-- header -->
         {% if status is true %}
-
-        <header class="header namal-hd" style="background-color:whitesmoke;">
-        <nav class="navbar navbar-expand-lg navbar-light .bg-transparent text-black">
-            <div class="container-fluid hd-container">
-                <a class="navbar-brand text-black fs-4 logo-" href="/">T-log</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse mr-1 navbar-collapseEdit" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item item">
-                            <a class="nav-link active text-black" aria-current="page" href="/">TOP</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="#search">SEARCH</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="plans">PLANS</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="post">POST</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="logout">LOG OUT</a>
-                        </li>
-                        <!-- My page へのリンク（自分の投稿一覧が見れる、、とか） -->
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="#">{{ email }}さん</a>
-                        </li>
-                        <li class="nav-item dropdown item">
-                            <a class="nav-link dropdown-toggle text-black" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                PROFILE
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+        <header class="header normal-hd">
+            <nav class="navbar navbar-expand-lg navbar-light .bg-dark text-black">
+                <div class="container-fluid hd-container">
+                    <a class="navbar-brand fs-4" href="/">T-log</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse mr-1 navbar-collapseEdit" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item item">
+                                <a class="nav-link active text-white" aria-current="page" href="#">TOP</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="#search">SEARCH</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="plans">PLANS</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="post">POST</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="logout">LOG OUT</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="#">{{ user_name }}さん</a>
+                            </li>
+                            <li class="nav-item dropdown item">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    PROFILE
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
         </header>
+          
 
         {% else %}
-        <header class="header" style="background-color:whitesmoke;">
-        <nav class="navbar navbar-expand-lg navbar-light .bg-transparent text-white">
-            <div class="container-fluid hd-container">
-                <a class="navbar-brand text-black fs-4 logo-" href="/">T-log</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse mr-1 navbar-collapseEdit" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item item">
-                            <a class="nav-link active text-black" aria-current="page" href="/">TOP</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="#search">SEARCH</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="plans">PLANS</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="login">LOG IN</a>
-                        </li>
-                        <li class="nav-item item">
-                            <a class="nav-link text-black" href="register">REGISTER</a>
-                        </li>
-                    </ul>
+        <header class="header normal-hd">
+            <nav class="navbar navbar-expand-lg navbar-light .bg-dark text-black">
+                <div class="container-fluid hd-container">
+                    <a class="navbar-brand fs-4" href="/">T-log</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse mr-1 navbar-collapseEdit" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item item">
+                                <a class="nav-link active text-white" aria-current="page" href="/">TOP</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="#search">SEARCH</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="plans">PLANS</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="login">LOG IN</a>
+                            </li>
+                            <li class="nav-item item">
+                                <a class="nav-link" href="register">REGISTER</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
         </header>
         {% endif %}
 
@@ -97,6 +100,10 @@
             <!-- main-content -->
         {% endblock %}
 
+        <!-- load scripts relate to maps -->
+        <script type="text/javascript" src="../static/javascripts/addplan.js"></script>
+        <script type="text/javascript" src="../static/javascripts/post.js"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
 
         <footer class="text-center bg-dark p-3">
             <div class="copyright">
@@ -104,6 +111,8 @@
             </div>
         </footer>
     </div>
+
+    
 
     <!-- bootstrap(js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

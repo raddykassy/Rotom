@@ -31,16 +31,17 @@ def index():
 
     # statusがTrue(login状態)ならusersテーブルからemailを取得
     # index2.htmlにemailを渡して、表示する
-    if status == True:
+    if status:
         user_id = session["id"]
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
         # ここnameにしてもいいかも
-        cur.execute("SELECT email FROM users WHERE id = ?", (user_id,))
+        cur.execute("SELECT name FROM users WHERE id = ?", (user_id,))
         user_info =  cur.fetchall()
         con.close()
 
-        return render_template('index2.html', status=status, email=user_info[0][0])
+        session["user_name"] = user_info[0][0]
+        return render_template('index2.html', status=status, user_name=session["user_name"])
 
     else:
         return render_template('index2.html', status=status)
@@ -53,11 +54,12 @@ def login():
     GET: loginページの表示
     POST: username, passwordの取得, sesion情報の登録
     """
+    global status
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
         # hash = generate_password_hash(password)
-        global status
+        # global status
 
         error_message = ""
 
@@ -159,6 +161,7 @@ def post():
     GET: post.htmlの表示
     POST: planの追加
     """
+    global status
     if request.method == 'POST':
 
         user = session["id"]
@@ -224,7 +227,7 @@ def post():
         return redirect("/")
 
     else:
-        return render_template("post.html")
+        return render_template("post.html", status=status, user_name=session["user_name"])
 
 
 @app.route('/inquiry')
@@ -363,9 +366,10 @@ def plans():
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
     MaxPage = (- len(plans) // 6) * -1
     
-
-    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
-
+    if status:
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+    else:
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
 
 #下二行のパラメーターのuser_idは、動画を投稿した人のuser_id
 @app.route('/plan_content/<user_id>/<int:post_id>')
