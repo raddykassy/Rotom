@@ -102,16 +102,17 @@ def index():
 
     # statusがTrue(login状態)ならusersテーブルからemailを取得
     # index2.htmlにemailを渡して、表示する
-    if status == True:
+    if status:
         user_id = session["id"]
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
         # ここnameにしてもいいかも
-        cur.execute("SELECT email FROM users WHERE id = ?", (user_id,))
+        cur.execute("SELECT name FROM users WHERE id = ?", (user_id,))
         user_info =  cur.fetchall()
         con.close()
 
-        return render_template('index2.html', status=status, email=user_info[0][0])
+        session["user_name"] = user_info[0][0]
+        return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id)
 
     else:
         return render_template('index2.html', status=status)
@@ -124,11 +125,12 @@ def login():
     GET: loginページの表示
     POST: username, passwordの取得, sesion情報の登録
     """
+    global status
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
         # hash = generate_password_hash(password)
-        global status
+        # global status
 
         error_message = ""
 
@@ -156,11 +158,6 @@ def login():
             # ↓現段階では登録されていない or メールアドレスが重複して登録されている
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
-
-        # """
-        # <h1>ログインに成功しました</h1>
-        # <p><a href='/'> ⇒top page</p>
-        # """
 
     else:
         return render_template("login.html")
@@ -230,6 +227,7 @@ def post():
     GET: post.htmlの表示
     POST: planの追加
     """
+    global status
     if request.method == 'POST':
 
         user = session["id"]
@@ -255,13 +253,8 @@ def post():
 
             place_names.append(tmp_name)
             place_id.append(tmp_id)
-        """
-        print("-----------")
-        print(place_names)
-        print(place_id)
-        print("-----------")
-        """
-        # リストからNoneを削除する
+
+        # リストからNoneを削除する(なくてもいいかも)
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
@@ -295,7 +288,7 @@ def post():
         return redirect("/")
 
     else:
-        return render_template("post.html")
+        return render_template("post.html", status=status, user_name=session["user_name"])
 
 
 @app.route('/inquiry')
@@ -404,6 +397,7 @@ def content():
 
 @app.route('/plans')
 def plans():
+    global status
     #データベースから情報を取ってきて、plans.htmlに渡す。
     #渡す情報　plan_places, plans
     dbname = "Rotom.db"
@@ -433,8 +427,10 @@ def plans():
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
     MaxPage = (- len(plans) // 6) * -1
     
-    return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
-
+    if status:
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+    else:
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
 
 #下二行のパラメーターのuser_idは、動画を投稿した人のuser_id
 @app.route('/plan_content/<user_id>/<int:post_id>')
@@ -491,7 +487,7 @@ def plan_content(user_id, post_id):
         else:
             is_liked = True
         #過去のlike状況をフロント側に伝える
-        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked,)
+        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked, status=status, user_name=session["user_name"])
 
     else:
         return render_template('content.html', plan_info = plan_info, place_info_li = place_info_li,)
@@ -530,6 +526,99 @@ def like():
             conn.close()
 
     return "いいねボタン押後のデータベースの処理が完了しました"
+
+# mypage表示の処理
+@app.route("/mypage/<int:user_id>")
+@login_required
+def mypage(user_id):
+    global status
+    dbname = "Rotom.db"
+    conn = sqlite3.connect(dbname)
+    conn.row_factory = user_lit_factory
+
+    cur = conn.cursor()
+
+    #plansを全て取得
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
+    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
+    """, (session["id"],)))
+
+    # ユーザ情報を取得
+    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
+    for row in cur.fetchall():
+        users = row
+
+    # 投稿総数を取得
+    cur.execute("SELECT COUNT(*) AS plans_sum FROM plans WHERE user_id = ?", (session["id"],))
+    for row in cur.fetchall():
+        sum = row
+
+    #urlからyoutubeIDを取得
+    for index, plan in enumerate(plans):
+        plan["video_id"] = plan["url"].split("/")[3]
+
+    #ここからページネーション機能
+    
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+
+    conn.close()
+    
+    return render_template('profile.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
+
+# mypageでいいね一覧を見る
+@app.route("/mypage_likes/<int:user_id>")
+@login_required
+def mypage_likes(user_id):
+    global status
+    dbname = "Rotom.db"
+    conn = sqlite3.connect(dbname)
+    conn.row_factory = user_lit_factory
+
+    cur = conn.cursor()
+
+    # userがいいねしたplanを取り出す
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time  
+    FROM plans INNER JOIN likes ON plans.id = likes.plan_id WHERE likes.user_id = ?;
+    """, (session["id"],)))
+
+    # ユーザ情報を取得
+    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
+    for row in cur.fetchall():
+        users = row
+
+    # ユーザのいいね数の取得
+    cur.execute("SELECT COUNT(*) AS counts FROM likes WHERE user_id = ?", (session["id"],))
+    for row in cur.fetchall():
+        sum = row
+    
+
+    #urlからyoutubeIDを取得
+    for index, plan in enumerate(plans):
+        plan["video_id"] = plan["url"].split("/")[3]
+
+    #ここからページネーション機能
+    
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+
+    conn.close()
+    
+    return render_template('profile_likes.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status,user_id=session["id"], user_name=session["user_name"], email=users["email"], register_date=users["date"], likes_sum=sum["counts"])
 
 if __name__ == '__main__':
     app.debug = True
