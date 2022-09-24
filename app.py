@@ -6,6 +6,8 @@ from helpers import login_required
 import secrets
 import requests
 import json
+from flask_paginate import Pagination, get_page_parameter
+import datetime
 
 
 app = Flask(__name__)
@@ -29,16 +31,17 @@ def index():
 
     # statusがTrue(login状態)ならusersテーブルからemailを取得
     # index2.htmlにemailを渡して、表示する
-    if status == True:
+    if status:
         user_id = session["id"]
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
         # ここnameにしてもいいかも
-        cur.execute("SELECT email FROM users WHERE id = ?", (user_id,))
+        cur.execute("SELECT name FROM users WHERE id = ?", (user_id,))
         user_info =  cur.fetchall()
         con.close()
 
-        return render_template('index2.html', status=status, email=user_info[0][0])
+        session["user_name"] = user_info[0][0]
+        return render_template('index2.html', status=status, user_name=session["user_name"])
 
     else:
         return render_template('index2.html', status=status)
@@ -51,11 +54,12 @@ def login():
     GET: loginページの表示
     POST: username, passwordの取得, sesion情報の登録
     """
+    global status
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
         # hash = generate_password_hash(password)
-        global status
+        # global status
 
         error_message = ""
 
@@ -95,7 +99,7 @@ def login():
 
 # logout
 @app.route("/logout")
-# @login_required
+@login_required
 def logout():
     # セッション情報をクリア
     session.clear()
@@ -119,6 +123,7 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm-password')
+        username = request.form.get('user-name')
 
         error_message = ""
 
@@ -140,7 +145,7 @@ def register():
                 # エラーメッセージ付きでregister.htmlに渡す
                 return render_template("register.html", error_message=error_message)
         # ユーザ情報をusersテーブルに登録
-        cur.execute("""INSERT INTO users (email, password) values (?,?)""", (email, generate_password_hash(password)))
+        cur.execute("""INSERT INTO users (email, password, name) values (?,?,?)""", (email, generate_password_hash(password), username,))
         con.commit()
         con.close()
         # 新規登録後はlogin画面へ
@@ -150,11 +155,13 @@ def register():
         return render_template("register.html")
 
 @app.route("/post", methods=["GET", "POST"])
+@login_required
 def post():
     """
     GET: post.htmlの表示
     POST: planの追加
     """
+    global status
     if request.method == 'POST':
 
         user = session["id"]
@@ -220,7 +227,7 @@ def post():
         return redirect("/")
 
     else:
-        return render_template("post.html")
+        return render_template("post.html", status=status, user_name=session["user_name"])
 
 
 @app.route('/inquiry')
@@ -231,14 +238,6 @@ def inquiry():
 def plan():
     return render_template('plan.html')
 
-@app.route('/serach')
-def search():
-    return render_template('search.html')
-
-@app.route('/content')
-def content():
-    return render_template('content.html')
-
 #データベースから取ってきた値を辞書形式で扱えるように
 def user_lit_factory(cursor, row):
     d = {}
@@ -246,8 +245,98 @@ def user_lit_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+@app.route('/search', methods=["GET", "POST"])
+def search():
+    if request.method == 'POST':
+
+        url = request.form.get("vlog-url")
+        place = request.form.get("place")
+        place_id = request.form.get("place_id_box")
+
+        # 同時に複数項目が入力されている場合
+        if url and place:
+            error_message = "複数欄を同時に入力することはできません。"
+            return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
+
+        # VlogのURLから検索
+        elif url:
+            dbname = "Rotom.db"
+            con = sqlite3.connect(dbname)
+            con.row_factory = user_lit_factory
+
+            cur = con.cursor()
+
+            plans = list(cur.execute("SELECT * FROM plans WHERE url = ?", (url,)))
+
+            con.close()
+
+            if not plans:
+                error_message = url + "に関するプランは存在しません"
+                return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
+
+            for index, plan in enumerate(plans):
+                plan["video_id"] = plan["url"].split("/")[3]
+
+            #ここからページネーション機能
+
+            # (1) 表示されているページ番号を取得(初期ページ1)
+            page = request.args.get(get_page_parameter(), type=int, default=1)
+
+            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+            PageData = plans[(page - 1)*6: page*6]
+
+            # (3) 表示するデータリストの最大件数から最大ページ数を算出
+            MaxPage = (- len(plans) // 6) * -1
+
+
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+
+        # 場所から検索
+        elif place:
+            dbname = "Rotom.db"
+            con = sqlite3.connect(dbname)
+            con.row_factory = user_lit_factory
+
+            cur = con.cursor()
+
+            # 入力された場所が含まれるプランを取得
+            plans = list(cur.execute("SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time FROM plans JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?", (place_id,)))
+
+            con.close()
+
+            if not plans:
+                error_message = place + "を含んだプランは存在しません"
+                return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
+
+            for index, plan in enumerate(plans):
+                plan["video_id"] = plan["url"].split("/")[3]
+
+            #ここからページネーション機能
+
+            # (1) 表示されているページ番号を取得(初期ページ1)
+            page = request.args.get(get_page_parameter(), type=int, default=1)
+
+            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+            PageData = plans[(page - 1)*6: page*6]
+
+            # (3) 表示するデータリストの最大件数から最大ページ数を算出
+            MaxPage = (- len(plans) // 6) * -1
+
+
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+
+    # GET methods
+    else:
+        return render_template('search.html')
+
+@app.route('/content')
+def content():
+    return render_template('content.html')
+
+
 @app.route('/plans')
 def plans():
+    global status
     #データベースから情報を取ってきて、plans.htmlに渡す。
     #渡す情報　plan_places, plans
     dbname = "Rotom.db"
@@ -257,14 +346,32 @@ def plans():
     cur = conn.cursor()
 
     #plansを全て取得
-    plans = list(cur.execute("SELECT * FROM plans"))
-
-        #urlからyoutubeIDを取得
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
+    FROM plans INNER JOIN users ON plans.user_id = users.id;
+    """))
+    
+    #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
-    return render_template('plans.html',plans=plans)
 
+    #ここからページネーション機能
+    
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
 
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+    
+    if status:
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+    else:
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
+
+#下二行のパラメーターのuser_idは、動画を投稿した人のuser_id
 @app.route('/plan_content/<user_id>/<int:post_id>')
 def plan_content(user_id, post_id):
     #データベースから情報を取ってきて、content.htmlに渡す。
@@ -276,23 +383,75 @@ def plan_content(user_id, post_id):
     cur = conn.cursor()
 
     place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
-    plan_info = list(cur.execute("SELECT * FROM plans WHERE id=?", (post_id,)))
-
-    #place_idから緯度経度を取得
-    #place_info_liにlat, lngをappend
-    # place_info_li = [{}, {}, ...]
+    plan_info = list(cur.execute(
+        """
+        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
+        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
+        """
+        , (post_id,)))
+    
+    #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
         response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
-        place_info_li[index]["url"] = response["result"]["website"]
+        try:
+            place_info_li[index]["url"] = response["result"]["website"]
+        except KeyError:
+            place_info_li[index]["url"] = "WEBサイトが見つかりません"
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
+    
+    #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
+    if status:
+        is_liked = False
+        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
+        
+        #過去にlikeしていない場合
+        if like_info == []:
+            pass
+        #過去にlikeしている場合
+        else:
+            is_liked = True
+        #過去のlike状況をフロント側に伝える
+        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked, status=status, user_name=session["user_name"])
 
-    photo = requests.get('https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uEA7vb0DDYVJWEaX3O-AtYp77AaswQKSGtDaimt3gt7QCNpdjp1BkdM6acJ96xTec3tsV_ZJNL_JP-lqsVxydG3nh739RE_hepOOL05tfJh2_ranjMadb3VoBYFvF0ma6S24qZ6QJUuV6sSRrhCskSBP5C1myCzsebztMfGvm7ij3gZT&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI')
-    print(photo)
+    else:
+        return render_template('content.html', plan_info = plan_info, place_info_li = place_info_li,)
 
-    return render_template('content.html', plan_info = plan_info, username = user_id, place_info_li = place_info_li)
 
+@app.route('/like', methods=['GET', 'POST'])
+def like():
+    
+    if request.method=="POST":
+
+        dt_now = datetime.datetime.now()
+
+        plan_id = request.json['plan_id']
+        user_id = session["id"]
+
+        #データベースから情報を取ってくる
+        dbname = "Rotom.db"
+        conn = sqlite3.connect(dbname)
+        conn.row_factory = user_lit_factory
+        cur = conn.cursor()
+
+        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+
+        #過去にLikeしたことがない場合、新たに列を追加
+        if like_info == []:
+            cur.execute("INSERT INTO likes (plan_id, user_id, created_at) VALUES (?, ?, ?)", (plan_id, user_id, dt_now,))
+            like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+            conn.commit()
+            conn.close()
+
+        #過去にLikeしたことがある場合、データベースから削除
+        else:
+            cur.execute("DELETE FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,))
+            # like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id)))
+            conn.commit()
+            conn.close()
+
+    return "いいねボタン押後のデータベースの処理が完了しました"
 
 if __name__ == '__main__':
     app.debug = True

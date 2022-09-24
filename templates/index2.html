@@ -13,9 +13,6 @@
           <div class="collapse navbar-collapse mr-1 navbar-collapseEdit" id="navbarNavDropdown">
               <ul class="navbar-nav">
                   <li class="nav-item item">
-                      <a class="nav-link active text-white" aria-current="page" href="/">TOP</a>
-                  </li>
-                  <li class="nav-item item">
                       <a class="nav-link text-white" href="#search">SEARCH</a>
                   </li>
                   <li class="nav-item item">
@@ -29,7 +26,7 @@
                   </li>
                   <!-- My page へのリンク（自分の投稿一覧が見れる、、とか） -->
                   <li class="nav-item item">
-                      <a class="nav-link text-white" href="#">{{ email }}さん</a>
+                      <a class="nav-link text-white" href="#">{{ user_name }}さん</a>
                   </li>
                   <li class="nav-item dropdown item">
                       <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -109,7 +106,18 @@
     <section class="mt-5 d-flex flex-column align-items-center search" id="search">
         <h2>さがす</h2>
         <div class="container my-5">
-            <form class="form-search" method="POST" action="">
+            <form class="form-search" method="POST" action="./search">
+                <div class="mb-4 form-group">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <p class="text-center">行きたい場所</p>
+                    </div>
+                    <div class="col-md-8">
+                      <input type="text" name="place" id="place_box" class="form-control" placeholder="場所を入力し、選択して下さい">
+                      <input type="hidden" name="place_id_box" id="place_id_box" class="form-control" value="">
+                    </div>
+                  </div>
+                </div>
                 <div class="mb-4 form-group">
                   <div class="row">
                     <div class="col-md-4">
@@ -126,7 +134,7 @@
                       <p class="text-center">vlogのurl</p>
                     </div>
                     <div class="col-md-8">
-                      <input type="text" name="name" class="form-control" placeholder="">
+                      <input type="text" name="vlog-url" class="form-control" placeholder="共有URLを入力">
                     </div>
                   </div>
                 </div>
@@ -139,19 +147,12 @@
                         <input type="text" name="name" class="form-control" placeholder="">
                       </div>
                     </div>
-                  </div>
-                  <div class="mb-4 form-group">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <p class="text-center">行きたい場所</p>
-                      </div>
-                      <div class="col-md-8">
-                        <input type="text" name="name" class="form-control" placeholder="">
-                      </div>
-                    </div>
-                  </div>
+                </div>
                 <button type="submit" class="btn btn-outline-primary">送信</button>
               </form>
         </div>
     </section>
+
+    <script type="text/javascript" src="../static/javascripts/search.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
 {% endblock %}
