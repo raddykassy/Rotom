@@ -26,7 +26,10 @@
                   </li>
                   <!-- My page へのリンク（自分の投稿一覧が見れる、、とか） -->
                   <li class="nav-item item">
-                      <a class="nav-link text-white" href="#">{{ user_name }}さん</a>
+                      <!--<a class="nav-link text-white" href="mypage">{{ user_name }}さん</a>-->
+
+                      <a class="nav-link text-white" href="mypage/{{ user_id }}">{{ user_name }}さん</a>
+
                   </li>
                   <li class="nav-item dropdown item">
                       <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
