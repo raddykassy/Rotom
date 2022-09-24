@@ -12,6 +12,22 @@
     box-sizing: border-box;
 }
 
+.spOnly {
+    display: none;
+}
+
+@media only screen and (max-width:749px) {
+    .pcOnly {
+        display: none;
+    }
+    .spOnly {
+        display: block;
+    }
+    img {
+        width: 100%;
+    }
+}
+
 ul {
     list-style-type: none;
 }
@@ -21,6 +37,7 @@ ul {
 header {
     position: fixed;
     width: 100%;
+    height: 64px;
     z-index: 999;
     letter-spacing: 2px;
 }
@@ -133,63 +150,88 @@ footer {
 /* form-search end */
 
 /*------ post(post.html)------- */
-/* .planning {
-    margin-top: 30px;
-}
-
-.planning-wrapper {
-    display: flex;
-    justify-content: space-around;
-}
-
-.post-plan-form > input {
-    display: block;
-    width: 100%;
-    margin: 20px;
-}
-
-#map {
-    width: 40vw;
-    height: 50vh;
-    margin: 0 auto;
-}
-
-.input_geo_name {
-    width: 500px;
-} */
 
 .post-wrapper {
+    font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
     display: flex;
-    margin-bottom: 3rem;
+    width: 100%;
+    min-height: 90vh;
+    height: auto;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
-.planning, .mapping {
+.planning, .banner {
     padding: 20px;
 }
 
+.banner {
+    padding-top: 0;
+    background-color: rgb(221 221 221);
+    width: 40%;
+}
+
+.post-banner-wrapper {
+    display: flex;
+    text-align: center;;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.post-logo {
+    width: 30%;
+    height: auto;
+}
+
+@media screen and (max-width: 1400px) {
+    .post-logo {
+        width: 35%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .post-logo {
+        width: 40%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .post-logo {
+        width: 50%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .post-logo {
+        width: 60%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .post-logo {
+        width: 70%;
+        height: auto;
+    }
+}
+
+
+
+
 .planning {
     position: relative;
+    display: flex;
+    flex-direction: column;
     text-align: center;
-    /* background: pink; */
-    /* width: 60%; */
-    flex-grow: 1;
-    margin-right: 2em;
+    justify-content: center;
+    background: #FFFFFF;
+    width: 60%;
+    padding-bottom: 3rem;
 }
 
-.planning::after {
-    position: absolute;
-    content: "";
-    top: 3%;
-    left: 92%;
-    width: 5px;
-    height: 94%;
-    margin: 0 1rem;
-    background-color: rgb(0 0 0 / 25%);
-}
-
-/* .planning .head-post {
-    position: relative;
-} */
 .head-post .under{
     position: relative;
 }
@@ -201,14 +243,7 @@ footer {
     left: 0;
     width: 100%;
     height: 5px;
-    background-color: #ff9393;
-}
-
-.mapping {
-    text-align: center;
-    /* background: skyblue; */
-    /* width: 40%; */
-    flex-grow: 1;
+    background-color: #c6c6c6;
 }
 
 .head-post {
@@ -221,22 +256,33 @@ footer {
     margin: 0 auto;
 }
 
-.mapping ul {
-    background-color: #f0f0f0;
-    padding: 30px;
+.place-label {
+    margin-bottom: 0.5rem;
+}
+
+.btn-wrapper {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
 }
 
 .add-plan-btn {
-    border-radius: 1.5rem;
-    padding: .475rem 1.1rem;
+    border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 50%;
+    color: #000000;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+}
+
+.add-text {
+    font-weight: 400;
+    margin-left: 20px;
 }
 
 .delete-plan-btn {
-    border-radius: 1.5rem;
     color: #FFFFFF;
     background-color: #ff0505e0;
     border-color: #ff0505e0;
-    padding: .475rem 1.1rem;
 }
 
 .delete-plan-btn:hover {
@@ -251,15 +297,9 @@ footer {
     padding: .475rem 1.1rem;
 }
 
-.plan-map-wrapper {
+.post-banner-wrapper {
     width: 100%;
     height: 100%;
-}
-
-#map {
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
 }
 
 .btn:focus {
@@ -267,7 +307,10 @@ footer {
     box-shadow: none;
 }
 
-
+.post-form-control {
+    border: 1px solid #000000;
+    border-radius: 0.35rem;
+}
 
 /* -------end post(post.html)------- */
 
@@ -667,7 +710,7 @@ input:valid {
     border: 2px solid black;
 } */
 
-form {
+/* form {
     font: 1em sans-serif;
     max-width: 320px;
   }
@@ -677,35 +720,35 @@ form {
   }
 
   /*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
-input[type="text"],
+/* input[type="text"],
 input[type="url"],
 textarea,
 fieldset {
     width: 100%;
     border: 1px solid #333;
     box-sizing: border-box;
-}
+} */
 
 /*投稿画面で未入力のところに赤線を引く*/
-input:invalid {
+/* input:invalid {
     box-shadow: 0 0 5px 1px #ff9393;
 }
 textarea:invalid {
     box-shadow: 0 0 5px 1px #ff9393;
-}
+} */
 
 /*エラー検出時　https://code-kitchen.dev/css/invalid/*/
-input:focus:invalid {
+/* input:focus:invalid {
     box-shadow: none;
 }
 textarea:focus:invalid {
     box-shadow: none;
-}
+} */
 
 /*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
-input:-webkit-autofill {
+/* input:-webkit-autofill {
     box-shadow: 0 0 0 1000px white inset;
-}
+} */ 
 
 
 
