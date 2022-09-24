@@ -6,48 +6,55 @@ T-log post
 
 {% block content %}
 <main class="post-wrapper">
+    <section class="banner">
+        <div class="post-banner-wrapper">
+            <p>＼あなたの思い出が誰かの思い出に／</p>
+            <h1>
+                <figure>
+                    <picture>
+                        <!-- <source media="(max-width:749px)" srcset="static/img/logo_sp.png" /> -->
+                        <img src="static/img/logo.png" alt="T-log Logo" class="post-logo">
+                    </picture>
+                </figure>
+            </h1>
+            <p>最高の旅行体験を、あなたに。</p>
+        </div>
+    </section>
     <section class="planning">
         <h2 class="head-post"><span class="under">プランを投稿する</span></h2>
         <form action="" method="POST" class="planning-form">
-            <div class="mt-5 mb-3">
-                <label for="plan-title" class="form-label">プランタイトル</label>
-                <input type="text" class="form-control" id="plan-title" name="plan-title" placeholder="プランのタイトルを入力">
+            <div class="mt-5 mb-4">
+                <label for="plan-title" class="form-label">プランのタイトル＊</label>
+                <input type="text" class="form-control post-form-control" id="plan-title" name="plan-title" placeholder="プランのタイトルを入力">
             </div>
-            <div class="mb-3">
-                <label for="vlog-url" class="form-label">YouTubeのURL</label>
-                <input type="text" class="form-control" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力">
+            <div class="mb-4">
+                <label for="vlog-url" class="form-label">YouTubeのURL＊</label>
+                <input type="text" class="form-control post-form-control" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力">
             </div>
             <div class="plan-places">
-                <div class="mt-5 mb-3">
-                    <p>場所を選択</p>
-                </div>
+                <p class="place-label">場所＊</p>
                 <div class="place-container" id="place-container">
                     <div class="mb-3">
                         <!-- <label for="place" class="form-label">1番目</label> -->
-                        <input type="text" class="form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい">
+                        <input type="text" class="form-control post-form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい">
                         <input type="hidden" id="place_name_1" name="place_name_1" value="">
                         <input type="hidden" id="place_id_1" name="place_id_1" value="">
                     </div>
                 </div>
                 <div class="mt-5 mb-5 d-flex justify-content-evenly btn_wrapper">
                     <button type="button" class="btn btn-primary add-plan-btn" id="add-plan-btn">場所を追加</button>
-                    <button type="button" class="btn delete-plan-btn">場所を削除</button>
+                    <!-- <button type="button" class="btn delete-plan-btn">場所を削除</button> -->
                 </div>
                 <input type="hidden" id="place_sum" name="place_sum" value="">
             </div>
             <div class="description_wrapper">
-                <label for="description" class="form-label">旅行の概要</label>
-                <textarea class="form-control" id="description" name="description" placeholder="旅行の概要を入力" wrap="soft"></textarea>
+                <label for="description" class="form-label">プランの概要＊</label>
+                <textarea class="form-control post-form-control" id="description" name="description" placeholder="旅行の概要を入力" wrap="soft"></textarea>
             </div>
             <div class="mt-5 submit-container">
                 <button type="submit" id="submit-plan-btn" class="btn btn-primary submit-plan-btn">投稿する</button>
             </div>
         </form>
-    </section>
-    <section class="mapping">
-        <div class="plan-map-wrapper">
-            <div id="map"></div>
-        </div>
     </section>
 </main>
 {% endblock %}
