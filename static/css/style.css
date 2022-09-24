@@ -409,7 +409,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 }
 
 .follow-button {
- 
+
     cursor: pointer;
     outline: 0;
     display: inline-block;
@@ -430,7 +430,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
         border-color: #0d6efd;
     }
 
-    
+
 }
 
 .profile__img {
@@ -459,7 +459,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
     height: 50px;
     align-items: center;
   }
-  
+
   .destination-num{
     position: absolute;
     left: 51px;
@@ -582,7 +582,7 @@ ol li:before {
     height: 500px;
     border: 3px solid;
     padding: 10px;
-  
+
 }
 
 
@@ -599,9 +599,9 @@ ol li:before {
     display: -webkit-flex;
     display: flex;
     }
-    
+
 .schedule-container,
-.map-container  
+.map-container
 {
 
     -webkit-flex: 1;
@@ -670,6 +670,7 @@ ol li:before {
 
 
 
+
 .plan-details{
     height: 80px;
     margin-left: 20px;
@@ -696,6 +697,61 @@ ol li:before {
 /* ここまでプランページ一覧のcss */
 
 
+/*枠が虹色に！！！お遊び心に！！*/
+/* input:invalid {
+    border: 2px dashed red;
+}
+
+input:invalid:required {
+    background-image: linear-gradient(to right, pink, lightgreen);
+}
+
+input:valid {
+    border: 2px solid black;
+} */
+
+form {
+    font: 1em sans-serif;
+    max-width: 320px;
+  }
+
+  p > label {
+    display: block;
+  }
+
+  /*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
+input[type="text"],
+input[type="url"],
+textarea,
+fieldset {
+    width: 100%;
+    border: 1px solid #333;
+    box-sizing: border-box;
+}
+
+/*投稿画面で未入力のところに赤線を引く*/
+input:invalid {
+    box-shadow: 0 0 5px 1px #ff9393;
+}
+textarea:invalid {
+    box-shadow: 0 0 5px 1px #ff9393;
+}
+
+/*エラー検出時　https://code-kitchen.dev/css/invalid/*/
+input:focus:invalid {
+    box-shadow: none;
+}
+textarea:focus:invalid {
+    box-shadow: none;
+}
+
+/*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
+input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px white inset;
+}
+
+
+
 /* ここからページネーション */
 
 
@@ -712,3 +768,4 @@ ol li:before {
     align-items: center;
 
 }
+
