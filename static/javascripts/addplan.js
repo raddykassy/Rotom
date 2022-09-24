@@ -17,9 +17,9 @@ addPlanBtn.addEventListener('click', function() {
 function getInputTag() {
     placeCount++;
     var elements = '<div class="mb-3">\
-                        <input type="text" class="form-control autocomplete" id="autocomplete_' + placeCount + '" name="place_' + placeCount + '"placeholder="場所を入力し、選択して下さい" required>\
-                        <input type="hidden" id="place_name_' + placeCount + '" name="place_name_' + placeCount + '"placeholder="場所を入力し、選択して下さい" >\
-                        <input type="hidden" id="place_id_' + placeCount + '" name="place_id_' + placeCount + '"placeholder="場所を入力し、選択して下さい" >\
+                        <input type="text" class="form-control post-form-control autocomplete" id="autocomplete_' + placeCount + '" name="place_' + placeCount + '"placeholder="場所を入力し、選択して下さい" required>\
+                        <input type="hidden" id="place_name_' + placeCount + '" name="place_name_' + placeCount + '"placeholder="場所を入力し、選択して下さい">\
+                        <input type="hidden" id="place_id_' + placeCount + '" name="place_id_' + placeCount + '"placeholder="場所を入力し、選択して下さい">\
                     </div>';
     return elements;
 }
