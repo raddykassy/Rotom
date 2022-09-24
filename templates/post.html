@@ -8,7 +8,7 @@ T-log post
 <main class="post-wrapper">
     <section class="banner">
         <div class="post-banner-wrapper">
-            <p>＼あなたの思い出が誰かの思い出に／</p>
+            <p>＼あなたの<br class="spOnly">思い出が誰かの思い出に／
             <h1>
                 <figure>
                     <picture>
@@ -21,7 +21,7 @@ T-log post
         </div>
     </section>
     <section class="planning">
-        <h2 class="head-post"><span class="under">プランを投稿する</span></h2>
+        <h2 class="head-post"><span class="under">プランを<br class="spOnly">投稿する</span></h2>
         <form action="" method="POST" class="planning-form">
             <div class="mt-5 mb-4">
                 <label for="plan-title" class="form-label">プランのタイトル＊</label>
@@ -41,8 +41,9 @@ T-log post
                         <input type="hidden" id="place_id_1" name="place_id_1" value="">
                     </div>
                 </div>
-                <div class="mt-5 mb-5 d-flex justify-content-evenly btn_wrapper">
-                    <button type="button" class="btn btn-primary add-plan-btn" id="add-plan-btn">場所を追加</button>
+                <div class="mt-3 mb-4 d-flex btn-wrapper">
+                    <button type="button" class="btn add-plan-btn" id="add-plan-btn">＋</button>
+                    <span class="add-text">場所を追加</span>
                     <!-- <button type="button" class="btn delete-plan-btn">場所を削除</button> -->
                 </div>
                 <input type="hidden" id="place_sum" name="place_sum" value="">
