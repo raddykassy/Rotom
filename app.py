@@ -443,7 +443,7 @@ def like():
 
     return "いいねボタン押後のデータベースの処理が完了しました"
 
-
+# mypage表示の処理
 @app.route("/mypage/<int:user_id>")
 @login_required
 def mypage(user_id):
@@ -465,7 +465,10 @@ def mypage(user_id):
     for row in cur.fetchall():
         users = row
 
-    print(users)
+    # 投稿総数を取得
+    cur.execute("SELECT COUNT(*) AS plans_sum FROM plans WHERE user_id = ?", (session["id"],))
+    for row in cur.fetchall():
+        sum = row
 
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
@@ -484,8 +487,54 @@ def mypage(user_id):
 
     conn.close()
     
-    return render_template('profile.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"])
+    return render_template('profile.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
 
+# mypageでいいね一覧を見る
+@app.route("/mypage_likes/<int:user_id>")
+@login_required
+def mypage_likes(user_id):
+    global status
+    dbname = "Rotom.db"
+    conn = sqlite3.connect(dbname)
+    conn.row_factory = user_lit_factory
+
+    cur = conn.cursor()
+
+    # userがいいねしたplanを取り出す
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time  
+    FROM plans INNER JOIN likes ON plans.id = likes.plan_id WHERE likes.user_id = ?;
+    """, (session["id"],)))
+
+    # ユーザ情報を取得
+    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
+    for row in cur.fetchall():
+        users = row
+
+    # ユーザのいいね数の取得
+    cur.execute("SELECT COUNT(*) AS counts FROM likes WHERE user_id = ?", (session["id"],))
+    for row in cur.fetchall():
+        sum = row
+    
+
+    #urlからyoutubeIDを取得
+    for index, plan in enumerate(plans):
+        plan["video_id"] = plan["url"].split("/")[3]
+
+    #ここからページネーション機能
+    
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+
+    conn.close()
+    
+    return render_template('profile_likes.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status,user_id=session["id"], user_name=session["user_name"], email=users["email"], register_date=users["date"], likes_sum=sum["counts"])
 
 if __name__ == '__main__':
     app.debug = True
