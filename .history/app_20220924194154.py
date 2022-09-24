@@ -462,7 +462,6 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
-        #emojiを表示させたくないtypesを削除
         types_li = response["result"]["types"]
 
         for type_index, type in enumerate(types_li):
