@@ -88,11 +88,6 @@ def login():
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
 
-        # """
-        # <h1>ログインに成功しました</h1>
-        # <p><a href='/'> ⇒top page</p>
-        # """
-
     else:
         return render_template("login.html")
 
@@ -187,13 +182,8 @@ def post():
 
             place_names.append(tmp_name)
             place_id.append(tmp_id)
-        """
-        print("-----------")
-        print(place_names)
-        print(place_id)
-        print("-----------")
-        """
-        # リストからNoneを削除する
+
+        # リストからNoneを削除する(なくてもいいかも)
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
