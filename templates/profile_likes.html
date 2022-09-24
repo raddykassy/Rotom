@@ -28,12 +28,12 @@ T-log mypage
                 <td>{{ register_date }}</td>
             </tr>
             <tr>
-                <td>投稿総数</td>
-                <td>{{ plans_sum }}</td>
+                <td>いいね総数</td>
+                <td>{{ likes_sum }}</td>
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-primary" href="/mypage_likes/{{ user_id }}" role="button" align="right">いいね一覧  ▶</a>
+    <a class="btn btn-primary right" href="/mypage/{{ user_id }}" role="button" >Your posts  ▶</a>
 
 </div>
 
@@ -41,7 +41,7 @@ T-log mypage
 <!-- planの表示 -->
 <div class="plans-body mt-5" >
     <div class="container">
-        <h3 align="left" class="heading">{{user_name}}'s posts</h3>
+        <h3 align="left" class="heading">Posts {{user_name}} liked</h3>
         <hr width="200" align="left" style="margin-bottom:0">
     </div>
     <div class="plan-grid-layout">
