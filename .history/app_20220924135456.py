@@ -71,8 +71,6 @@ emoji_array = {
     "parking":"🚗",
     "park":"🏞",
     "place_of_worship": "⛩",
-    "rv_park": "🚗",
-    "real_estate_agency":"🏢",
     "restaurant":"🍽️",
     "school": "🏫",
     "secondary_school": "🏫",
@@ -83,11 +81,9 @@ emoji_array = {
     "store":"🛒",
     "subway_station":"🚇",
     "supermarket":"🛒",
-    "synagogue": "🕍",
     "tourist_attraction":"📸",
     "train_station":"🚉",
     "travel_agency": "🧳",
-    "transit_station": "🚉",
     "university":"🏫",
     "zoo":"🐘",
     "lodging":"🏨",
@@ -470,7 +466,7 @@ def plan_content(user_id, post_id):
         print(types_li)
 
         for type_index, type in enumerate(types_li):
-            if type in ["pointofinterest", "tourist_attraction", "establishment"]:
+            if type == "pointofinterest" or type ==  "tourist_attraction":
                 types_li.pop(type_index)
 
         # 対応する絵文字がある場合とない場合で分岐

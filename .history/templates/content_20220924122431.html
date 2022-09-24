@@ -138,17 +138,17 @@
 
                 <div class="links-container">
 
-                    <h2 class="links-links" style="text-align:center">Links🔗</h2>
+                    <h2 class="links-links" style="text-align:center">Links</h2>
 
                     <div class="links-grid-layout">
                         <!-- urlが取得できるものだけ表示-->
                         {% for place_info in place_info_li %}
                             <!-- urlのあるものだけ表示 -->
-                            {% if place_info["url"] == "WEBサイトが見つかりません" %}
+                            {% if place_info_li["url"] == "WEBサイトが見つかりません" %}
                                 <script>console.log("urlが取得できませんでした")</script>
                             {% else %}
                                 <div class="link-grid-item">
-                                    <a href={{ place_info["url"] }} class="icon-link" id="icon-link" target="_blank" rel="noopener noreferrer">
+                                    <a href={{ place_info["url"] }} class="icon-link" id="icon-link">
                                         <div class="property-icon">
                                             <h2>{{ place_info["types"][1] }}</h2>
                                         </div>

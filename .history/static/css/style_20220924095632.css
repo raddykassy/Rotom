@@ -673,34 +673,12 @@ ol li:before {
 
 
 /* ここからcontent.htmlのリンク一覧 */
-.links-container{
-    margin-bottom: 50px;
-}
 
 .links-links{
     text-align: center;
 }
 
-.link-title h2 {
-    text-align: center;
-    color: #000;
-}
-
-.link-details p {
-    color: gray;
-}
-
-.link-info{
-    margin-top: 30px;
-}
-
-#icon-link{
-    text-decoration: none;
-}
-
 .links-grid-layout{
-    grid-gap: 45px;
-    margin-top: 20px;
     display: grid;
     /* 3カラムのグリッド */
     grid-template-columns: 1fr 1fr 1fr;
@@ -712,11 +690,5 @@ ol li:before {
 .property-icon h2 {
     text-align: center;
     font-size: 100px;
-}
-
-.links-container{
-    margin-left: 40px;
-    margin-right: 40px;
-
 }
 

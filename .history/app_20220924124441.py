@@ -31,48 +31,30 @@ emoji_array = {
     "aquarium": "🐠",
     "art_gallery": "🖼",
     "bakery": "🥯",
-    "bank":"🏦",
     "bar": "🍺",
     "beauty_salon": "💇‍♀️",
-    "bicycle_store":"🚲",
     "book_store":"📚",
-    "car_dealer": "🚗",
-    "car_rental": "🚗",
     "cafe":"☕",
     "campground":"🏕️",
-    "casino": "🎰",
     "city_hall":"🏛",
     "church":"⛪",
     "clothing_store":"👚",
     "convenience_store":"🏪",
     "department_store":"🛍",
-    "electronics_store": "🤖",
-    "embassy": "🛂",
     "florist":"💐",
-    "food":"🍽️",
-    "furniture_store": "🛋",
-    "gym":"🏋️",
-    "hardware_store": "💻",
     "hair_care":"💇‍♀️",
     "hindu_temple":"🛕",
     "home_goods_store":"🛋",
     "jewelry_store":"💎",
-    "landmark": "🗽",
     "library":"📚",
     "light_rail_station": "🚉",
-    "liquor_store": "🥃",
-    "meal_delivery": "😋",
-    "meal_takeaway": "😋",
     "mosque": "🕌",
     "movie_theater": "🍿",
     "museum":"🖼️",
-    "natural_feature": "🏞",
     "night_club":"💃🏻",
     "parking":"🚗",
     "park":"🏞",
-    "place_of_worship": "⛩",
-    "rv_park": "🚗",
-    "real_estate_agency":"🏢",
+    "place_of_worship": "⛩"
     "restaurant":"🍽️",
     "school": "🏫",
     "secondary_school": "🏫",
@@ -83,14 +65,11 @@ emoji_array = {
     "store":"🛒",
     "subway_station":"🚇",
     "supermarket":"🛒",
-    "synagogue": "🕍",
-    "tourist_attraction":"📸",
+    "tourist_attraction":"🏞",
     "train_station":"🚉",
-    "travel_agency": "🧳",
-    "transit_station": "🚉",
     "university":"🏫",
     "zoo":"🐘",
-    "lodging":"🏨",
+    "lodging":"🛌",
 }
 
 
@@ -466,18 +445,13 @@ def plan_content(user_id, post_id):
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
-        types_li = response["result"]["types"]
-        print(types_li)
-
-        for type_index, type in enumerate(types_li):
-            if type in ["pointofinterest", "tourist_attraction", "establishment"]:
-                types_li.pop(type_index)
+        print(response)
 
         # 対応する絵文字がある場合とない場合で分岐
-        if types_li[0] in emoji_array:
-            place_info_li[index]["types"] = [types_li[0], emoji_array[types_li[0]]]
+        if response["result"]["types"][0] in emoji_array:
+            place_info_li[index]["types"] = [response["result"]["types"][0], emoji_array[response["result"]["types"][0]]]
         else:
-            place_info_li[index]["types"] = [types_li[0], "🤟"]
+            place_info_li[index]["types"] = [response["result"]["types"][0], "🤟"]
 
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:

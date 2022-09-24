@@ -25,74 +25,41 @@ app.config["SESSION_TYPE"] = "filesystem"
 # ---------------------------------------------------------------------
 
 #絵文字に対応する16進数を格納したリスト
-emoji_array = {
-    "airport": "🛩",
-    "amusement_park":"🎠",
+emoji_hex_li = {
+    "amusement_park":"",
     "aquarium": "🐠",
     "art_gallery": "🖼",
     "bakery": "🥯",
-    "bank":"🏦",
     "bar": "🍺",
     "beauty_salon": "💇‍♀️",
-    "bicycle_store":"🚲",
     "book_store":"📚",
-    "car_dealer": "🚗",
-    "car_rental": "🚗",
     "cafe":"☕",
     "campground":"🏕️",
-    "casino": "🎰",
-    "city_hall":"🏛",
+    "city_hall":"",
     "church":"⛪",
     "clothing_store":"👚",
-    "convenience_store":"🏪",
-    "department_store":"🛍",
-    "electronics_store": "🤖",
-    "embassy": "🛂",
+    "department_store":"",
     "florist":"💐",
-    "food":"🍽️",
-    "furniture_store": "🛋",
-    "gym":"🏋️",
-    "hardware_store": "💻",
     "hair_care":"💇‍♀️",
     "hindu_temple":"🛕",
-    "home_goods_store":"🛋",
     "jewelry_store":"💎",
-    "landmark": "🗽",
-    "library":"📚",
-    "light_rail_station": "🚉",
-    "liquor_store": "🥃",
-    "meal_delivery": "😋",
-    "meal_takeaway": "😋",
-    "mosque": "🕌",
-    "movie_theater": "🍿",
+    "library":"📔",
     "museum":"🖼️",
-    "natural_feature": "🏞",
     "night_club":"💃🏻",
-    "parking":"🚗",
     "park":"🏞",
-    "place_of_worship": "⛩",
-    "rv_park": "🚗",
-    "real_estate_agency":"🏢",
     "restaurant":"🍽️",
-    "school": "🏫",
-    "secondary_school": "🏫",
     "shoe_store":"👟",
     "shopping_mall":"🛍",
     "spa":"💆",
     "stadium":"🏟",
     "store":"🛒",
-    "subway_station":"🚇",
     "supermarket":"🛒",
-    "synagogue": "🕍",
-    "tourist_attraction":"📸",
+    "tourist_attraction":"🏞",
     "train_station":"🚉",
-    "travel_agency": "🧳",
-    "transit_station": "🚉",
     "university":"🏫",
     "zoo":"🐘",
-    "lodging":"🏨",
+    "lodging":"🛌",
 }
-
 
 @app.route('/')
 def index():
@@ -134,7 +101,7 @@ def login():
 
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        # SELECT * より修正 9/20 passwordのみからpassword, idに変更
+        # SELECT より修正 9/20 passwordのみからpassword, idに変更
         cur.execute("SELECT password, id FROM users WHERE email = ?", (email,))
         user_data = cur.fetchall()
 
@@ -334,7 +301,7 @@ def search():
 
             cur = con.cursor()
 
-            plans = list(cur.execute("SELECT * FROM plans WHERE url = ?", (url,)))
+            plans = list(cur.execute("SELECT FROM plans WHERE url = ?", (url,)))
 
             con.close()
 
@@ -354,7 +321,7 @@ def search():
             PageData = plans[(page - 1)*6: page*6]
 
             # (3) 表示するデータリストの最大件数から最大ページ数を算出
-            MaxPage = (- len(plans) // 6) * -1
+            MaxPage = (- len(plans) // 6) -1
 
 
             return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
@@ -388,7 +355,7 @@ def search():
             PageData = plans[(page - 1)*6: page*6]
 
             # (3) 表示するデータリストの最大件数から最大ページ数を算出
-            MaxPage = (- len(plans) // 6) * -1
+            MaxPage = (- len(plans) // 6) -1
 
 
             return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
@@ -431,7 +398,7 @@ def plans():
     PageData = plans[(page - 1)*6: page*6]
 
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
+    MaxPage = (- len(plans) // 6) -1
     
     return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage)
 
@@ -447,7 +414,7 @@ def plan_content(user_id, post_id):
 
     cur = conn.cursor()
 
-    place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
+    place_info_li = list(cur.execute("SELECT FROM plan_places WHERE plan_id = ?", (post_id,)))
     plan_info = list(cur.execute(
         """
         SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
@@ -465,24 +432,12 @@ def plan_content(user_id, post_id):
             place_info_li[index]["url"] = "WEBサイトが見つかりません"
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
-
-        types_li = response["result"]["types"]
-        print(types_li)
-
-        for type_index, type in enumerate(types_li):
-            if type in ["pointofinterest", "tourist_attraction", "establishment"]:
-                types_li.pop(type_index)
-
-        # 対応する絵文字がある場合とない場合で分岐
-        if types_li[0] in emoji_array:
-            place_info_li[index]["types"] = [types_li[0], emoji_array[types_li[0]]]
-        else:
-            place_info_li[index]["types"] = [types_li[0], "🤟"]
+        place_info_li[index]["types"] = [response["result"]["types"][0],"🐠"]
 
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:
         is_liked = False
-        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
+        like_info = list(cur.execute("SELECT FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
         
         #過去にlikeしていない場合
         if like_info == []:
@@ -513,19 +468,19 @@ def like():
         conn.row_factory = user_lit_factory
         cur = conn.cursor()
 
-        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+        like_info = list(cur.execute("SELECT FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
 
         #過去にLikeしたことがない場合、新たに列を追加
         if like_info == []:
             cur.execute("INSERT INTO likes (plan_id, user_id, created_at) VALUES (?, ?, ?)", (plan_id, user_id, dt_now,))
-            like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+            like_info = list(cur.execute("SELECT FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
             conn.commit()
             conn.close()
 
         #過去にLikeしたことがある場合、データベースから削除
         else:
             cur.execute("DELETE FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,))
-            # like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id)))
+            # like_info = list(cur.execute("SELECT FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id)))
             conn.commit()
             conn.close()
 

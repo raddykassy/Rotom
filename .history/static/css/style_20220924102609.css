@@ -682,7 +682,6 @@ ol li:before {
 }
 
 .link-title h2 {
-    text-align: center;
     color: #000;
 }
 
@@ -699,7 +698,6 @@ ol li:before {
 }
 
 .links-grid-layout{
-    grid-gap: 45px;
     margin-top: 20px;
     display: grid;
     /* 3カラムのグリッド */

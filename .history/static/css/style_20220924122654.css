@@ -699,7 +699,7 @@ ol li:before {
 }
 
 .links-grid-layout{
-    grid-gap: 45px;
+    grid-gap: 30px;
     margin-top: 20px;
     display: grid;
     /* 3カラムのグリッド */
