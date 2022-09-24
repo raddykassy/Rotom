@@ -41,7 +41,7 @@ def index():
         con.close()
 
         session["user_name"] = user_info[0][0]
-        return render_template('index2.html', status=status, user_name=session["user_name"])
+        return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id)
 
     else:
         return render_template('index2.html', status=status)
@@ -87,11 +87,6 @@ def login():
             # ↓現段階では登録されていない or メールアドレスが重複して登録されている
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
-
-        # """
-        # <h1>ログインに成功しました</h1>
-        # <p><a href='/'> ⇒top page</p>
-        # """
 
     else:
         return render_template("login.html")
@@ -187,13 +182,8 @@ def post():
 
             place_names.append(tmp_name)
             place_id.append(tmp_id)
-        """
-        print("-----------")
-        print(place_names)
-        print(place_id)
-        print("-----------")
-        """
-        # リストからNoneを削除する
+
+        # リストからNoneを削除する(なくてもいいかも)
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
@@ -452,6 +442,50 @@ def like():
             conn.close()
 
     return "いいねボタン押後のデータベースの処理が完了しました"
+
+
+@app.route("/mypage/<int:user_id>")
+@login_required
+def mypage(user_id):
+    global status
+    dbname = "Rotom.db"
+    conn = sqlite3.connect(dbname)
+    conn.row_factory = user_lit_factory
+
+    cur = conn.cursor()
+
+    #plansを全て取得
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
+    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
+    """, (session["id"],)))
+
+    # ユーザ情報を取得
+    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
+    for row in cur.fetchall():
+        users = row
+
+    print(users)
+
+    #urlからyoutubeIDを取得
+    for index, plan in enumerate(plans):
+        plan["video_id"] = plan["url"].split("/")[3]
+
+    #ここからページネーション機能
+    
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+
+    conn.close()
+    
+    return render_template('profile.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"])
+
 
 if __name__ == '__main__':
     app.debug = True
