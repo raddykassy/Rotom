@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap');
 /* end fonts */
 
-/* common */
+/* common ---------------------------------*/
 .wrapper {
     position: relative;
     min-height: 100vh;
@@ -73,6 +73,30 @@ ul li.item:not(:first-of-type) {
 }
 /* end header */
 
+/* head-underline */
+
+.head-text {
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+.head-text .under{
+    position: relative;
+}
+
+.head-text .under::after {
+    position: absolute;
+    content: "";
+    bottom: -25%;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #c6c6c6;
+}
+
+/* head-underline */
+
 /* footer */
 footer {
     width: 100%;
@@ -81,9 +105,9 @@ footer {
 }
 /* footer end */
 
-/* common end */
+/* common end -------------------------------------*/
 
-/* main(index.html) */
+/* main(index.html) ------------------------------ */
 .mainContents {
     width: 100%;
     height: auto;
@@ -137,7 +161,7 @@ footer {
     border-color: aliceblue;
 }
 
-/* main end */
+/* main end  -------------------------------*/
 
 
 /* form-search(index.html) */
@@ -230,25 +254,6 @@ footer {
     background: #FFFFFF;
     width: 60%;
     padding-bottom: 3rem;
-}
-
-.head-post .under{
-    position: relative;
-}
-
-.head-post .under::after {
-    position: absolute;
-    content: "";
-    bottom: -25%;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background-color: #c6c6c6;
-}
-
-.head-post {
-    font-family: 'Noto Sans JP', sans-serif;
-    letter-spacing: 0.1em;
 }
 
 .planning-form {

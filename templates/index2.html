@@ -102,8 +102,8 @@
 
     <!-- showPlan -->
     <section class="mt-5 showPlan d-flex flex-column align-items-center">
-        <h2>人気の旅行プラン</h2>
-        <div class="container mt-4 popularPlan">
+        <h2 class="head-text"><span class="under">人気の旅行プラン</span></h2>
+        <div class="container mt-5 popularPlan">
             <div class="row row-cols-3 text-center">
                 <div class="col plan-item">Column</div>
                 <div class="col plan-item">Column</div>
@@ -114,7 +114,7 @@
     <!-- showPlan -->
 
     <section class="mt-5 d-flex flex-column align-items-center search" id="search">
-        <h2>さがす</h2>
+      <h2 class="head-text"><span class="under">さがす</span></h2>
         <div class="container my-5">
             <form class="form-search" method="POST" action="./search">
                 <div class="mb-4 form-group">
@@ -131,16 +131,6 @@
                 <div class="mb-4 form-group">
                   <div class="row">
                     <div class="col-md-4">
-                      <p class="text-center">都道府県からさがす</p>
-                    </div>
-                    <div class="col-md-8">
-                      <input type="email" name="email" class="form-control" placeholder="">
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-4 form-group">
-                  <div class="row">
-                    <div class="col-md-4">
                       <p class="text-center">vlogのurl</p>
                     </div>
                     <div class="col-md-8">
@@ -148,17 +138,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="mb-4 form-group">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <p class="text-center">タグ</p>
-                      </div>
-                      <div class="col-md-8">
-                        <input type="text" name="name" class="form-control" placeholder="">
-                      </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-outline-primary">送信</button>
+                <button type="submit" class="btn btn-outline-primary">さがす</button>
               </form>
         </div>
     </section>
