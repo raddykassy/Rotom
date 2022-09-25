@@ -285,11 +285,10 @@ def post():
         con.commit()
         con.close()
         flash("投稿が完了しました。")
-
         return redirect("/")
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"])
+        return render_template("post.html", status=status, user_name=session["user_name"], user_id=session["id"])
 
 
 @app.route('/inquiry')
@@ -385,7 +384,7 @@ def search():
             MaxPage = (- len(plans) // 6) * -1
 
 
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage, user_name=session["user_name"], user_id=session["user_id"])
 
     # GET methods
     else:
@@ -429,7 +428,7 @@ def plans():
     MaxPage = (- len(plans) // 6) * -1
     
     if status:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], user_id=session["id"])
     else:
         return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
 

@@ -1,8 +1,15 @@
 {% extends "layout.html" %}
 
 {% block header %}
-{% if status is true %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    {% for msg in messages %}
+    <p class="flash-messages">{{msg}}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 
+{% if status %}
 <header class="header">
   <nav class="navbar navbar-expand-lg navbar-light .bg-transparent text-white">
       <div class="container-fluid hd-container">
