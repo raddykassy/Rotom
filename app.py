@@ -423,7 +423,7 @@ def search():
             MaxPage = (- len(plans) // 6) * -1
 
 
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage, user_name=session["user_name"], user_id=session["user_id"])
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
 
     # GET methods
     else:
