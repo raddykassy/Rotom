@@ -817,3 +817,11 @@ textarea:focus:invalid {
     margin-right: 40px;
 
 }
+
+
+/* flashメッセージ用 */
+.flash-messages{
+    margin-bottom: 0;
+    background-color: #333c5e;
+    color: #fff;
+}
