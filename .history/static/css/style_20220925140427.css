@@ -389,7 +389,6 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 }
 
-
 .trip-route{
     margin-top: 30px;
     padding-bottom: 30px;
@@ -403,7 +402,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 .follow-button{
     position: absolute;
-    right:15px;
+    right:20px;
     margin-top: 15px;
     width:200px;
     height:60%;
@@ -452,14 +451,8 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
   }
 
   .content-plan-comment{
-    padding-left: 10px;
-    padding-right: 20px;
     margin-top: 15px;
     padding-bottom: 5px;
-  }
-
-  .plan-comment-box{
-    color: gray;
   }
 
   .user_info {
@@ -467,8 +460,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
     flex-direction: column;
     background: #FFF;
     /* padding: 2rem; */
-    height: auto;
-    max-height: 130px;
+    height: 180px;
     width:660px;
     overflow-y: scroll;
   }
