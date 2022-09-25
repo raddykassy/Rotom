@@ -151,6 +151,12 @@ footer {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.search {
+    font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
 .btn-search {
     font-family: 'Noto Sans JP', sans-serif;
     color: #FFFFFF;
