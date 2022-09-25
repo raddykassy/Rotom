@@ -411,8 +411,6 @@ def plans():
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id;
     """))
-
-    plans.reverse()
     
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
@@ -545,7 +543,8 @@ def mypage(user_id):
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
     """, (session["id"],)))
-    
+
+    plans.reverse()
 
     # ユーザ情報を取得
     cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))

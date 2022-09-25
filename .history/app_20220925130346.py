@@ -410,9 +410,7 @@ def plans():
     plans = list(cur.execute("""
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id;
-    """))
-
-    plans.reverse()
+    """)).reverse()
     
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
