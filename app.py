@@ -1,5 +1,5 @@
 from turtle import title
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, flash
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -213,6 +213,7 @@ def post():
 
         con.commit()
         con.close()
+        flash("投稿が完了しました。")
 
         return redirect("/")
 
