@@ -111,11 +111,50 @@ def index():
         user_info =  cur.fetchall()
         con.close()
 
+        #一度閉じてもう一度接続しなおさないとエラーでた。なぜ？？
+        dbname = "Rotom.db"
+        con = sqlite3.connect(dbname)
+        con.row_factory = user_lit_factory
+
+        cur = con.cursor()
+
+        plans = list(cur.execute("""
+            SELECT * FROM plans WHERE plans.id IN
+            (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
+            plans.id = likes.plan_id WHERE plans.id IN
+            (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
+            LIMIT 3)
+        """))
+
+        con.close()
+
+        for index, plan in enumerate(plans):
+                plan["video_id"] = plan["url"].split("/")[3]
+
         session["user_name"] = user_info[0][0]
-        return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id)
+        return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id, plans=plans)
 
     else:
-        return render_template('index2.html', status=status)
+        dbname = "Rotom.db"
+        con = sqlite3.connect(dbname)
+        con.row_factory = user_lit_factory
+
+        cur = con.cursor()
+        
+        plans = list(cur.execute("""
+            SELECT * FROM plans WHERE plans.id IN
+            (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
+            plans.id = likes.plan_id WHERE plans.id IN
+            (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
+            LIMIT 3)
+        """))
+        
+        con.close()
+
+        for index, plan in enumerate(plans):
+                plan["video_id"] = plan["url"].split("/")[3]
+
+        return render_template('index2.html', status=status, plans=plans)
 
 
 # loginページ
@@ -384,7 +423,7 @@ def search():
             MaxPage = (- len(plans) // 6) * -1
 
 
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage, user_name=session["user_name"], user_id=session["user_id"])
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
 
     # GET methods
     else:
