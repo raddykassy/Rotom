@@ -1,5 +1,5 @@
 from turtle import title
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -284,11 +284,11 @@ def post():
 
         con.commit()
         con.close()
-        flash("投稿が完了しました。")
+
         return redirect("/")
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"], user_id=session["id"])
+        return render_template("post.html", status=status, user_name=session["user_name"])
 
 
 @app.route('/inquiry')
@@ -384,7 +384,7 @@ def search():
             MaxPage = (- len(plans) // 6) * -1
 
 
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage, user_name=session["user_name"], user_id=session["user_id"])
+            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
 
     # GET methods
     else:
@@ -430,7 +430,7 @@ def plans():
     MaxPage = (- len(plans) // 6) * -1
     
     if status:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], user_id=session["id"])
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
     else:
         return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
 
