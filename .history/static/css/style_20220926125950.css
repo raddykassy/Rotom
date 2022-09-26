@@ -755,7 +755,7 @@ ul li.plan-place-details-price::before{
     transition: all .3s;
   }
 
-  input[type="checkbox"]:checked + .content-like-label::after {
+  input[type="checkbox"]:checked + .::after {
     content: "";
     position: absolute;
     width: 50px;

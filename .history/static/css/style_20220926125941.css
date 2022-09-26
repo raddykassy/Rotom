@@ -745,17 +745,17 @@ ul li.plan-place-details-price::before{
   .content-like-label svg {
     width: 50px;
   }
-  input[type="checkbox"] + .content-like-label svg {
+  input[type="checkbox"] + label svg {
     fill: #dedede;
     transition: all .3s;
   }
-  input[type="checkbox"]:checked + .content-like-label svg {
+  input[type="checkbox"]:checked + label svg {
     fill: #ff0033dd;
     animation: like .8s ease-out;
     transition: all .3s;
   }
 
-  input[type="checkbox"]:checked + .content-like-label::after {
+  input[type="checkbox"]:checked + label::after {
     content: "";
     position: absolute;
     width: 50px;
