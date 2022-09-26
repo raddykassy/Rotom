@@ -1,0 +1,41 @@
+{% extends "layout-3.html" %}
+
+{% block title %}
+T-log delete comfirm
+{% endblock %}
+
+{% block content %}
+<main class="site-content">
+    <h1>plan削除の確認</h1>
+    <div class="plans-body">
+        <div class="plan-grid-layout">
+            {% for plan in plans %}
+                <div class="plan-grid-item">
+                    <!-- 以下に値を渡す -->
+                    <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                        <div class="thumbnail">
+                            <img src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
+                        </div>
+                    </a>
+                        <div class="plan-info">
+                            <div class="plan-user-info">
+                                <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                            </div>
+                            <div class="plan-details">
+                            <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                                <h3>{{ plan["title"] }}</h3>
+                            </a>
+                            <p>{{plan["name"]}}</p>
+                            </div>
+                        </div>
+                </div>
+                <div class="plan-grid-item">
+                    <p>本当に削除しますか？（<a href='/mypage/{{ user_id }}'>戻る</a>）</p>
+                    <a class="btn btn-outline-secondary" href="/delete/{{ plan["id"] }}">投稿の削除</a>     
+                </div>  
+            {% endfor %}
+        
+        </div>
+    </div>
+</main>
+{% endblock %}

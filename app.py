@@ -579,7 +579,7 @@ def mypage(user_id):
 
     cur = conn.cursor()
 
-    #plansを全て取得
+    #ユーザが登録したplansを全て取得
     plans = list(cur.execute("""
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
@@ -660,7 +660,59 @@ def mypage_likes(user_id):
 
     conn.close()
     
-    return render_template('profile_likes.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status,user_id=session["id"], user_name=session["user_name"], email=users["email"], register_date=users["date"], likes_sum=sum["counts"])
+    return render_template('profile_likes.html',plans=PageData, CurPage=page, 
+                                                MaxPage=MaxPage, status=status,
+                                                user_id=session["id"], user_name=session["user_name"], 
+                                                email=users["email"], register_date=users["date"], 
+                                                likes_sum=sum["counts"])
+
+
+# mypageからplanを削除するための確認ページへ遷移
+@app.route("/mypage_delete/<int:user_id>/<int:plan_id>")
+@login_required
+def mypage_delete(user_id, plan_id):
+    global status
+    dbname = "Rotom.db"
+    conn = sqlite3.connect(dbname)
+    conn.row_factory = user_lit_factory
+
+    cur = conn.cursor()
+
+    # 削除対象のplanを取り出す
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
+    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id = ?;""", (plan_id,)))
+    
+
+    #urlからyoutubeIDを取得
+    for index, plan in enumerate(plans):
+        plan["video_id"] = plan["url"].split("/")[3]
+
+
+    conn.close()
+    
+    return render_template("delete_comfirm.html", plans=plans, status=status, user_name=session["user_name"], user_id=session["id"]) 
+
+
+# 投稿を削除する
+@app.route("/delete/<int:plan_id>")
+@login_required
+def delete(plan_id):
+    """
+    GET: 
+    POST: 選択したplanの削除
+    """
+    # plansテーブル、plan_placesテーブルから削除
+    con = sqlite3.connect('Rotom.db')
+    cur = con.cursor()
+    cur.execute("""DELETE FROM plans WHERE id = ?""", (plan_id,) )
+    cur.execute("""DELETE FROM plan_places WHERE plan_id = ?""", (plan_id,) )
+    con.commit()
+    con.close()
+
+        
+    return redirect("/")
+
 
 if __name__ == '__main__':
     app.debug = True

@@ -61,7 +61,15 @@ T-log mypage
                         <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
                             <h3>{{ plan["title"] }}</h3>
                         </a>
-                        <p>{{plan["name"]}}</p>
+                        <table>
+                            <tr>
+                                <td><p>{{plan["name"]}}</p></td>
+                                <td><a href="{{ url_for('mypage_delete',user_id=plan["user_id"],plan_id=plan["id"]) }}">
+                                    <p>削除</p>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
                         </div>
                     </div>
             </div>
@@ -72,7 +80,7 @@ T-log mypage
     <div class="pagination">
         <!--(1)前のページ-->
         {% if (CurPage - 1) > 0 %}
-        <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
+        <a href="/mypage/{{ user_id }}?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
         {% endif %}
 
         <!--(1)現在のページ-->
@@ -81,7 +89,7 @@ T-log mypage
         </li>
         <!--(2)次のページ-->
         {% if (CurPage + 1) <= MaxPage %}
-        <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+        <a href="/mypage/{{ user_id }}?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
         {% endif %}
     </div>
 
