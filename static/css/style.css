@@ -35,7 +35,7 @@ ul {
 /* header */
 
 header {
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 64px;
     z-index: 999;
@@ -62,15 +62,39 @@ ul li.item:not(:first-of-type) {
     padding-left: .8vw;
 }
 
-.catch-phrase {
-    font-family: 'Zen Old Mincho', serif;
-    margin-bottom: 2rem;
-}
 
 .catch-copy {
     font-family: 'Ink Free', sans-serif;
     font-size: 8vw;
 }
+
+.catch-phrase {
+    font-family: 'Zen Old Mincho', serif;
+    margin-bottom: 2rem;
+    font-size: calc(1.275rem + .3vw);
+}
+
+@media screen and (max-width: 768px) {
+    .catch-copy {
+        font-size: 12vw;
+    }
+
+    .catch-phrase {
+        font-size: 3vw;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .catch-copy {
+        font-size: 13vw;
+    }
+
+    .catch-phrase {
+        font-size: 4vw;
+    }
+}
+
+
 /* end header */
 
 /* head-underline */
@@ -157,7 +181,7 @@ footer {
     font-weight: bold;
 }
 
-#place_box, #vlog-url {
+#place_box, .vlog-url-box {
     border: 2px solid #ced4da;
 }
 
