@@ -821,6 +821,22 @@ ul li.plan-place-details-price::before{
 
 /* ここからプランページ一覧のcss */
 
+.form-search-plans {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.submit-search-plans {
+    margin-left: 3%;
+}
+
+.search-input-wrapper-plans {
+    display: inline-block;
+    text-align: center;
+    width: 37%;
+    margin-right: 20px;
+}
+
 .plan-info{
     display: flex;
     flex-direction: row;
