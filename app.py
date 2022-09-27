@@ -347,6 +347,7 @@ def user_lit_factory(cursor, row):
 
 @app.route('/search', methods=["GET", "POST"])
 def search():
+    global status
     if request.method == 'POST':
 
         url = request.form.get("vlog-url")
@@ -422,12 +423,17 @@ def search():
             # (3) 表示するデータリストの最大件数から最大ページ数を算出
             MaxPage = (- len(plans) // 6) * -1
 
-
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+            if status:
+                return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+            else:
+                return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
 
     # GET methods
     else:
-        return render_template('search.html')
+        if status:
+            return render_template('search.html', status=status, user_name=session["user_name"])
+        else:
+            return render_template("search.html")
 
 @app.route('/content')
 def content():
