@@ -1,8 +1,15 @@
 {% extends "layout.html" %}
 
 {% block header %}
-{% if status is true %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    {% for msg in messages %}
+    <p class="flash-messages">{{msg}}</p>
+    {% endfor %}
+{% endif %}
+{% endwith %}
 
+{% if status %}
 <header class="header">
   <nav class="navbar navbar-expand-lg navbar-light .bg-transparent text-white">
       <div class="container-fluid hd-container">
@@ -26,7 +33,10 @@
                   </li>
                   <!-- My page へのリンク（自分の投稿一覧が見れる、、とか） -->
                   <li class="nav-item item">
-                      <a class="nav-link text-white" href="#">{{ user_name }}さん</a>
+                      <!--<a class="nav-link text-white" href="mypage">{{ user_name }}さん</a>-->
+
+                      <a class="nav-link text-white" href="mypage/{{ user_id }}">{{ user_name }}さん</a>
+
                   </li>
                   <li class="nav-item dropdown item">
                       <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -84,71 +94,57 @@
         <div class="bg-img-blur"></div>
         <div class="headline">
             <h1 class="catch-copy text-white">Vlog × Travel</h1>
-            <p class="catch-phrase text-white fs-4">最高の旅行体験を、あなたに。</p>
+            <p class="catch-phrase text-white">最高の旅行体験を、あなたに。</p>
             <a href="#search"><button type="button" class="btn btn-search">プランを探す</button></a>
         </div>
     </main>
     <!-- end main -->
 
     <!-- showPlan -->
-    <section class="mt-5 showPlan d-flex flex-column align-items-center">
-        <h2>人気の旅行プラン</h2>
-        <div class="container mt-4 popularPlan">
+    <section class="mt-5 mb-5 showPlan d-flex flex-column align-items-center">
+        <h2 class="head-text"><span class="under">人気の旅行プラン</span></h2>
+        <div class="container mt-5 popularPlan">
             <div class="row row-cols-3 text-center">
-                <div class="col plan-item">Column</div>
-                <div class="col plan-item">Column</div>
-                <div class="col plan-item">Column</div>
+                {% for plan in plans %}
+                <div class="plan-grid-item col plan-item">
+                    <!-- 以下に値を渡す -->
+                    <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                        <div class="thumbnail">
+                            <img src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
+                        </div>
+                    </a>
+                        <div class="plan-info">
+                            <div class="plan-user-info">
+                                <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                            </div>
+                            <div class="plan-details">
+                            <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                                <h3>{{ plan["title"] }}</h3>
+                            </a>
+                            <p>{{plan["name"]}}</p>
+                            </div>
+                        </div>
+                </div>
+            {% endfor %}
             </div>
         </div>
     </section>
     <!-- showPlan -->
 
-    <section class="mt-5 d-flex flex-column align-items-center search" id="search">
-        <h2>さがす</h2>
+    <section class="py-5 d-flex flex-column align-items-center search" id="search">
+      <h2 class="head-text"><span class="under">さがす</span></h2>
         <div class="container my-5">
             <form class="form-search" method="POST" action="./search">
-                <div class="mb-4 form-group">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <p class="text-center">行きたい場所</p>
-                    </div>
-                    <div class="col-md-8">
-                      <input type="text" name="place" id="place_box" class="form-control" placeholder="場所を入力し、選択して下さい">
-                      <input type="hidden" name="place_id_box" id="place_id_box" class="form-control" value="">
-                    </div>
-                  </div>
+                <div class="mt-2">
+                    <label for="place_box" class="form-label">場所</label>
+                    <input type="text" name="place" id="place_box" class="form-control" placeholder="場所を入力し、選択して下さい">
+                    <input type="hidden" name="place_id_box" id="place_id_box" class="form-control" value="">
                 </div>
-                <div class="mb-4 form-group">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <p class="text-center">都道府県からさがす</p>
-                    </div>
-                    <div class="col-md-8">
-                      <input type="email" name="email" class="form-control" placeholder="">
-                    </div>
-                  </div>
+                <div class="mt-5 mb-5">
+                    <label for="vlog-url" class="form-label">YouTubeの共有URL</label>
+                    <input type="text" name="vlog-url" id="vlog-url" class="form-control vlog-url-box" placeholder="共有URLを入力">
                 </div>
-                <div class="mb-4 form-group">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <p class="text-center">vlogのurl</p>
-                    </div>
-                    <div class="col-md-8">
-                      <input type="text" name="vlog-url" class="form-control" placeholder="共有URLを入力">
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-4 form-group">
-                    <div class="row">
-                      <div class="col-md-4">
-                        <p class="text-center">タグ</p>
-                      </div>
-                      <div class="col-md-8">
-                        <input type="text" name="name" class="form-control" placeholder="">
-                      </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-outline-primary">送信</button>
+                <button type="submit" class="btn btn-outline-primary submit-search">さがす</button>
               </form>
         </div>
     </section>

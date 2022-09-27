@@ -1,5 +1,9 @@
 {% extends "layout-3.html" %}
 
+{% block title %}
+T-log プラン一覧
+{% endblock %}
+
 {% block content %}
 
 <main class="site-content">
@@ -8,6 +12,23 @@
             <p>{{ error_message }}</p>
         </div>
     {% endif %}
+    <section class="py-5 d-flex flex-column align-items-center search" id="search">
+        <h2 class="head-text"><span class="under">さがす</span></h2>
+        <div class="container my-5">
+            <form class="form-search" method="POST" action="/search">
+                <div class="mt-2">
+                    <label for="place_box" class="form-label">場所</label>
+                    <input type="text" name="place" id="place_box" class="form-control" placeholder="場所を入力し、選択して下さい">
+                    <input type="hidden" name="place_id_box" id="place_id_box" class="form-control" value="">
+                </div>
+                <div class="mt-5 mb-5">
+                    <label for="vlog-url" class="form-label">YouTubeの共有URL</label>
+                    <input type="text" name="vlog-url" id="vlog-url" class="form-control vlog-url-box" placeholder="共有URLを入力">
+                </div>
+                <button type="submit" class="btn btn-outline-primary submit-search">さがす</button>
+            </form>
+        </div>
+    </section>
     <div class="plans-body">
         <div class="plan-grid-layout">
             {% for plan in plans %}
@@ -54,5 +75,8 @@
     </div>
 
 </main>
+
+<script type="text/javascript" src="../static/javascripts/search.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
 
 {% endblock %}

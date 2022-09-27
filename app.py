@@ -1,5 +1,5 @@
 from turtle import title
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, flash
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -24,8 +24,79 @@ app.config["SESSION_TYPE"] = "filesystem"
 # Session(app)
 # ---------------------------------------------------------------------
 
+#絵文字に対応する16進数を格納したリスト
+emoji_array = {
+    "airport": "🛩",
+    "amusement_park":"🎠",
+    "aquarium": "🐠",
+    "art_gallery": "🖼",
+    "bakery": "🥯",
+    "bank":"🏦",
+    "bar": "🍺",
+    "beauty_salon": "💇‍♀️",
+    "bicycle_store":"🚲",
+    "book_store":"📚",
+    "car_dealer": "🚗",
+    "car_rental": "🚗",
+    "cafe":"☕",
+    "campground":"🏕️",
+    "casino": "🎰",
+    "city_hall":"🏛",
+    "church":"⛪",
+    "clothing_store":"👚",
+    "convenience_store":"🏪",
+    "department_store":"🛍",
+    "electronics_store": "🤖",
+    "embassy": "🛂",
+    "florist":"💐",
+    "food":"🍽️",
+    "furniture_store": "🛋",
+    "gym":"🏋️",
+    "hardware_store": "💻",
+    "hair_care":"💇‍♀️",
+    "hindu_temple":"🛕",
+    "home_goods_store":"🛋",
+    "jewelry_store":"💎",
+    "landmark": "🗽",
+    "library":"📚",
+    "light_rail_station": "🚉",
+    "liquor_store": "🥃",
+    "meal_delivery": "😋",
+    "meal_takeaway": "😋",
+    "mosque": "🕌",
+    "movie_theater": "🍿",
+    "museum":"🖼️",
+    "natural_feature": "🏞",
+    "night_club":"💃🏻",
+    "parking":"🚗",
+    "park":"🏞",
+    "place_of_worship": "⛩",
+    "rv_park": "🚗",
+    "real_estate_agency":"🏢",
+    "restaurant":"🍽️",
+    "school": "🏫",
+    "secondary_school": "🏫",
+    "shoe_store":"👟",
+    "shopping_mall":"🛍",
+    "spa":"💆",
+    "stadium":"🏟",
+    "store":"🛒",
+    "subway_station":"🚇",
+    "supermarket":"🛒",
+    "synagogue": "🕍",
+    "tourist_attraction":"📸",
+    "train_station":"🚉",
+    "travel_agency": "🧳",
+    "transit_station": "🚉",
+    "university":"🏫",
+    "zoo":"🐘",
+    "lodging":"🏨",
+}
+
+
 @app.route('/')
 def index():
+
     # グローバル変数を宣言
     global status
 
@@ -40,11 +111,50 @@ def index():
         user_info =  cur.fetchall()
         con.close()
 
+        #一度閉じてもう一度接続しなおさないとエラーでた。なぜ？？
+        dbname = "Rotom.db"
+        con = sqlite3.connect(dbname)
+        con.row_factory = user_lit_factory
+
+        cur = con.cursor()
+
+        plans = list(cur.execute("""
+            SELECT * FROM plans WHERE plans.id IN
+            (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
+            plans.id = likes.plan_id WHERE plans.id IN
+            (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
+            LIMIT 3)
+        """))
+
+        con.close()
+
+        for index, plan in enumerate(plans):
+                plan["video_id"] = plan["url"].split("/")[3]
+
         session["user_name"] = user_info[0][0]
-        return render_template('index2.html', status=status, user_name=session["user_name"])
+        return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id, plans=plans)
 
     else:
-        return render_template('index2.html', status=status)
+        dbname = "Rotom.db"
+        con = sqlite3.connect(dbname)
+        con.row_factory = user_lit_factory
+
+        cur = con.cursor()
+
+        plans = list(cur.execute("""
+            SELECT * FROM plans WHERE plans.id IN
+            (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
+            plans.id = likes.plan_id WHERE plans.id IN
+            (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
+            LIMIT 3)
+        """))
+
+        con.close()
+
+        for index, plan in enumerate(plans):
+                plan["video_id"] = plan["url"].split("/")[3]
+
+        return render_template('index2.html', status=status, plans=plans)
 
 
 # loginページ
@@ -87,11 +197,6 @@ def login():
             # ↓現段階では登録されていない or メールアドレスが重複して登録されている
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
-
-        # """
-        # <h1>ログインに成功しました</h1>
-        # <p><a href='/'> ⇒top page</p>
-        # """
 
     else:
         return render_template("login.html")
@@ -187,13 +292,8 @@ def post():
 
             place_names.append(tmp_name)
             place_id.append(tmp_id)
-        """
-        print("-----------")
-        print(place_names)
-        print(place_id)
-        print("-----------")
-        """
-        # リストからNoneを削除する
+
+        # リストからNoneを削除する(なくてもいいかも)
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
@@ -223,11 +323,11 @@ def post():
 
         con.commit()
         con.close()
-
+        flash("投稿が完了しました。")
         return redirect("/")
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"])
+        return render_template("post.html", status=status, user_name=session["user_name"], user_id=session["id"])
 
 
 @app.route('/inquiry')
@@ -351,6 +451,10 @@ def plans():
     FROM plans INNER JOIN users ON plans.user_id = users.id;
     """))
 
+
+
+    plans.reverse()
+
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
@@ -367,7 +471,7 @@ def plans():
     MaxPage = (- len(plans) // 6) * -1
 
     if status:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], user_id=session["id"])
     else:
         return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
 
@@ -400,6 +504,20 @@ def plan_content(user_id, post_id):
             place_info_li[index]["url"] = "WEBサイトが見つかりません"
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
+
+        #emojiを表示させたくないtypesを削除
+        types_li = response["result"]["types"]
+
+        for type_index, type in enumerate(types_li):
+            if type in ["pointofinterest", "tourist_attraction", "establishment"]:
+                types_li.pop(type_index)
+
+        # 対応する絵文字がある場合とない場合で分岐
+        if types_li[0] in emoji_array:
+            place_info_li[index]["types"] = [types_li[0], emoji_array[types_li[0]]]
+        else:
+            place_info_li[index]["types"] = [types_li[0], "🤟"]
+
 
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:
@@ -452,6 +570,100 @@ def like():
             conn.close()
 
     return "いいねボタン押後のデータベースの処理が完了しました"
+
+# mypage表示の処理
+@app.route("/mypage/<int:user_id>")
+@login_required
+def mypage(user_id):
+    global status
+    dbname = "Rotom.db"
+    conn = sqlite3.connect(dbname)
+    conn.row_factory = user_lit_factory
+
+    cur = conn.cursor()
+
+    #plansを全て取得
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
+    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
+    """, (session["id"],)))
+
+
+    # ユーザ情報を取得
+    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
+    for row in cur.fetchall():
+        users = row
+
+    # 投稿総数を取得
+    cur.execute("SELECT COUNT(*) AS plans_sum FROM plans WHERE user_id = ?", (session["id"],))
+    for row in cur.fetchall():
+        sum = row
+
+    #urlからyoutubeIDを取得
+    for index, plan in enumerate(plans):
+        plan["video_id"] = plan["url"].split("/")[3]
+
+    #ここからページネーション機能
+
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+
+    conn.close()
+
+    return render_template('profile.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
+
+# mypageでいいね一覧を見る
+@app.route("/mypage_likes/<int:user_id>")
+@login_required
+def mypage_likes(user_id):
+    global status
+    dbname = "Rotom.db"
+    conn = sqlite3.connect(dbname)
+    conn.row_factory = user_lit_factory
+
+    cur = conn.cursor()
+
+    # userがいいねしたplanを取り出す
+    plans = list(cur.execute("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time
+    FROM plans INNER JOIN likes ON plans.id = likes.plan_id WHERE likes.user_id = ?;
+    """, (session["id"],)))
+
+    # ユーザ情報を取得
+    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
+    for row in cur.fetchall():
+        users = row
+
+    # ユーザのいいね数の取得
+    cur.execute("SELECT COUNT(*) AS counts FROM likes WHERE user_id = ?", (session["id"],))
+    for row in cur.fetchall():
+        sum = row
+
+
+    #urlからyoutubeIDを取得
+    for index, plan in enumerate(plans):
+        plan["video_id"] = plan["url"].split("/")[3]
+
+    #ここからページネーション機能
+
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+
+    conn.close()
+
+    return render_template('profile_likes.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status,user_id=session["id"], user_name=session["user_name"], email=users["email"], register_date=users["date"], likes_sum=sum["counts"])
 
 if __name__ == '__main__':
     app.debug = True

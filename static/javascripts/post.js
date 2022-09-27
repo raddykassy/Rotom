@@ -138,19 +138,19 @@ let specific_place_info = {};
 function initMap() {
 
     // ---------------------Map表示部分-------------------------------
-    const test_place = { lat: 34.665442, lng: 135.4323382 };
-    const opts = {
-        zoom: 15,
-        center: test_place,
-    }
+    // const test_place = { lat: 34.665442, lng: 135.4323382 };
+    // const opts = {
+    //     zoom: 15,
+    //     center: test_place,
+    // }
 
-    // goole.maps.Mapクラスのコンストラクタは第1引数にmapを挿入するタグ、第2引数にoptionを指定
-    const map = new google.maps.Map(document.getElementById("map"), opts)
+    // // goole.maps.Mapクラスのコンストラクタは第1引数にmapを挿入するタグ、第2引数にoptionを指定
+    // const map = new google.maps.Map(document.getElementById("map"), opts)
 
-    const marker = new google.maps.Marker({
-        position: test_place,
-        map: map,
-    })
+    // const marker = new google.maps.Marker({
+    //     position: test_place,
+    //     map: map,
+    // })
     // -----------------------------------------------------------------
 
 
