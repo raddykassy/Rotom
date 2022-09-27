@@ -22,14 +22,14 @@ T-log post
     </section>
     <section class="planning">
         <h2 class="head-text"><span class="under">プランを<br class="spOnly">投稿する</span></h2>
-        <form action="" method="POST" class="planning-form">
+        <form action="" method="POST" class="planning-form" novalidate>
             <div class="mt-5 mb-4">
                 <label for="plan-title" class="form-label">プランのタイトル＊</label>
-                <input type="text" class="form-control post-form-control" id="plan-title" name="plan-title" placeholder="プランのタイトルを入力">
+                <input type="text" class="form-control post-form-control required plan-title" id="plan-title" name="plan-title" placeholder="プランのタイトルを入力">
             </div>
             <div class="mb-4">
                 <label for="vlog-url" class="form-label">YouTubeのURL＊</label>
-                <input type="text" class="form-control post-form-control" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力">
+                <input type="text" class="form-control post-form-control required vlog-url" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力">
             </div>
             <div class="plan-places">
                 <p class="place-label">場所＊</p>
@@ -60,6 +60,9 @@ T-log post
 </main>
 
 <script type="text/javascript" src="../static/javascripts/addplan.js"></script>
+<script type="text/javascript" src="../static/javascripts/search.js"></script>
+<script type="text/javascript" src="../static/javascripts/va.js"></script>
 <script type="text/javascript" src="../static/javascripts/post.js"></script>
+>>>>>>> main
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
 {% endblock %}
