@@ -243,7 +243,7 @@ footer {
 
 .banner {
     padding-top: 0;
-    background-color: rgb(221 221 221);
+    background: linear-gradient(114deg, #4c4b4b 0%, #555555 10%, #ffffff 50%, #ffffff 70%, #fff 100%);
     width: 40%;
 }
 
