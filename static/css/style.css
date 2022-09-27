@@ -526,7 +526,7 @@ ol li:before {
     top: -10px;
     left: -4px;
     z-index: -100;
-  }
+}
 
 
 /* ここまでcontentのlist */
@@ -672,11 +672,11 @@ form {
     max-width: 320px;
   }
 
-  p > label {
+p > label {
     display: block;
   }
 
-  /*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
+/*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
 input[type="text"],
 input[type="url"],
 textarea,
@@ -686,20 +686,12 @@ fieldset {
     box-sizing: border-box;
 }
 
-/*投稿画面で未入力のところに赤線を引く*/
-input:invalid {
-    box-shadow: 0 0 5px 1px #ff9393;
-}
-textarea:invalid {
-    box-shadow: 0 0 5px 1px #ff9393;
-}
-
-/*エラー検出時　https://code-kitchen.dev/css/invalid/*/
+/*エラー検出時 https://code-kitchen.dev/css/invalid/*/
 input:focus:invalid {
-    box-shadow: none;
+    box-shadow: red
 }
 textarea:focus:invalid {
-    box-shadow: none;
+    box-shadow: red;
 }
 
 /*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
@@ -726,3 +718,13 @@ input:-webkit-autofill {
 
 }
 
+/*バリデーション時*/
+/* エラーメッセージのスタイル */
+.error {
+    width : 100%;
+    padding: 0;
+    display: inline-block;
+    font-size: 90%;
+    color: red;
+    box-sizing: border-box;
+}

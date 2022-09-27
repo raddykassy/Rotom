@@ -347,16 +347,16 @@ def plans():
 
     #plansを全て取得
     plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
     FROM plans INNER JOIN users ON plans.user_id = users.id;
     """))
-    
+
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
     #ここからページネーション機能
-    
+
     # (1) 表示されているページ番号を取得(初期ページ1)
     page = request.args.get(get_page_parameter(), type=int, default=1)
 
@@ -365,7 +365,7 @@ def plans():
 
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
     MaxPage = (- len(plans) // 6) * -1
-    
+
     if status:
         return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
     else:
@@ -389,7 +389,7 @@ def plan_content(user_id, post_id):
         FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
         """
         , (post_id,)))
-    
+
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
@@ -400,12 +400,12 @@ def plan_content(user_id, post_id):
             place_info_li[index]["url"] = "WEBサイトが見つかりません"
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
-    
+
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:
         is_liked = False
         like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
-        
+
         #過去にlikeしていない場合
         if like_info == []:
             pass
@@ -421,7 +421,7 @@ def plan_content(user_id, post_id):
 
 @app.route('/like', methods=['GET', 'POST'])
 def like():
-    
+
     if request.method=="POST":
 
         dt_now = datetime.datetime.now()
