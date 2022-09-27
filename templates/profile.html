@@ -33,7 +33,7 @@ T-log mypage
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-primary" href="/mypage_likes/{{ user_id }}" role="button" align="right">いいね一覧  ▶</a>
+    <a class="btn btn-primary" href="/mypage_likes/{{ user_id }}" role="button",align="right">いいね一覧  ▶</a>
 
 </div>
 
@@ -48,7 +48,7 @@ T-log mypage
         {% for plan in plans %}
             <div class="plan-grid-item">
                 <!-- 以下に値を渡す -->
-                <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                <a href="{{ url_for('plan_content',user_id=plan["user_id"], post_id=plan["id"]) }}">
                     <div class="thumbnail">
                         <img src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
                     </div>
@@ -58,14 +58,15 @@ T-log mypage
                             <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
                         </div>
                         <div class="plan-details">
-                        <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                        <a href="{{ url_for('plan_content',user_id=plan["user_id"], post_id=plan["id"]) }}">
                             <h3>{{ plan["title"] }}</h3>
                         </a>
                         <table>
                             <tr>
                                 <td><p>{{plan["name"]}}</p></td>
-                                <td><a href="{{ url_for('mypage_delete',user_id=plan["user_id"],plan_id=plan["id"]) }}">
-                                    <p>削除</p>
+                                <td><a href="{{ url_for('delete', plan_id=plan["id"]) }}">
+                                    <button type="button" id="delete-btn">削除</button>
+                                        <!--<input type="botton" value="削除" />-->
                                     </a>
                                 </td>
                             </tr>
@@ -94,5 +95,7 @@ T-log mypage
     </div>
 
 </div>
+
+<script type="text/javascript" src="../static/javascripts/delete_alert.js"></script>
 
 {% endblock %}
