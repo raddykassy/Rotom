@@ -357,7 +357,10 @@ def search():
         if url and place:
             error_message = "複数欄を同時に入力することはできません。"
             return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
-
+        # 両方入力されていない場合
+        elif not url and not place:
+            error_message = "いずれかの項目を入力する必要があります。"
+            return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
         # VlogのURLから検索
         elif url:
             dbname = "Rotom.db"
