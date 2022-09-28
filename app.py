@@ -358,7 +358,10 @@ def search():
         if url and place:
             error_message = "複数欄を同時に入力することはできません。"
             return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
-
+        # 両方入力されていない場合
+        elif not url and not place:
+            error_message = "いずれかの項目を入力する必要があります。"
+            return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
         # VlogのURLから検索
         elif url:
             dbname = "Rotom.db"
@@ -378,19 +381,10 @@ def search():
             for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
 
-            #ここからページネーション機能
+            #ページネーション機能
+            page_info = paginate(plans)
 
-            # (1) 表示されているページ番号を取得(初期ページ1)
-            page = request.args.get(get_page_parameter(), type=int, default=1)
-
-            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-            PageData = plans[(page - 1)*6: page*6]
-
-            # (3) 表示するデータリストの最大件数から最大ページ数を算出
-            MaxPage = (- len(plans) // 6) * -1
-
-
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+            return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
 
         # 場所から検索
         elif place:
@@ -412,21 +406,13 @@ def search():
             for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
 
-            #ここからページネーション機能
-
-            # (1) 表示されているページ番号を取得(初期ページ1)
-            page = request.args.get(get_page_parameter(), type=int, default=1)
-
-            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-            PageData = plans[(page - 1)*6: page*6]
-
-            # (3) 表示するデータリストの最大件数から最大ページ数を算出
-            MaxPage = (- len(plans) // 6) * -1
+            #ページネーション機能
+            page_info = paginate(plans)
 
             if status:
-                return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"])
             else:
-                return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
 
     # GET methods
     else:
@@ -463,21 +449,13 @@ def plans():
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
-    #ここからページネーション機能
-    
-    # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-
-    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
-
-    # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
+    #ページネーション機能
+    page_info = paginate(plans)
     
     if status:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], user_id=session["id"])
+        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
     else:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
+        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status)
 
 #下二行のパラメーターのuser_idは、動画を投稿した人のuser_id
 @app.route('/plan_content/<user_id>/<int:post_id>')
@@ -526,7 +504,7 @@ def plan_content(user_id, post_id):
     if status:
         is_liked = False
         like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
-        
+
         #過去にlikeしていない場合
         if like_info == []:
             pass
@@ -542,7 +520,7 @@ def plan_content(user_id, post_id):
 
 @app.route('/like', methods=['GET', 'POST'])
 def like():
-    
+
     if request.method=="POST":
 
         dt_now = datetime.datetime.now()
@@ -590,7 +568,6 @@ def mypage(user_id):
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
     """, (session["id"],)))
-    
 
     # ユーザ情報を取得
     cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
@@ -602,24 +579,16 @@ def mypage(user_id):
     for row in cur.fetchall():
         sum = row
 
+    conn.close()
+
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
-    #ここからページネーション機能
-    
-    # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
+    #ページネーション機能
+    page_info = paginate(plans)
 
-    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
-
-    # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
-
-    conn.close()
-    
-    return render_template('profile.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
+    return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
 
 # mypageでいいね一覧を見る
 @app.route("/mypage_likes/<int:user_id>")
@@ -647,14 +616,25 @@ def mypage_likes(user_id):
     cur.execute("SELECT COUNT(*) AS counts FROM likes WHERE user_id = ?", (session["id"],))
     for row in cur.fetchall():
         sum = row
-    
 
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
-    #ここからページネーション機能
-    
+    #ページネーション機能
+    page_info = paginate(plans)
+
+    conn.close()
+
+    return render_template('profile_likes.html',plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"],
+                                                status=status,
+                                                user_id=session["id"], user_name=session["user_name"], 
+                                                email=users["email"], register_date=users["date"], 
+                                                likes_sum=sum["counts"])
+
+
+# ページネーション機能
+def paginate(plans):
     # (1) 表示されているページ番号を取得(初期ページ1)
     page = request.args.get(get_page_parameter(), type=int, default=1)
 
@@ -664,40 +644,9 @@ def mypage_likes(user_id):
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
     MaxPage = (- len(plans) // 6) * -1
 
-    conn.close()
-    
-    return render_template('profile_likes.html',plans=PageData, CurPage=page, 
-                                                MaxPage=MaxPage, status=status,
-                                                user_id=session["id"], user_name=session["user_name"], 
-                                                email=users["email"], register_date=users["date"], 
-                                                likes_sum=sum["counts"])
+    page_info = {"plans" : PageData, "CurPage" : page, "MaxPage" : MaxPage}
 
-
-# mypageからplanを削除するための確認ページへ遷移
-@app.route("/mypage_delete/<int:user_id>/<int:plan_id>")
-@login_required
-def mypage_delete(user_id, plan_id):
-    global status
-    dbname = "Rotom.db"
-    conn = sqlite3.connect(dbname)
-    conn.row_factory = user_lit_factory
-
-    cur = conn.cursor()
-
-    # 削除対象のplanを取り出す
-    plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
-    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id = ?;""", (plan_id,)))
-    
-
-    #urlからyoutubeIDを取得
-    for index, plan in enumerate(plans):
-        plan["video_id"] = plan["url"].split("/")[3]
-
-
-    conn.close()
-    
-    return render_template("delete_comfirm.html", plans=plans, status=status, user_name=session["user_name"], user_id=session["id"]) 
+    return page_info
 
 
 # 投稿を削除する
