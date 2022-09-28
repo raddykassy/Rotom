@@ -530,15 +530,8 @@ def plans():
     page_info = paginate(plans)
     
     if status:
-<<<<<<< HEAD
-<<<<<<< HEAD
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
-=======
         return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
->>>>>>> 727f4e98dff3c55c1d7c3839ab00e7f180a38540
-=======
-        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
->>>>>>> 727f4e98dff3c55c1d7c3839ab00e7f180a38540
+
     else:
         return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status)
 
