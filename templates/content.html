@@ -207,7 +207,7 @@
                                 <ol class="list place-ol">
                                     {% for place_info in place_info_li %}
                                             <!-- 縦線 -->
-                                            <div class="plan-gray-line" style="background-color:#dedede; width:2px; height:30px;"></div>
+                                            <div class="plan-gray-line plan-gray-line-inner" style="background-color:#dedede; width:2px; height:30px;"></div>
                                                 <details class="plan-content-site-details">
                                                     <summary class="plan-content-site-details-summary">
                                                         <li class="list-item one" name="list-item-0" id="plan-place-num">
@@ -221,22 +221,21 @@
                                                     </summary>
                                                     <ul class="plan-place-details">
                                                         <li class="plan-place-details-rate">
-                                                            ★★★★★★
+                                                            {{place_info["place_review"]}}
                                                         </li>
                                                         <li class="plan-place-details-price">
-                                                            ￥1000〜￥10000
+                                                            {{place_info["price"]}}
                                                         </li>
                                                         <li class="plan-place-details-comment">
-                                                            コメントコメントコメントコメントコメントコメントコメントコメント
-                                                            コメントコメントコメントコメントコメントコメントコメントコメント
-                                                            コメントコメントコメントコメントコメントコメントコメントコメント
-                                                            コメントコメントコメントコメントコメントコメントコメントコメント
+                                                            {{place_info["description"]}}
                                                         </li>
                                                         <li>
-
-                                                            <div class="d-grid gap-2">
-                                                                <button type="button" class="btn btn-primary">Book</button>
-                                                            </div>
+                                                            {% if place_info["booking_url"] == "" %}
+                                                            {% else %}
+                                                                <div class="d-grid gap-2">
+                                                                    <a href = {{place_info["booking_url"]}}><button type="button" class="btn btn-primary">予約する</button></a>
+                                                                </div>
+                                                            {% endif %}
                                                         </li>
                                                     </ul>
                                                 </details>
@@ -282,6 +281,7 @@
                                                 </p>
                                             </div>
                                         </div>
+                                <div class="plan-gray-line" style="background-color:#dedede; width:2px;"></div>
                                 </div>
                             {% endif %}
                         {% endfor  %}

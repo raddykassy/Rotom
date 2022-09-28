@@ -1,5 +1,5 @@
 from turtle import title
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -8,7 +8,6 @@ import requests
 import json
 from flask_paginate import Pagination, get_page_parameter
 import datetime
-
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -274,6 +273,7 @@ def post():
         plan_title = request.form.get("plan-title")
         plan_description = request.form.get("description")
         url = request.form.get("vlog-url")
+        #プランに追加した場所の合計
         place_sum = request.form.get("place_sum")
 
         # place_names と place_idに情報を追加していく
@@ -297,38 +297,115 @@ def post():
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
+        #セッション情報に登録
+        session["place_names"] = place_names
+        session["place_id"] = place_id
+
+        session["place_sum"] = place_sum
+        session["plan_title"] = plan_title
+        session["plan_description"] = plan_description
+        session["url"] = url
+        session["place_names"] = place_names
+        session["place_id"] = place_id
+
+
+        # # plansテーブルにinsert
+        # con = sqlite3.connect('Rotom.db')
+        # cur = con.cursor()
+        # cur.execute("""SELECT id FROM users WHERE id = ?""", (user,) )
+
+
+
+
+
+        #セッション情報に追加
+
+
+        # for row in cur.fetchall():
+        #     user_id = row
+        # cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id[0], plan_title, plan_description, url))
+        # con.commit()
+        # con.close()
+
+        # plan_detailテーブルにinsert
+        # con = sqlite3.connect('Rotom.db')
+        # cur = con.cursor()
+        # cur.execute("""SELECT id FROM plans WHERE title = ?""", (plan_title,))
+        # for row in cur.fetchall():
+        #     plan_id = row
+
+        # for n  in range(len(place_names)):
+        #     cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number) VALUES(?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1))
+
+        # # for i in range():
+
+        # con.commit()
+        # con.close()
+
+        return redirect("/post-details")
+
+    else:
+        return render_template("post.html", status=status, user_name=session["user_name"])
+
+@app.route("/post-details", methods=["GET", "POST"])
+@login_required
+# 場所別のレビューや予約URLのリンク貼り付けなど、詳細情報記入のページ
+def post_details():
+   
+    # プラン投稿ボタンが押された時
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+        place_description = data["comment_li"] #場所ごとのコメント
+        place_review = data["rating_li"] #場所ごとのレーティング
+        booking_url = data["url_li"] #場所ごとの予約URL
+        price = data["price_li"] #場所ごとの価格
+
+        # plansテーブルに格納する情報
+        user_id = session["id"]
+        title = session["plan_title"]
+        description = session["plan_description"]
+        url = session["url"]
 
         # plansテーブルにinsert
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""SELECT id FROM users WHERE id = ?""", (user,) )
-
-        for row in cur.fetchall():
-            user_id = row
-        cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id[0], plan_title, plan_description, url))
+        cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id, title, description, url))
         con.commit()
-        con.close()
+
+        # plan_placesに格納する情報
+        plan_id = "" #データベースからとってくる
+        place_id = session["place_id"] #for文で回して取得
+        place_names = session["place_names"] #for文で回して取得
+        
 
         # plan_detailテーブルにinsert
-        con = sqlite3.connect('Rotom.db')
-        cur = con.cursor()
-        cur.execute("""SELECT id FROM plans WHERE title = ?""", (plan_title,))
+
+        #plan_idを取ってくる
+        cur.execute("""SELECT id FROM plans WHERE title = ? """, (title,))
         for row in cur.fetchall():
             plan_id = row
 
-        for n  in range(len(place_names)):
-            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number) VALUES(?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1))
 
-        # for i in range():
+        #場所ごとにplan_placesに格納
+        for n  in range(len(session["place_names"])):
+            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number, description, place_review, booking_url, price) VALUES(?,?,?,?,?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1, place_description[n], place_review[n], booking_url[n], price[n],))
+
 
         con.commit()
         con.close()
-        flash("投稿が完了しました。")
-        return redirect("/")
+
+        return "post_details()での処理が完了"
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"], user_id=session["id"])
 
+        #post.htmlから引き継いだ値を表示
+        plan_info = [{"user_id": session["id"], "title": session["plan_title"],  "description":	session["plan_description"], "url": session["url"]}]
+        place_info_li = []
+
+        for n  in range(len(session["place_names"])):
+            place_info_li.append({"place_name": session["place_names"][n]})
+
+        return render_template('post-details.html', plan_info = plan_info, place_info_li = place_info_li,)
 
 @app.route('/inquiry')
 def inquiry():
@@ -453,7 +530,15 @@ def plans():
     page_info = paginate(plans)
     
     if status:
+<<<<<<< HEAD
+<<<<<<< HEAD
+        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"])
+=======
         return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
+>>>>>>> 727f4e98dff3c55c1d7c3839ab00e7f180a38540
+=======
+        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
+>>>>>>> 727f4e98dff3c55c1d7c3839ab00e7f180a38540
     else:
         return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status)
 
@@ -484,6 +569,7 @@ def plan_content(user_id, post_id):
             place_info_li[index]["url"] = response["result"]["website"]
         except KeyError:
             place_info_li[index]["url"] = "WEBサイトが見つかりません"
+
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
