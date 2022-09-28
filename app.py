@@ -711,6 +711,7 @@ def delete(plan_id):
     cur = con.cursor()
     cur.execute("""DELETE FROM plans WHERE id = ?""", (plan_id,) )
     cur.execute("""DELETE FROM plan_places WHERE plan_id = ?""", (plan_id,) )
+    cur.execute("""DELETE FROM likes WHERE plan_id = ?""", (plan_id,))
     con.commit()
     con.close()
 
