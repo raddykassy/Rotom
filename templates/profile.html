@@ -33,7 +33,7 @@ T-log mypage
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-primary" href="/mypage_likes/{{ user_id }}" role="button" align="right">いいね一覧  ▶</a>
+    <a class="btn btn-primary" href="/mypage_likes/{{ user_id }}" role="button",align="right">いいね一覧  ▶</a>
 
 </div>
 
@@ -48,7 +48,7 @@ T-log mypage
         {% for plan in plans %}
             <div class="plan-grid-item">
                 <!-- 以下に値を渡す -->
-                <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                <a href="{{ url_for('plan_content',user_id=plan["user_id"], post_id=plan["id"]) }}">
                     <div class="thumbnail">
                         <img src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
                     </div>
@@ -58,10 +58,20 @@ T-log mypage
                             <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
                         </div>
                         <div class="plan-details">
-                        <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                        <a href="{{ url_for('plan_content',user_id=plan["user_id"], post_id=plan["id"]) }}">
                             <h3>{{ plan["title"] }}</h3>
                         </a>
-                        <p>{{plan["name"]}}</p>
+                        <table>
+                            <tr>
+                                <td><p>{{plan["name"]}}</p></td>
+                                <td>
+                                    <!--<a href="{{ url_for('delete', plan_id=plan["id"]) }}">-->
+                                    <button type='button' onclick="deleteComfirm({{ plan['id'] }})">削除</button>
+                                    <!--<input type="botton" value="削除" />-->
+                                    
+                                </td>
+                            </tr>
+                        </table>
                         </div>
                     </div>
             </div>
@@ -72,7 +82,7 @@ T-log mypage
     <div class="pagination">
         <!--(1)前のページ-->
         {% if (CurPage - 1) > 0 %}
-        <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
+        <a href="/mypage/{{ user_id }}?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
         {% endif %}
 
         <!--(1)現在のページ-->
@@ -81,10 +91,12 @@ T-log mypage
         </li>
         <!--(2)次のページ-->
         {% if (CurPage + 1) <= MaxPage %}
-        <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+        <a href="/mypage/{{ user_id }}?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
         {% endif %}
     </div>
 
 </div>
+
+
 
 {% endblock %}
