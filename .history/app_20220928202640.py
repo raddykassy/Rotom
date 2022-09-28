@@ -390,7 +390,6 @@ def user_lit_factory(cursor, row):
 
 @app.route('/search', methods=["GET", "POST"])
 def search():
-    global status
     if request.method == 'POST':
 
         url = request.form.get("vlog-url")
@@ -451,17 +450,11 @@ def search():
             #ページネーション機能
             page_info = paginate(plans)
 
-            if status:
-                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"])
-            else:
-                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
+            return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
 
     # GET methods
     else:
-        if status:
-            return render_template('search.html', status=status, user_name=session["user_name"])
-        else:
-            return render_template("search.html")
+        return render_template('search.html')
 
 @app.route('/content')
 def content():
@@ -496,7 +489,6 @@ def plans():
     
     if status:
         return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
-
     else:
         return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status)
 
@@ -611,7 +603,7 @@ def mypage(user_id):
 
     cur = conn.cursor()
 
-    #ユーザが登録したplansを全て取得
+    #plansを全て取得
     plans = list(cur.execute("""
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
@@ -671,16 +663,24 @@ def mypage_likes(user_id):
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
+    #ここからページネーション機能
+    
+    # (1) 表示されているページ番号を取得(初期ページ1)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+
+    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
+    PageData = plans[(page - 1)*6: page*6]
+
+    # (3) 表示するデータリストの最大件数から最大ページ数を算出
+    MaxPage = (- len(plans) // 6) * -1
+
     #ページネーション機能
     page_info = paginate(plans)
 
     conn.close()
+    
+    return render_template('profile_likes.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status,user_id=session["id"], user_name=session["user_name"], email=users["email"], register_date=users["date"], likes_sum=sum["counts"])
 
-    return render_template('profile_likes.html',plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"],
-                                                status=status,
-                                                user_id=session["id"], user_name=session["user_name"], 
-                                                email=users["email"], register_date=users["date"], 
-                                                likes_sum=sum["counts"])
 
 # ページネーション機能
 def paginate(plans):
@@ -696,26 +696,6 @@ def paginate(plans):
     page_info = {"plans" : PageData, "CurPage" : page, "MaxPage" : MaxPage}
 
     return page_info
-
-
-# 投稿を削除する
-@app.route("/delete/<int:plan_id>")
-@login_required
-def delete(plan_id):
-    """
-    GET: 
-    POST: 選択したplanの削除
-    """
-    # plansテーブル、plan_placesテーブルから削除
-    con = sqlite3.connect('Rotom.db')
-    cur = con.cursor()
-    cur.execute("""DELETE FROM plans WHERE id = ?""", (plan_id,) )
-    cur.execute("""DELETE FROM plan_places WHERE plan_id = ?""", (plan_id,) )
-    con.commit()
-    con.close()
-
-    
-    return redirect(url_for("mypage", user_id=session["id"]))
 
 
 if __name__ == '__main__':
