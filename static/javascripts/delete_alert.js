@@ -1,20 +1,10 @@
-//function deleteComfirm(){
-    var deleteBtn = document.getElementById('delete-btn');
-    deleteBtn.addEventListener('click', function(){
-        alert("aaa");
-//         result = window.confirm("この投稿を消去しますか？");
-    
-//         if(result){
-//             console.log("ok");
-//             //return true;
-//         }
-//         else{
-//             colsole.log("no");
-//             //return false;
-//         }
+function deleteComfirm(plan_id){
 
-
-// 
+         const result = window.confirm("この投稿を消去しますか？");
+         console.log(result)
+         if(result){
+            location.href=`/delete/${plan_id}`;
+            //console.log("ok");
+         }
+//});
 }
-)
-//}

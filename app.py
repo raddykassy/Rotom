@@ -716,8 +716,8 @@ def delete(plan_id):
     con.commit()
     con.close()
 
-        
-    return redirect("/")
+    
+    return redirect(url_for("mypage", user_id=session["id"]))
 
 
 if __name__ == '__main__':

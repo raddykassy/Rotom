@@ -64,10 +64,11 @@ T-log mypage
                         <table>
                             <tr>
                                 <td><p>{{plan["name"]}}</p></td>
-                                <td><a href="{{ url_for('delete', plan_id=plan["id"]) }}">
-                                    <button type="button" id="delete-btn">削除</button>
-                                        <!--<input type="botton" value="削除" />-->
-                                    </a>
+                                <td>
+                                    <!--<a href="{{ url_for('delete', plan_id=plan["id"]) }}">-->
+                                    <button type='button' onclick="deleteComfirm({{ plan['id'] }})">削除</button>
+                                    <!--<input type="botton" value="削除" />-->
+                                    
                                 </td>
                             </tr>
                         </table>
@@ -96,6 +97,6 @@ T-log mypage
 
 </div>
 
-<script type="text/javascript" src="../static/javascripts/delete_alert.js"></script>
+
 
 {% endblock %}
