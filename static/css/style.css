@@ -175,6 +175,18 @@ footer {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.showPlan {
+    opacity: 0;         /* 初期値は透明にしておく */
+    transition: .7s;    /* 動くスピードを0.5秒に指定 */
+    position: relative; /* 相対位置の設定 */
+    top: 50px;          /* 事前に下に50pxずらしておく */
+}
+
+.active {
+    opacity: 1;         /* 透明度を元に戻す */
+    top: 0;             /* ずらしていた位置を戻すことで上に上がっているようにみえる */
+}
+
 .search {
     font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
     background-color: #f8f8f8;
