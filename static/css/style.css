@@ -243,7 +243,7 @@ footer {
 
 .banner {
     padding-top: 0;
-    background-color: rgb(221 221 221);
+    background: linear-gradient(114deg, #4c4b4b 0%, #555555 10%, #ffffff 50%, #ffffff 70%, #fff 100%);
     width: 40%;
 }
 
@@ -832,6 +832,22 @@ ul li.plan-place-details-price::before{
 
 
 /* ここからプランページ一覧のcss */
+
+.form-search-plans {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.submit-search-plans {
+    margin-left: 3%;
+}
+
+.search-input-wrapper-plans {
+    display: inline-block;
+    text-align: center;
+    width: 37%;
+    margin-right: 20px;
+}
 
 .plan-info{
     display: flex;
