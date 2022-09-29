@@ -129,6 +129,16 @@ footer {
 }
 /* footer end */
 
+.error-container {
+    text-align: center;
+    background-color: #fbfbfb;
+}
+
+.error-container p {
+    margin: 0;
+    color: rgb(255, 11, 11);
+}
+
 /* common end -------------------------------------*/
 
 /* main(index.html) ------------------------------ */
@@ -191,6 +201,10 @@ footer {
     font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
     background-color: #f8f8f8;
     font-weight: bold;
+}
+
+.plans-search {
+    background-color: #FFFFFF;
 }
 
 #place_box, .vlog-url-box {
@@ -666,7 +680,6 @@ ol li.list-item:after {
     margin-left: 40px;
 }
 
-
 /* --------アコーディオンアイコン-------- */
 .accordion-icon {
     display: block;
@@ -734,12 +747,12 @@ ol li.list-item:after {
 }
 
 ul li.plan-place-details-rate::before{
-    content:"Rate: ";
+    content:"投稿者の評価: ";
     color: gray;
 }
 
 ul li.plan-place-details-price::before{
-    content:"Price: ";
+    content:"価格: ";
     color: gray;
 }
 
@@ -755,7 +768,7 @@ ul li.plan-place-details-price::before{
 }
 
 
-/* いいねボタン */
+/* content.htmlのいいねボタン */
 
   input[type="checkbox"] {
     display: none;
@@ -792,6 +805,7 @@ ul li.plan-place-details-price::before{
     left: -4px;
     z-index: -100;
   }
+
 
 
 /* ここまでcontentのlist */
@@ -845,10 +859,6 @@ ul li.plan-place-details-price::before{
 
 /* ここからプランページ一覧のcss */
 
-.form-search-plans {
-    width: 80%;
-    margin: 0 auto;
-}
 
 .submit-search-plans {
     margin-left: 3%;
@@ -934,6 +944,38 @@ ul li.plan-place-details-price::before{
     /* height: 50%; */
 }
 
+.plans-plan-description-comment{
+
+    margin-top: 10px;
+    margin-left: 20px;
+
+    text-decoration: none;
+    font-family: "Roboto","Arial",sans-serif;
+    max-height: 100px;
+    overflow: hidden;
+    display: block;
+    -webkit-line-clamp: 3;
+    display: box;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+    bottom: 30px;
+}
+.plans-plan-description-comment p{
+    color: gray;
+    font-size: 15px;
+}
+
+.plans-plan-description-price-days h3{
+    text-align: right;
+    font-weight: bold;
+}
+
+.plans-plan-description-price-days h4{
+    text-align: right;
+    color: gray;
+}
 
 /* ここまでプランページ一覧のcss */
 
@@ -1074,3 +1116,187 @@ textarea:focus:invalid {
     color: gray;
 
 }
+
+
+
+
+/* plan.htmlの内容 */
+.plans-wrapper{
+    display: flex;
+    flex-direction: column;
+    margin: 30px 100px;
+
+}
+
+.plans-plan-content{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    height: 270px;
+    border-radius: 10px;
+    background-color: white;
+    margin-top: 30px;
+
+}
+
+.plans-plan-description{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 10px;
+}
+
+
+.plans-plan-description-details{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+
+}
+
+.plans-plan-description-user-plan-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.plans-plan-description-user-info{
+    display: flex;
+    flex-direction: row;
+    max-width:50%;
+}
+
+.plans-plan-right{
+    margin-right: 50px;
+    width: 300px;
+    flex: 0 0 32%;
+    position: relative;
+
+}
+
+.plans-plan-left{
+    margin-left: 20px;
+}
+
+.plans-plan-content-thumbnail-img{
+    aspect-ratio:16 / 9;
+    height: 100%;
+    width: 450px;
+    border-radius: 10px 0 0 10px
+}
+
+.plans-body-background{
+    background-color: #f8f8f8;
+}
+
+
+.plans-plan-description-title{
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    max-height: 30%;
+}
+
+.plans-plan-description-title h3{
+    text-decoration: none;
+    font-family: "Roboto","Arial",sans-serif;
+    font-size: 1.7rem;
+    line-height: 2rem;
+    font-weight: 500;
+    max-height: 4rem;
+    overflow: hidden;
+    display: block;
+    -webkit-line-clamp: 2;
+    display: box;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+
+}
+
+.plans-plan-description-title a {
+    text-decoration: none;
+    color:black;
+}
+
+.plans-plan-description-title a:hover {
+    text-decoration: none;
+    opacity: 70%;
+}
+
+.plans-plan-description-username p {
+    font-size:large;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.plans-plan-description-like-link{
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    position: relative;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 30px;
+    right:-10px
+}
+
+
+.plans-plan-description-like-link p{
+    margin-right: 30px;
+    margin-top: 4px;
+    color: gray;
+    font-size: 18px;
+}
+
+.plans-plan-description-like-link img{
+    width: 25px;
+    height: 25px;
+    opacity: 20%;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+
+
+
+/* plans.htmlのいいねボタン */
+
+input[type="checkbox"] {
+    display: none;
+  }
+ .plans-like-label {
+    right: 90px;
+    position: absolute;
+    cursor: pointer;
+  }
+  .plans-like-label svg {
+    width: 35px;
+  }
+  input[type="checkbox"] + .plans-like-label svg {
+    fill: #dedede;
+    transition: all .3s;
+  }
+  input[type="checkbox"]:checked + .plans-like-label svg {
+    fill: #ff0033dd;
+    animation: like .8s ease-out;
+    transition: all .3s;
+  }
+
+  input[type="checkbox"]:checked + .plans-like-label::after {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border: 5px solid #ff0033dd;
+    border-radius: 50%;
+    animation: circle .8s ease-out;
+    opacity: 0;
+    top: -10px;
+    left: -4px;
+    z-index: -100;
+  }
+
+  

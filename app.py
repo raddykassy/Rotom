@@ -1,5 +1,6 @@
+from itertools import count
 from turtle import title
-from flask import Flask, render_template, request, redirect, session, url_for, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify, flash
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -210,10 +211,8 @@ def logout():
     # グローバル変数をlogout状態に
     global status
     status = False
-    return """
-           <h1>ログアウトしました</h1>
-           <p><a href="/"> ⇒top page</p>
-    """
+    flash("ログアウトが完了しました。")
+    return redirect("/")
 
 # register
 @app.route("/register", methods=["GET", "POST"])
@@ -273,6 +272,9 @@ def post():
         plan_title = request.form.get("plan_title")
         plan_description = request.form.get("description")
         url = request.form.get("vlog_url")
+        costs = request.form.get("costs")
+        days = request.form.get("days")
+
         #プランに追加した場所の合計
         place_sum = request.form.get("place_sum")
 
@@ -307,6 +309,8 @@ def post():
         session["url"] = url
         session["place_names"] = place_names
         session["place_id"] = place_id
+        session["days"] = days
+        session["costs"] = costs
 
         return redirect("/post-details")
 
@@ -331,11 +335,13 @@ def post_details():
         title = session["plan_title"]
         description = session["plan_description"]
         url = session["url"]
+        days = session["days"]
+        costs = session["costs"]
 
         # plansテーブルにinsert
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id, title, description, url))
+        cur.execute("""INSERT INTO plans (user_id, title, description, url, days, costs) VALUES (?,?,?,?,?,?)""", (user_id, title, description, url, days, costs,))
         con.commit()
 
         # plan_placesに格納する情報
@@ -360,6 +366,7 @@ def post_details():
         con.commit()
         con.close()
 
+        flash("投稿が完了しました。")
         return "post_details()での処理が完了"
 
     else:
@@ -480,10 +487,33 @@ def plans():
     cur = conn.cursor()
 
     #plansを全て取得
-    plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
-    FROM plans INNER JOIN users ON plans.user_id = users.id;
-    """))
+
+    plans = list(cur.execute(
+        """
+        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
+        FROM plans INNER JOIN users ON plans.user_id = users.id;
+        """))
+
+    likes = list(cur.execute(
+        """
+        SELECT plan_id
+        FROM likes;
+        """))
+
+    # like数カウント
+    plan_id_num=[]
+    planid_like_dic = {}
+
+    for like in likes:
+        plan_id_num.append(like["plan_id"])
+    else:
+        for plan_id in plan_id_num:
+            planid_like_dic[plan_id] = int(plan_id_num.count(plan_id))
+
+    # like数をplansに加える
+    for plan_index, plan in enumerate(plans):
+        if plan["id"] in planid_like_dic.keys():
+            plans[plan_index]["likes"] = planid_like_dic[plan["id"]]
 
     plans.reverse()
 
@@ -634,7 +664,7 @@ def mypage(user_id):
 
     conn.close()
 
-      #ページネーション機能
+    #ページネーション機能
     page_info = paginate(plans)
 
     return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
