@@ -1,3 +1,4 @@
+from itertools import count
 from turtle import title
 from flask import Flask, render_template, request, redirect, session, url_for, jsonify, flash
 import sqlite3
@@ -271,6 +272,9 @@ def post():
         plan_title = request.form.get("plan-title")
         plan_description = request.form.get("description")
         url = request.form.get("vlog-url")
+        costs = request.form.get("costs")
+        days = request.form.get("days")
+
         #プランに追加した場所の合計
         place_sum = request.form.get("place_sum")
 
@@ -305,6 +309,8 @@ def post():
         session["url"] = url
         session["place_names"] = place_names
         session["place_id"] = place_id
+        session["days"] = days
+        session["costs"] = costs
 
         return redirect("/post-details")
 
@@ -329,11 +335,13 @@ def post_details():
         title = session["plan_title"]
         description = session["plan_description"]
         url = session["url"]
+        days = session["days"]
+        costs = session["costs"]
 
         # plansテーブルにinsert
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id, title, description, url))
+        cur.execute("""INSERT INTO plans (user_id, title, description, url, days, costs) VALUES (?,?,?,?,?,?)""", (user_id, title, description, url, days, costs,))
         con.commit()
 
         # plan_placesに格納する情報
@@ -479,10 +487,32 @@ def plans():
     cur = conn.cursor()
 
     #plansを全て取得
-    plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
-    FROM plans INNER JOIN users ON plans.user_id = users.id;
-    """))
+    plans = list(cur.execute(
+        """
+        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
+        FROM plans INNER JOIN users ON plans.user_id = users.id;
+        """))
+
+    likes = list(cur.execute(
+        """
+        SELECT plan_id
+        FROM likes;
+        """))
+
+    # like数カウント
+    plan_id_num=[]
+    planid_like_dic = {}
+
+    for like in likes:
+        plan_id_num.append(like["plan_id"])
+    else:
+        for plan_id in plan_id_num:
+            planid_like_dic[plan_id] = int(plan_id_num.count(plan_id))
+
+    # like数をplansに加える
+    for plan_index, plan in enumerate(plans):
+        if plan["id"] in planid_like_dic.keys():
+            plans[plan_index]["likes"] = planid_like_dic[plan["id"]]
 
     plans.reverse()
     
