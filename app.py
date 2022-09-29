@@ -1,6 +1,6 @@
 from itertools import count
 from turtle import title
-from flask import Flask, render_template, request, redirect, session, url_for, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify, flash
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -211,10 +211,8 @@ def logout():
     # グローバル変数をlogout状態に
     global status
     status = False
-    return """
-           <h1>ログアウトしました</h1>
-           <p><a href="/"> ⇒top page</p>
-    """
+    flash("ログアウトが完了しました。")
+    return redirect("/")
 
 # register
 @app.route("/register", methods=["GET", "POST"])
@@ -368,6 +366,7 @@ def post_details():
         con.commit()
         con.close()
 
+        flash("投稿が完了しました。")
         return "post_details()での処理が完了"
 
     else:
