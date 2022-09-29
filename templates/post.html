@@ -25,11 +25,13 @@ T-log post
         <form action="" method="POST" id="form_id">
             <div class="mt-5 mb-4">
                 <label for="plan-title" class="form-label" name="form-label">プランのタイトル＊</label>
-                <input type="text" class="form-control post-form-control required plan-title" id="plan_title" name="plantitle" placeholder="プランのタイトルを入力">
+                <input type="text" class="form-control post-form-control required plan-title" id="plan_title" name="plan_title" placeholder="プランのタイトルを入力">
+                <p class="is-error-plan_title"></p>
             </div>
             <div class="mb-4">
                 <label for="vlog-url" class="form-label">YouTubeのURL＊</label>
-                <input type="url" class="form-control post-form-control required vlog-url" id="vlog-url" name="vlogurl" placeholder="YouTubeのURLを入力">
+                <input type="url" class="form-control post-form-control required vlog-url" id="vlog-url" name="vlog_url" placeholder="YouTubeのURLを入力">
+                <p class="is-error-vlog_url"></p>
             </div>
             <div class="plan-places">
                 <p class="place-label">場所＊</p>
@@ -37,6 +39,7 @@ T-log post
                     <div class="mb-3">
                         <!-- <label for="place" class="form-label">1番目</label> -->
                         <input type="text" class="form-control post-form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい" required>
+                        <p class="is-error-place01"></p>
                         <input type="hidden" id="place_name_1" name="place_name_1" value="">
                         <input type="hidden" id="place_id_1" name="place_id_1" value="">
                     </div>
@@ -51,6 +54,7 @@ T-log post
             <div class="description_wrapper">
                 <label for="description" class="form-label">プランの概要＊</label>
                 <textarea class="form-control post-form-control" id="description" name="description" placeholder="旅行の概要を入力" wrap="soft"></textarea>
+                <p class="is-error-description"></p>
             </div>
             <div class="mt-5 submit-container">
                 <button type="submit" id="submit-plan-btn" class="btn btn-primary submit-plan-btn">投稿する</button>

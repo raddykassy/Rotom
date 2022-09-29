@@ -1068,25 +1068,9 @@ textarea:focus:invalid {
     color: #fff;
 }
 
-
-<<<<<<< HEAD
-/*varidationエラーメッセージ*/
-/* エラーメッセージのスタイル */
-.error {
-    width : 100%;
-    padding: 0;
-    display: inline-block;
-    font-size: 90%;
-    color: red;
-    box-sizing: border-box;
-  }
-
-.error {
-    color:#ff6699;
-=======
 /* post-detailsのcss */
 
 .post-plan-details-price{
     color: gray;
->>>>>>> main
+
 }
