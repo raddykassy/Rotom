@@ -175,6 +175,18 @@ footer {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.showPlan {
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
+}
+
+.active {
+    opacity: 1;
+    top: 0;
+}
+
 .search {
     font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
     background-color: #f8f8f8;
@@ -243,7 +255,7 @@ footer {
 
 .banner {
     padding-top: 0;
-    background-color: rgb(221 221 221);
+    background: linear-gradient(114deg, #4c4b4b 0%, #555555 10%, #ffffff 50%, #ffffff 70%, #fff 100%);
     width: 40%;
 }
 
@@ -585,12 +597,14 @@ margin-left: 65px;
 }
 
 
-ol li.list-item:before {
+ol li.list-item:after {
+    margin-right: -100px;
     content: counter(item) " ";
     counter-increment: item;
     color: white;
     position: absolute;
     top: 50%;
+    left: 0%;
     margin-top: -1em;
     background: linear-gradient(90deg, hsla(145, 84%, 73%, 1) 0%, hsla(150, 61%, 48%, 1) 100%);
     height: 2em;
@@ -602,6 +616,7 @@ ol li.list-item:before {
   }
 
 .plan-gray-line{
+
     margin-left: 25px;
     position: relative;
 }
@@ -620,6 +635,7 @@ ol li.list-item:before {
 
 /* ここからcontent.htmlのアコーディオン */
 .plan-content-site-details{
+    max-height: 400px;
     margin-left: 25px;
     border-left: 2px solid #dedede;
 }
@@ -629,6 +645,7 @@ ol li.list-item:before {
     left: -27px;
 }
 
+/* Safariにおいては、display: list-itemではなく、::-webkit-details-marker 擬似要素によって表示される。 */
 .plan-content-site-details ::-webkit-details-marker,
 .plan-content-site-details summary::marker{
 
@@ -653,12 +670,11 @@ ol li.list-item:before {
 /* --------アコーディオンアイコン-------- */
 .accordion-icon {
     display: block;
-    margin-left: 20px;
+    position: absolute;
+    right: 30px;
     margin-top: 25px;
-    position: relative;
     width: 24px;
     height: 24px;
-    margin-left: 30px;
     flex-shrink: 0;
     transform-origin: 100% 10%;
     transition: transform 0.4s;
@@ -693,10 +709,18 @@ ol li.list-item:before {
 
   .accordiong-placename-icon-container{
     display: flex;
+    position: relative;
   }
 
   .plan-place-details{
+    /* max-height: 50px; */
+    min-height: 80px;
     margin-left: 30px;
+    margin-bottom: 0px;
+  }
+
+  .plan-gray-line-inner{
+    margin-top: 0px;
   }
 
  /* li.place-details-price::marker {
@@ -721,9 +745,9 @@ ul li.plan-place-details-price::before{
 
 .plan-place-details-comment{
     color: gray;
-    max-height: 100px;
+    max-height: 150px;
     overflow-y: scroll;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }
 
 .plan-place-details {
@@ -820,6 +844,22 @@ ul li.plan-place-details-price::before{
 
 
 /* ここからプランページ一覧のcss */
+
+.form-search-plans {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.submit-search-plans {
+    margin-left: 3%;
+}
+
+.search-input-wrapper-plans {
+    display: inline-block;
+    text-align: center;
+    width: 37%;
+    margin-right: 20px;
+}
 
 .plan-info{
     display: flex;
@@ -1029,6 +1069,7 @@ textarea:focus:invalid {
 }
 
 
+<<<<<<< HEAD
 /*varidationエラーメッセージ*/
 /* エラーメッセージのスタイル */
 .error {
@@ -1042,4 +1083,10 @@ textarea:focus:invalid {
 
 .error {
     color:#ff6699;
+=======
+/* post-detailsのcss */
+
+.post-plan-details-price{
+    color: gray;
+>>>>>>> main
 }

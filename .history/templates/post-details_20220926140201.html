@@ -1,0 +1,118 @@
+{% extends "layout-3.html" %}
+
+{% block title %}
+T-log post
+{% endblock %}
+
+{% block content %}
+<main class="post-wrapper">
+    <section class="banner">
+        <div class="post-banner-wrapper">
+            <p>＼あなたの<br class="spOnly">思い出が誰かの思い出に／
+            <h1>
+                <figure>
+                    <picture>
+                        <!-- <source media="(max-width:749px)" srcset="static/img/logo_sp.png" /> -->
+                        <img src="static/img/logo.png" alt="T-log Logo" class="post-logo">
+                    </picture>
+                </figure>
+            </h1>
+            <p>最高の旅行体験を、あなたに。</p>
+        </div>
+    </section>
+    <section class="planning">
+        <div class="column">
+            <div class="flexbox">
+                <div class="schedule-container">
+                    <div class="title">
+                        <h2>{{ plan_info[0]["title"] }}</h2>
+                        <!-- ユーザーがログインしていたら、いいねボタンを表示 -->
+                        {% if user_id %}
+                            <!-- ユーザーが既にlikeしていたら、色を変える -->
+                            {% if is_liked is true %}
+                                <input type="checkbox" id="like" checked><label class="content-like-label"for="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></label>
+                            {% elif is_liked is false %}
+                                <input type="checkbox" id="like"><label class="content-like-label" for="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></label>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="user_info">
+                        <div class="content-userinfo-upper">
+                            <img class="profile__img" src="{{ url_for('static',filename='img/profile01.jpeg') }}" width ="45" height="45" alt="profile">
+                            <h3 class="user_name">{{plan_info[0]["name"]}}</h3>
+                            <div class="button">
+                                <button type="button" class="follow-button">フォロー</button>
+                            </div>
+                        </div>
+
+                        <div class="content-plan-comment">
+                            <div class="plan-comment-box">
+                                <p>
+                                    {{plan_info[0]["description"]}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="trip-route">
+                        <div class="start-point">
+                            <ul><span></span></ul>
+                        </div>
+                        <!-- 場所の名前 -->
+                        <ol class="list place-ol">
+                            {% for place_info in place_info_li %}
+                                    <!-- 縦線 -->
+                                    <div class="plan-gray-line" style="background-color:#dedede; width:2px; height:30px;"></div>
+                                        <details class="plan-content-site-details">
+                                            <summary class="plan-content-site-details-summary">
+                                                <li class="list-item one" name="list-item-0" id="plan-place-num">
+                                                    <div class="accordiong-placename-icon-container">
+                                                        <span>
+                                                            {{ place_info["place_name"] }}
+                                                        </span>
+                                                        <span class="accordion-icon"></span>
+                                                    </div>
+                                                </li>
+                                            </summary>
+                                            <ul class="plan-place-details">
+                                                <li class="plan-place-details-rate">
+                                                    ★★★★★★
+                                                </li>
+                                                <li class="plan-place-details-price">
+                                                    ￥1000〜￥10000
+                                                </li>
+                                                <li class="plan-place-details-comment">
+                                                    コメントコメントコメントコメントコメントコメントコメントコメント
+                                                    コメントコメントコメントコメントコメントコメントコメントコメント
+                                                    コメントコメントコメントコメントコメントコメントコメントコメント
+                                                    コメントコメントコメントコメントコメントコメントコメントコメント
+                                                </li>
+                                                <li>
+
+                                                    <div class="d-grid gap-2">
+                                                        <button type="button" class="btn btn-primary">Book</button>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </details>
+                                
+                            {% endfor %}
+                            <div class="plan-gray-line" style="background-color:#dedede; width:2px; height:30px;"></div>
+
+                        </ol>
+                        <div class="end-point">
+                            <ul><span></span></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <div id="map" class="plan-page-map"></div>
+                </div>
+                </div>
+        </div>
+    </section>
+</main>
+
+<script type="text/javascript" src="../static/javascripts/addplan.js"></script>
+<script type="text/javascript" src="../static/javascripts/post.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
+{% endblock %}

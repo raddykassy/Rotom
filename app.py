@@ -1,5 +1,5 @@
 from turtle import title
-from flask import Flask, render_template, request, redirect, session, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, jsonify
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from helpers import login_required
@@ -8,7 +8,6 @@ import requests
 import json
 from flask_paginate import Pagination, get_page_parameter
 import datetime
-
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -274,6 +273,7 @@ def post():
         plan_title = request.form.get("plan-title")
         plan_description = request.form.get("description")
         url = request.form.get("vlog-url")
+        #プランに追加した場所の合計
         place_sum = request.form.get("place_sum")
 
         # place_names と place_idに情報を追加していく
@@ -297,38 +297,81 @@ def post():
         place_names = list(filter(None, place_names))
         place_id = list(filter(None, place_id))
 
+        #セッション情報に登録
+        session["place_names"] = place_names
+        session["place_id"] = place_id
+
+        session["place_sum"] = place_sum
+        session["plan_title"] = plan_title
+        session["plan_description"] = plan_description
+        session["url"] = url
+        session["place_names"] = place_names
+        session["place_id"] = place_id
+
+        return redirect("/post-details")
+
+    else:
+        return render_template("post.html", status=status, user_name=session["user_name"])
+
+@app.route("/post-details", methods=["GET", "POST"])
+@login_required
+# 場所別のレビューや予約URLのリンク貼り付けなど、詳細情報記入のページ
+def post_details():
+   
+    # プラン投稿ボタンが押された時
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+        place_description = data["comment_li"] #場所ごとのコメント
+        place_review = data["rating_li"] #場所ごとのレーティング
+        booking_url = data["url_li"] #場所ごとの予約URL
+        price = data["price_li"] #場所ごとの価格
+
+        # plansテーブルに格納する情報
+        user_id = session["id"]
+        title = session["plan_title"]
+        description = session["plan_description"]
+        url = session["url"]
 
         # plansテーブルにinsert
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""SELECT id FROM users WHERE id = ?""", (user,) )
-
-        for row in cur.fetchall():
-            user_id = row
-        cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id[0], plan_title, plan_description, url))
+        cur.execute("""INSERT INTO plans (user_id, title, description, url) VALUES (?,?,?,?)""", (user_id, title, description, url))
         con.commit()
-        con.close()
+
+        # plan_placesに格納する情報
+        plan_id = "" #データベースからとってくる
+        place_id = session["place_id"] #for文で回して取得
+        place_names = session["place_names"] #for文で回して取得
+        
 
         # plan_detailテーブルにinsert
-        con = sqlite3.connect('Rotom.db')
-        cur = con.cursor()
-        cur.execute("""SELECT id FROM plans WHERE title = ?""", (plan_title,))
+
+        #plan_idを取ってくる
+        cur.execute("""SELECT id FROM plans WHERE title = ? """, (title,))
         for row in cur.fetchall():
             plan_id = row
 
-        for n  in range(len(place_names)):
-            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number) VALUES(?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1))
 
-        # for i in range():
+        #場所ごとにplan_placesに格納
+        for n  in range(len(session["place_names"])):
+            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number, description, place_review, booking_url, price) VALUES(?,?,?,?,?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1, place_description[n], place_review[n], booking_url[n], price[n],))
+
 
         con.commit()
         con.close()
-        flash("投稿が完了しました。")
-        return redirect("/")
+
+        return "post_details()での処理が完了"
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"], user_id=session["id"])
 
+        #post.htmlから引き継いだ値を表示
+        plan_info = [{"user_id": session["id"], "title": session["plan_title"],  "description":	session["plan_description"], "url": session["url"]}]
+        place_info_li = []
+
+        for n  in range(len(session["place_names"])):
+            place_info_li.append({"place_name": session["place_names"][n]})
+
+        return render_template('post-details.html', plan_info = plan_info, place_info_li = place_info_li,)
 
 @app.route('/inquiry')
 def inquiry():
@@ -347,6 +390,7 @@ def user_lit_factory(cursor, row):
 
 @app.route('/search', methods=["GET", "POST"])
 def search():
+    global status
     if request.method == 'POST':
 
         url = request.form.get("vlog-url")
@@ -377,19 +421,10 @@ def search():
             for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
 
-            #ここからページネーション機能
+            #ページネーション機能
+            page_info = paginate(plans)
 
-            # (1) 表示されているページ番号を取得(初期ページ1)
-            page = request.args.get(get_page_parameter(), type=int, default=1)
-
-            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-            PageData = plans[(page - 1)*6: page*6]
-
-            # (3) 表示するデータリストの最大件数から最大ページ数を算出
-            MaxPage = (- len(plans) // 6) * -1
-
-
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+            return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
 
         # 場所から検索
         elif place:
@@ -413,21 +448,20 @@ def search():
 
             #ここからページネーション機能
 
-            # (1) 表示されているページ番号を取得(初期ページ1)
-            page = request.args.get(get_page_parameter(), type=int, default=1)
+            #ページネーション機能
+            page_info = paginate(plans)
 
-            # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-            PageData = plans[(page - 1)*6: page*6]
-
-            # (3) 表示するデータリストの最大件数から最大ページ数を算出
-            MaxPage = (- len(plans) // 6) * -1
-
-
-            return render_template('plans.html', plans=PageData, CurPage=page, MaxPage=MaxPage)
+            if status:
+                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"])
+            else:
+                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
 
     # GET methods
     else:
-        return render_template('search.html')
+        if status:
+            return render_template('search.html', status=status, user_name=session["user_name"])
+        else:
+            return render_template("search.html")
 
 @app.route('/content')
 def content():
@@ -457,26 +491,23 @@ def plans():
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
-    #ここからページネーション機能
-    
-    # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-
-    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
-
-    # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
+    #ページネーション機能
+    page_info = paginate(plans)
     
     if status:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], user_id=session["id"])
+        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
+
     else:
-        return render_template('plans.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status)
+        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status)
 
 #下二行のパラメーターのuser_idは、動画を投稿した人のuser_id
 @app.route('/plan_content/<user_id>/<int:post_id>')
 def plan_content(user_id, post_id):
-    #データベースから情報を取ってきて、content.htmlに渡す。
+
+#     place_description = data["comment_li"] #場所ごとのコメント
+#     place_review = data["rating_li"] #場所ごとのレーティング
+#     booking_url = data["url_li"] #場所ごとの予約URL
+#     price = data["price_li"] #場所ごとの価格
 
     dbname = "Rotom.db"
     conn = sqlite3.connect(dbname)
@@ -500,6 +531,7 @@ def plan_content(user_id, post_id):
             place_info_li[index]["url"] = response["result"]["website"]
         except KeyError:
             place_info_li[index]["url"] = "WEBサイトが見つかりません"
+
         place_info_li[index]["lat"] = response["result"]["geometry"]["location"]["lat"]
         place_info_li[index]["lng"] = response["result"]["geometry"]["location"]["lng"]
 
@@ -579,7 +611,7 @@ def mypage(user_id):
 
     cur = conn.cursor()
 
-    #plansを全て取得
+    #ユーザが登録したplansを全て取得
     plans = list(cur.execute("""
     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
     FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
@@ -600,20 +632,12 @@ def mypage(user_id):
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
-    #ここからページネーション機能
-    
-    # (1) 表示されているページ番号を取得(初期ページ1)
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-
-    # (2)１ページに表示させたいデータ件数を指定して分割(１ページに3件表示)
-    PageData = plans[(page - 1)*6: page*6]
-
-    # (3) 表示するデータリストの最大件数から最大ページ数を算出
-    MaxPage = (- len(plans) // 6) * -1
-
     conn.close()
-    
-    return render_template('profile.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
+
+      #ページネーション機能
+    page_info = paginate(plans)
+
+    return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
 
 # mypageでいいね一覧を見る
 @app.route("/mypage_likes/<int:user_id>")
@@ -647,8 +671,19 @@ def mypage_likes(user_id):
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
-    #ここからページネーション機能
-    
+    #ページネーション機能
+    page_info = paginate(plans)
+
+    conn.close()
+
+    return render_template('profile_likes.html',plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"],
+                                                status=status,
+                                                user_id=session["id"], user_name=session["user_name"], 
+                                                email=users["email"], register_date=users["date"], 
+                                                likes_sum=sum["counts"])
+
+# ページネーション機能
+def paginate(plans):
     # (1) 表示されているページ番号を取得(初期ページ1)
     page = request.args.get(get_page_parameter(), type=int, default=1)
 
@@ -658,9 +693,31 @@ def mypage_likes(user_id):
     # (3) 表示するデータリストの最大件数から最大ページ数を算出
     MaxPage = (- len(plans) // 6) * -1
 
-    conn.close()
+    page_info = {"plans" : PageData, "CurPage" : page, "MaxPage" : MaxPage}
+
+    return page_info
+
+
+# 投稿を削除する
+@app.route("/delete/<int:plan_id>")
+@login_required
+def delete(plan_id):
+    """
+    GET: 
+    POST: 選択したplanの削除
+    """
+    # plansテーブル、plan_placesテーブルから削除
+    con = sqlite3.connect('Rotom.db')
+    cur = con.cursor()
+    cur.execute("""DELETE FROM plans WHERE id = ?""", (plan_id,) )
+    cur.execute("""DELETE FROM plan_places WHERE plan_id = ?""", (plan_id,) )
+    cur.execute("""DELETE FROM likes WHERE plan_id = ?""", (plan_id,))
+    con.commit()
+    con.close()
+
     
-    return render_template('profile_likes.html',plans=PageData, CurPage=page, MaxPage=MaxPage, status=status,user_id=session["id"], user_name=session["user_name"], email=users["email"], register_date=users["date"], likes_sum=sum["counts"])
+    return redirect(url_for("mypage", user_id=session["id"]))
+
 
 if __name__ == '__main__':
     app.debug = True

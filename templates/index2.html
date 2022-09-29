@@ -43,9 +43,8 @@
                           PROFILE
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                          <li><a class="dropdown-item" href="#">Action</a></li>
-                          <li><a class="dropdown-item" href="#">Another action</a></li>
-                          <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="/mypage/{{ user_id }}">Your Posts</a></li>
+                            <li><a class="dropdown-item" href="/mypage_likes/{{ user_id }}">Your Likes</a></li>
                       </ul>
                   </li>
               </ul>
@@ -101,7 +100,7 @@
     <!-- end main -->
 
     <!-- showPlan -->
-    <section class="mt-5 mb-5 showPlan d-flex flex-column align-items-center">
+    <section class="mt-5 mb-5 showPlan d-flex flex-column align-items-center fadeIn">
         <h2 class="head-text"><span class="under">人気の旅行プラン</span></h2>
         <div class="container mt-5 popularPlan">
             <div class="row row-cols-3 text-center">
@@ -151,4 +150,6 @@
 
     <script type="text/javascript" src="../static/javascripts/search.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/javascripts/animation.js"></script>
 {% endblock %}
