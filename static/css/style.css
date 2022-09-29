@@ -600,7 +600,7 @@ ol li.list-item:before {
     border-radius: 2em;
     font-weight: 700;
   }
-  
+
 .plan-gray-line{
     margin-left: 25px;
     position: relative;
@@ -664,12 +664,12 @@ ol li.list-item:before {
     transition: transform 0.4s;
     opacity: 0.7;
   }
-  
+
   /* アコーディオンが開いた時のスタイル */
   details[open] .accordion-icon {
     transform: rotateX(180deg);
   }
-  
+
   /* アイコンのバーのスタイル */
   .accordion-icon::before,
   .accordion-icon::after {
@@ -680,12 +680,12 @@ ol li.list-item:before {
     height: 3px;
     background: hsla(150, 61%, 48%, 1)
   }
-  
+
   .accordion-icon::before {
     left: 0;
     transform: rotate(45deg);
   }
-  
+
   .accordion-icon::after {
     right: 0;
     transform: rotate(-45deg);
@@ -949,7 +949,7 @@ textarea:focus:invalid {
 /*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
 /* input:-webkit-autofill {
     box-shadow: 0 0 0 1000px white inset;
-} */ 
+} */
 
 
 
@@ -1029,3 +1029,17 @@ textarea:focus:invalid {
 }
 
 
+/*varidationエラーメッセージ*/
+/* エラーメッセージのスタイル */
+.error {
+    width : 100%;
+    padding: 0;
+    display: inline-block;
+    font-size: 90%;
+    color: red;
+    box-sizing: border-box;
+  }
+
+.error {
+    color:#ff6699;
+}

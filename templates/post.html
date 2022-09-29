@@ -22,21 +22,21 @@ T-log post
     </section>
     <section class="planning">
         <h2 class="head-text"><span class="under">プランを<br class="spOnly">投稿する</span></h2>
-        <form action="" method="POST" class="planning-form" novalidate>
+        <form action="" method="POST" id="form_id">
             <div class="mt-5 mb-4">
-                <label for="plan-title" class="form-label">プランのタイトル＊</label>
-                <input type="text" class="form-control post-form-control required plan-title" id="plan-title" name="plan-title" placeholder="プランのタイトルを入力">
+                <label for="plan-title" class="form-label" name="form-label">プランのタイトル＊</label>
+                <input type="text" class="form-control post-form-control required plan-title" id="plan_title" name="plantitle" placeholder="プランのタイトルを入力">
             </div>
             <div class="mb-4">
                 <label for="vlog-url" class="form-label">YouTubeのURL＊</label>
-                <input type="text" class="form-control post-form-control required vlog-url" id="vlog-url" name="vlog-url" placeholder="YouTubeのURLを入力">
+                <input type="url" class="form-control post-form-control required vlog-url" id="vlog-url" name="vlogurl" placeholder="YouTubeのURLを入力">
             </div>
             <div class="plan-places">
                 <p class="place-label">場所＊</p>
                 <div class="place-container" id="place-container">
                     <div class="mb-3">
                         <!-- <label for="place" class="form-label">1番目</label> -->
-                        <input type="text" class="form-control post-form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい">
+                        <input type="text" class="form-control post-form-control autocomplete" id="autocomplete" name="place01" placeholder="場所を入力し、選択して下さい" required>
                         <input type="hidden" id="place_name_1" name="place_name_1" value="">
                         <input type="hidden" id="place_id_1" name="place_id_1" value="">
                     </div>
@@ -50,7 +50,7 @@ T-log post
             </div>
             <div class="description_wrapper">
                 <label for="description" class="form-label">プランの概要＊</label>
-                <textarea required class="form-control post-form-control" id="description" name="description" placeholder="旅行の概要を入力" wrap="soft"></textarea>
+                <textarea class="form-control post-form-control" id="description" name="description" placeholder="旅行の概要を入力" wrap="soft"></textarea>
             </div>
             <div class="mt-5 submit-container">
                 <button type="submit" id="submit-plan-btn" class="btn btn-primary submit-plan-btn">投稿する</button>
@@ -61,8 +61,8 @@ T-log post
 
 <script type="text/javascript" src="../static/javascripts/addplan.js"></script>
 <script type="text/javascript" src="../static/javascripts/search.js"></script>
-<script type="text/javascript" src="../static/javascripts/va.js"></script>
+<script type="text/javascript" src="../static/javascripts/jquery.validate.js"></script>
 <script type="text/javascript" src="../static/javascripts/post.js"></script>
->>>>>>> main
+
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
 {% endblock %}
