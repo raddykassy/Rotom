@@ -856,8 +856,7 @@ ul li.plan-place-details-price::before{
     margin-right: 20px;
 }
 
-
-/* ここからプランページ一覧のcss */
+/* plans.html*/
 
 
 .submit-search-plans {
@@ -977,71 +976,22 @@ ul li.plan-place-details-price::before{
     color: gray;
 }
 
-/* ここまでプランページ一覧のcss */
+.
 
 
-/*枠が虹色に！！！お遊び心に！！*/
-/* input:invalid {
-    border: 2px dashed red;
-}
 
-input:invalid:required {
-    background-image: linear-gradient(to right, pink, lightgreen);
-}
-
-input:valid {
-    border: 2px solid black;
-} */
-
-/* form {
-    font: 1em sans-serif;
-    max-width: 320px;
-  }
-
-  p > label {
-    display: block;
-  }
-
-  /*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
-/* input[type="text"],
-input[type="url"],
-textarea,
-fieldset {
-    width: 100%;
-    border: 1px solid #333;
-    box-sizing: border-box;
-} */
-
-/*投稿画面で未入力のところに赤線を引く*/
-/* input:invalid {
-    box-shadow: 0 0 5px 1px #ff9393;
-}
-textarea:invalid {
-    box-shadow: 0 0 5px 1px #ff9393;
-} */
-
-/*エラー検出時　https://code-kitchen.dev/css/invalid/*/
-/* input:focus:invalid {
-    box-shadow: none;
-}
-textarea:focus:invalid {
-    box-shadow: none;
-} */
-
-/*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
-/* input:-webkit-autofill {
-    box-shadow: 0 0 0 1000px white inset;
-} */ 
-
-
+/* end plans.html ------------------------ */
 
 /* ここからページネーション */
 
 
-.pagination{
+.pagination {
     margin-top: 30px;
     margin-bottom: 50px;
+}
 
+.plans-paginate {
+    margin-bottom: 60px;
 }
 
 .plans-body{
@@ -1298,5 +1248,3 @@ input[type="checkbox"] {
     left: -4px;
     z-index: -100;
   }
-
-  
