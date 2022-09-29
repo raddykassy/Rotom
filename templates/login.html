@@ -7,7 +7,9 @@ T-log login
 {% block content %}
 
 {% if error_message %}
-    <h2>{{ error_message }}</h2>
+<div class="py-3 error-container">
+    <p>{{ error_message }}</p>
+</div>
 {% endif %}
     <!-- form -->
     <main class="form-wrapper mt-5">
