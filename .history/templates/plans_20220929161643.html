@@ -1,0 +1,130 @@
+{% extends "layout-3.html" %}
+
+{% block title %}
+T-log プラン一覧
+{% endblock %}
+
+{% block content %}
+
+<main class="site-content">
+    {% if error_message %}
+        <div class="error-container">
+            <p>{{ error_message }}</p>
+        </div>
+    {% endif %}
+    <section class="pt-4 pb-5 align-items-center search" id="search">
+        <form class="form-search-plans" method="POST" action="/search">
+            <div class="search-input-wrapper-plans">
+                <label for="place_box" class="form-label">場所</label>
+                <input type="text" name="place" id="place_box" class="form-control" placeholder="場所を入力し、選択して下さい">
+                <input type="hidden" name="place_id_box" id="place_id_box" class="form-control" value="">
+            </div>
+            <div class="search-input-wrapper-plans">
+                <label for="vlog-url" class="form-label">YouTubeの共有URL</label>
+                <input type="text" name="vlog-url" id="vlog-url" class="form-control vlog-url-box" placeholder="共有URLを入力">
+            </div>
+            <button type="submit" class="btn btn-outline-primary submit-search submit-search-plans">さがす</button>
+        </form>
+    </section>
+    
+    <div class="plans-body plans-body-background">
+        <div class="plans-wrapper">
+            {% for plan in plans %}
+                <!-- ここにそれぞれのプランが入る -->
+                <div class="plans-plan-content">
+                    <!-- サムネ -->
+                    <div class ="plans-plan-content-thumbnail">
+                        <img class="plans-plan-content-thumbnail-img"src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
+                    </div>
+
+                    <!-- プラン内容の説明 -->
+                    <div class = "plans-plan-description">
+
+
+                        <!-- タイトル -->
+                        <div class = "plans-plan-description-title">
+                            <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                                <h3>{{ plan["title"] }}</h3>
+                            </a>
+                        </div> 
+
+                        <!-- プロフや価格 -->
+                        <div class="plans-plan-description-details">
+                            
+                            <!-- プロフとコメント -->
+                            <div class="plans-plan-left">
+                                <!-- ユーザー情報 -->
+                                <div class = "plans-plan-description-user-info">
+
+                                    <!-- ユーザーの写真 -->
+                                    <div class="plan-user-info">
+                                        <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                                    </div>
+                                    <!-- ユーザーネーム -->
+                                    <div  class= "plans-plan-description-username">
+                                        <p>{{plan["name"]}}</p>
+                                    </div>
+                                </div>
+
+                                <!-- コメント -->
+                                <div class="plans-plan-description-comment">
+                                    コメントコメントコメントコメントコメントコメントコメントコメントコメント
+                                    コメントコメントコメントコメントコメントコメントコメント
+                                </div>
+                            
+                            </div>
+
+
+                            <!-- 価格や日数、いいね数、共有リンク -->
+                            <div class="plans-plan-right">
+                                <!-- 価格・日数 -->
+                                <div class="plans-plan-description-price-days">
+                                    <h3>価格: 10000円〜20000円</h3>
+                                    <h4>日数: 2泊3日</h4>
+                                </div>
+
+                                <!-- いいね数、共有リンク -->
+                                <div class="plans-plan-description-like-link">
+                                    <input type="checkbox" id="like"><label class="plans-like-label" for="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></label>
+                                    <p class="plans-plan-description-like">15</p>
+                                    <img src="../static/img/send (1).png" alt="share">
+                                    <!-- <p class="plans-plan-description-link">🔗</p> -->
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="pagination">
+            <!--(1)前のページ-->
+            {% if (CurPage - 1) > 0 %}
+            <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
+            {% endif %}
+
+            <!--(1)現在のページ-->
+            <li class="page-item active">
+                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
+            </li>
+            <!--(2)次のページ-->
+            {% if (CurPage + 1) <= MaxPage %}
+            <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+</main>
+
+<script type="text/javascript" src="../static/javascripts/search.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
+
+{% endblock %}
