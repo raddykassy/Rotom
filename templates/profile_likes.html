@@ -11,7 +11,7 @@ T-log mypage
     <div class="line-container">
         <hr class="text-center heading-line">
     </div>
-    <h4 class="header">Register Data</h4>
+    <h4 class="header">登録データ</h4>
     <hr width="200" align="left">
     <table class="table">
         <tbody>
@@ -24,7 +24,7 @@ T-log mypage
                 <td>{{ user_name }}</td>
             </tr>
             <tr>
-                <td>register date</td>
+                <td>登録日</td>
                 <td>{{ register_date }}</td>
             </tr>
             <tr>
@@ -33,7 +33,7 @@ T-log mypage
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-primary right" href="/mypage/{{ user_id }}" role="button" >Your posts  ▶</a>
+    <a class="btn btn-primary right" href="/mypage/{{ user_id }}" role="button" >あなたの投稿一覧  ▶</a>
 
 </div>
 
@@ -41,7 +41,7 @@ T-log mypage
 <!-- planの表示 -->
 <div class="plans-body mt-5" >
     <div class="container">
-        <h3 align="left" class="heading">Posts {{user_name}} liked</h3>
+        <h3 align="left" class="heading">いいねした投稿</h3>
         <hr width="200" align="left" style="margin-bottom:0">
     </div>
     <div class="plan-grid-layout">
