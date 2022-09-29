@@ -129,6 +129,16 @@ footer {
 }
 /* footer end */
 
+.error-container {
+    text-align: center;
+    background-color: #fbfbfb;
+}
+
+.error-container p {
+    margin: 0;
+    color: rgb(255, 11, 11);
+}
+
 /* common end -------------------------------------*/
 
 /* main(index.html) ------------------------------ */
