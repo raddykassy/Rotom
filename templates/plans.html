@@ -13,7 +13,7 @@ T-log プラン一覧
         </div>
     {% endif %}
     <div class="search-wrapper">
-        <section class="pt-4 pb-5 align-items-center search" id="search">
+        <section class="pt-4 pb-5 align-items-center search plans-search" id="search">
             <form class="form-search-plans" method="POST" action="/search">
                 <div class="search-input-wrapper-plans">
                     <label for="place_box" class="form-label"></label>
@@ -105,7 +105,7 @@ T-log プラン一覧
 
         </div>
 
-        <div class="pagination">
+        <div class="pagination plans-paginate">
             <!--(1)前のページ-->
             {% if (CurPage - 1) > 0 %}
             <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
