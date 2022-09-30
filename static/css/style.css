@@ -1159,7 +1159,7 @@ textarea:focus:invalid {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    
+
 }
 
 .plans-plan-description-user-info{
@@ -1299,4 +1299,3 @@ input[type="checkbox"] {
     z-index: -100;
   }
 
-  

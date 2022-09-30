@@ -1,7 +1,3 @@
-$.validator.setDefaults({
-  submitHandler: function() { alert("submitted!"); }
-});
-
 $().ready(function() {
   $('#login_form').validate({
     rules: {
@@ -22,8 +18,25 @@ $().ready(function() {
         password: {
           required: '入力されていません',
           password:'パスワードが入力されていません'
-        }
-      }
+        },
+      },
+
+      // エラーメッセージ出力箇所
+      errorPlacement: function(error, element){
+        var errorKey = $(element).attr('id') + 'Error';
+        $('#error_' + errorKey).remove();
+        element.addClass('is-invalid');
+        const errorP = $('<p>').text(error[0].innerText);
+        const errorDiv = $('<div class="invalid-feedback" id="error_' + errorKey + '">').append(errorP);
+        element.parent().append(errorDiv);
+      },
+      success: function(error, element) {
+        var errorKey = $(element).attr('id') + 'Error';
+        $('#error_' + errorKey).remove();
+        $(error).remove();
+        $(element).removeClass('is-invalid');
+        $(element).removeClass('error');
+      },
   });
 });
 
@@ -65,14 +78,23 @@ $().ready(function() {
           required: 'ユーザーネームが入力されていません',
         },
       },
-          // エラーメッセージ出力箇所
-      errorPlacement: function(error, element){
-        var name = element.attr('name');
-        error.appendTo($('.is-error-'+name));
-    },
 
-      errorElement: "span",
-      errorClass: "is-error",
+      // エラーメッセージ出力箇所
+      errorPlacement: function(error, element){
+        var errorKey = $(element).attr('id') + 'Error';
+        $('#error_' + errorKey).remove();
+        element.addClass('is-invalid');
+        const errorP = $('<p>').text(error[0].innerText);
+        const errorDiv = $('<div class="invalid-feedback" id="error_' + errorKey + '">').append(errorP);
+        element.parent().append(errorDiv);
+      },
+      success: function(error, element) {
+        var errorKey = $(element).attr('id') + 'Error';
+        $('#error_' + errorKey).remove();
+        $(error).remove();
+        $(element).removeClass('is-invalid');
+        $(element).removeClass('error');
+      },
   });
 });
 
@@ -87,17 +109,37 @@ $().ready(function() {
         required: true,
         url: true,
       },
+      days: {
+        required: true,
+      },
+      costs: {
+        required: true,
+        number: true,
+        digits: true
+      },
       place01: {
         required: true,
       },
-      place_0: {
+      place_2: {
         required: true
       },
-      autocomplete_1:{
-        required: true,
+      place_3: {
+        required: true
       },
-      autocomplete_0:{
-        required: true,
+      place_4: {
+        required: true
+      },
+      place_5: {
+        required: true
+      },
+      place_6: {
+        required: true
+      },
+      place_7: {
+        required: true
+      },
+      place_8: {
+        required: true
       },
       description: {
         required: true,
@@ -108,33 +150,61 @@ $().ready(function() {
         required: "プランタイトルを入力してください"
       },
       vlog_url: {
-        required:"入力してください",
+        required:"URLを入力してください",
         url:"URL形式で入力してください"
+      },
+      days: {
+        required: "旅行日数を選んでください",
+      },
+      costs: {
+        required: '予算を入力してください',
+        number: '予算を入力してください',
+        digits: '数字のみを入力してください'
       },
       place01: {
         required: "場所を選択してください",
       },
-      place_1: {
-        required:'場所を入力してください'
+      place_2: {
+        required: "場所を選択してください",
       },
-      autocomplete_1: {
-        required: '場所を入力してください'
+      place_3: {
+        required: "場所を選択してください",
       },
-      autocomplete_0: {
-        required: '場所を入力してください'
+      place_4: {
+        required: "場所を選択してください",
+      },
+      place_5: {
+        required: "場所を選択してください",
+      },
+      place_6: {
+        required: "場所を選択してください",
+      },
+      place_7: {
+        required: "場所を選択してください",
+      },
+      place_8: {
+        required: "場所を選択してください",
       },
       description: {
-        required: '場所を入力してください'
+        required: '旅行の概要を入力してください'
       },
     },
 
       // エラーメッセージ出力箇所
       errorPlacement: function(error, element){
-        var name = element.attr('name');
-        error.appendTo($('.is-error-'+name));
-    },
-
-      errorElement: "span",
-      errorClass: "is-error",
+        var errorKey = $(element).attr('id') + 'Error';
+        $('#error_' + errorKey).remove();
+        element.addClass('is-invalid');
+        const errorP = $('<p>').text(error[0].innerText);
+        const errorDiv = $('<div class="invalid-feedback" id="error_' + errorKey + '">').append(errorP);
+        element.parent().append(errorDiv);
+      },
+      success: function(error, element) {
+        var errorKey = $(element).attr('id') + 'Error';
+        $('#error_' + errorKey).remove();
+        $(error).remove();
+        $(element).removeClass('is-invalid');
+        $(element).removeClass('error');
+      },
   });
   });

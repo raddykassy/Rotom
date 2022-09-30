@@ -400,7 +400,7 @@ def search():
     global status
     if request.method == 'POST':
 
-        url = request.form.get("vlog-url")
+        url = request.form.get("vlog_url")
         place = request.form.get("place")
         place_id = request.form.get("place_id_box")
 

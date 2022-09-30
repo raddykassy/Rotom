@@ -16,6 +16,7 @@ addPlanBtn.addEventListener('click', function() {
 // 場所選択ボックスの作成
 function getInputTag() {
     placeCount++;
+    console.log(placeCount)
     var elements = '<div class="mb-3">\
                         <input type="text" class="form-control post-form-control required autocomplete" id="autocomplete_' + placeCount + '" name="place_' + placeCount + '"placeholder="場所を入力し、選択して下さい" required>\
                         <input type="hidden" id="place_name_' + placeCount + '" name="place_name_' + placeCount + '"placeholder="場所を入力し、選択して下さい">\
