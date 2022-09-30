@@ -12,7 +12,7 @@ $().ready(function() {
       messages: {
         email: {
           required: 'メールアドレスが入力されていません',
-          email: '正しいemail形式で入力してください'
+          email: '正しいメールアドレスの形式で入力してください'
         },
         password: {
           required: 'パスワードが入力されていません',
@@ -61,7 +61,7 @@ $().ready(function() {
       messages: {
         email: {
           required: 'メールアドレスが入力されていません',
-          email: '正しいemail形式で入力してください'
+          email: '正しいメールアドレスの形式で入力してください'
         },
         password: {
           required: '入力されていません',
