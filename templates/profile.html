@@ -42,8 +42,8 @@ T-log mypage
     <!-- planの表示 -->
     <div class="plans-body mt-5" >
         <div class="container">
-            <h3 align="left" class="heading">{{user_name}}さんの投稿</h3>
-            <hr width="200" align="left" style="margin-bottom:0">
+            <h3 aligntext="left" class="heading">{{user_name}}さんの投稿</h3>
+            <hr width="200" aligntext="left" style="margin-bottom:0">
         </div>
         <div class="plans-body plans-body-background">
             <div class="plans-wrapper">
@@ -122,22 +122,23 @@ T-log mypage
                 {% endfor %}
 
             </div>
+            <div class="pagination plans-paginate">
+                <!--(1)前のページ-->
+                {% if (CurPage - 1) > 0 %}
+                <a href="/mypage/{{ user_id }}?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
+                {% endif %}
+    
+                <!--(1)現在のページ-->
+                <li class="page-item active">
+                    <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
+                </li>
+                <!--(2)次のページ-->
+                {% if (CurPage + 1) <= MaxPage %}
+                <a href="/mypage/{{ user_id }}?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+                {% endif %}
+            </div>
+    
 
-        </div>
-        <div class="pagination">
-            <!--(1)前のページ-->
-            {% if (CurPage - 1) > 0 %}
-            <a href="/mypage/{{ user_id }}?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
-            {% endif %}
-
-            <!--(1)現在のページ-->
-            <li class="page-item active">
-                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
-            </li>
-            <!--(2)次のページ-->
-            {% if (CurPage + 1) <= MaxPage %}
-            <a href="/mypage/{{ user_id }}?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
-            {% endif %}
         </div>
 
     </div>
