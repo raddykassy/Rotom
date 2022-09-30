@@ -226,7 +226,7 @@ def register():
         email = request.form.get("email")
         password = request.form.get('password')
         confirmation = request.form.get('confirm_password')
-        username = request.form.get('user_name')
+        username = request.form.get('username')
 
         error_message = ""
 
