@@ -757,7 +757,7 @@ ul li.plan-place-details-rate::before{
 }
 
 ul li.plan-place-details-price::before{
-    content:"予算: ";
+    content:"価格: ";
     color: gray;
 }
 
@@ -818,9 +818,9 @@ ul li.plan-place-details-price::before{
 
 .plan-page-map {
     /* width: 80%; */
-    margin: auto;
+    margin: 0 auto;
     width: 1080px;
-    height: 500px;
+    height: 890px;
     border: 3px solid;
     padding: 10px;
 
@@ -1087,8 +1087,7 @@ textarea:focus:invalid {
 }
 
 .link-info{
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 30px;
 }
 
 #icon-link{

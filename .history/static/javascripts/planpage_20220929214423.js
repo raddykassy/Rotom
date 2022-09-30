@@ -4,7 +4,7 @@ let center = {
   lat: 34.7019399, // 緯度
   lng: 135.51002519999997 // 経度
 };
-let youtube_url = plan_info[0]["url"];
+let youtube_url = plan_info[0]["url"]+"&rel=0";
 let youtube_id = youtube_url.split("/")[3]
 
 let markerData = [ // マーカーを立てる場所名・緯度・経度
@@ -120,7 +120,7 @@ function open_or_close_window(i){
 //youtube動画を反映
 document.addEventListener('DOMContentLoaded', function() {
     let element = document.querySelector('.youtube-video');
-    element.src = `https://www.youtube.com/embed/${ youtube_id }?autoplay=1&rel=0`
+    element.src = `https://www.youtube.com/embed/${ youtube_id }?autoplay=1`
 })
 
 //liをクリックしてマーカーのwindowを表示させる
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             open_or_close_window(index)
             //対応する動画の部分を再生させる。
             let youtube_video = document.querySelector('.youtube-video');
-            youtube_video.setAttribute("src", `https://www.youtube.com/embed/${youtube_id}?autoplay=1&start=${50*index}&rel=0`);
+            youtube_video.setAttribute("src", `https://www.youtube.com/embed/${youtube_id}?autoplay=1&start=${50*index}`);
         }
     })
 })

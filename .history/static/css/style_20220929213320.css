@@ -459,7 +459,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 }
 
 .title h2{
-    text-align: left;
+    text-align: center;
     max-width: 90%;
     padding-left: 0px;
     padding-bottom: 15px;
@@ -757,7 +757,7 @@ ul li.plan-place-details-rate::before{
 }
 
 ul li.plan-place-details-price::before{
-    content:"予算: ";
+    content:"価格: ";
     color: gray;
 }
 
@@ -819,7 +819,7 @@ ul li.plan-place-details-price::before{
 .plan-page-map {
     /* width: 80%; */
     margin: auto;
-    width: 1080px;
+    width: 90%;
     height: 500px;
     border: 3px solid;
     padding: 10px;
@@ -1087,8 +1087,7 @@ textarea:focus:invalid {
 }
 
 .link-info{
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 30px;
 }
 
 #icon-link{

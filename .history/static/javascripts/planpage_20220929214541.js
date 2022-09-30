@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             open_or_close_window(index)
             //対応する動画の部分を再生させる。
             let youtube_video = document.querySelector('.youtube-video');
-            youtube_video.setAttribute("src", `https://www.youtube.com/embed/${youtube_id}?autoplay=1&start=${50*index}&rel=0`);
+            youtube_video.setAttribute("src", `https://www.youtube.com/embed/${youtube_id}?autoplay=1&start=${50*index}`);
         }
     })
 })

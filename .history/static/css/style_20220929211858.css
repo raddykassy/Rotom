@@ -450,24 +450,20 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 /* 境界線 */
 .title{
-    margin: 0 auto;
     position: relative;
-    width:1050px;
+    width:660px;
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .title h2{
-    text-align: left;
     max-width: 90%;
     padding-left: 0px;
     padding-bottom: 15px;
 }
 
 .user_info{
-    width: 100%;
-    margin: 0 auto;
     border-top: 1px solid rgba(0,0,0,0.1);
     border-bottom: 1px solid rgba(0,0,0,0.1);
 
@@ -475,8 +471,6 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 
 .trip-route{
-    width: 80%;
-    margin: 0 auto;
     margin-top: 30px;
     padding-bottom: 30px;
 }
@@ -529,14 +523,10 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
   }
 
   .content-userinfo-upper{
-    
-    width:100%;
     position: relative;
     padding-top: 5px;
     display: flex;
     flex-direction: row;
-    
-
 
   }
 
@@ -558,7 +548,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
     /* padding: 2rem; */
     height: auto;
     max-height: 130px;
-    width:1050px;
+    width:660px;
     overflow-y: scroll;
   }
 
@@ -757,7 +747,7 @@ ul li.plan-place-details-rate::before{
 }
 
 ul li.plan-place-details-price::before{
-    content:"予算: ";
+    content:"価格: ";
     color: gray;
 }
 
@@ -819,7 +809,7 @@ ul li.plan-place-details-price::before{
 .plan-page-map {
     /* width: 80%; */
     margin: auto;
-    width: 1080px;
+    width: 90%;
     height: 500px;
     border: 3px solid;
     padding: 10px;
@@ -1087,8 +1077,7 @@ textarea:focus:invalid {
 }
 
 .link-info{
-    margin-top: 100px;
-    margin-bottom: 100px;
+    margin-top: 30px;
 }
 
 #icon-link{
