@@ -1282,7 +1282,41 @@ ul li.plan-place-details-price::before{
     margin-top: 5px;
 }
 
+.plans-plan-description-like-link-delete{
+    display: flex;
+    flex-direction: row;
+    width: 150px;
+    height: 30px;
+    position: relative;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 30px;
+    right:-10px
+}
 
+.plans-plan-description-like-link-delete input{
+    width: 25px;
+    height: 25px;
+    opacity: 20%;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+
+.plans-plan-description-like-link-delete p{
+    margin-right: 30px;
+    margin-top: 4px;
+    color: gray;
+    font-size: 18px;
+}
+
+.plans-plan-description-like-link-delete img{
+    display:inline-block;
+    width: 25px;
+    height: 25px;
+    opacity: 20%;
+    margin-right: 20px;
+    margin-top: 5px;
+}
 
 /* plans.htmlのいいねボタン */
 
