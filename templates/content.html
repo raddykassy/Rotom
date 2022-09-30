@@ -30,6 +30,8 @@
 
 
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='javascripts/animation.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='javascripts/planpage.js') }}"></script>
 </head>
 <body>
@@ -196,12 +198,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="trip-route">
+                            <div class="trip-route fadeIn">
                                 <div class="start-point">
                                     <ul><span></span></ul>
                                 </div>
                                 <!-- 場所の名前 -->
-                                <ol class="list place-ol">
+                                <ol class="list place-ol fadeIn">
                                     {% for place_info in place_info_li %}
                                             <!-- 縦線 -->
                                             <div class="plan-gray-line plan-gray-line-inner" style="background-color:#dedede; width:2px; height:30px;"></div>
@@ -246,13 +248,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="map-container">
+                        <div class="map-container fadeIn">
                             <div id="map" class="plan-page-map"></div>
                         </div>
                         </div>
                 </div>
 
-                <div class="links-container">
+                <div class="links-container fadeIn">
 
                     <h2 class="links-links" style="text-align:center">Links🔗</h2>
 
@@ -338,12 +340,10 @@
                                 </div>
                             {% endif %}
                         {% endfor  %}
-                                
 
-                    </div>         
+                    </div>
             </div>
-            
-            
+
             <!--Google map -->
             <script async defer
               src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI&callback=initMap">
@@ -360,5 +360,6 @@
     <!-- bootstrap(js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <!-- end bootstrap(js) -->
+    
 </body>
 </html>
