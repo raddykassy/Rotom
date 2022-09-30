@@ -1295,6 +1295,7 @@ ul li.plan-place-details-price::before{
 }
 
 .plans-plan-description-like-link-delete input{
+    text-align:left;
     width: 25px;
     height: 25px;
     opacity: 20%;
@@ -1303,6 +1304,7 @@ ul li.plan-place-details-price::before{
 }
 
 .plans-plan-description-like-link-delete p{
+    /*display:inline-block;*/
     margin-right: 30px;
     margin-top: 4px;
     color: gray;
