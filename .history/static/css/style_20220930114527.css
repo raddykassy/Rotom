@@ -831,7 +831,7 @@ ul li.plan-place-details-price::before{
 .plan-page-map {
     /* width: 80%; */
     margin: auto;
-    width: 975px;
+    width: 900px;
     height: 500px;
     border: 3px solid;
     padding: 10px;
