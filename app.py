@@ -643,10 +643,35 @@ def mypage(user_id):
     cur = conn.cursor()
 
     #ユーザが登録したplansを全て取得
-    plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
-    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
-    """, (session["id"],)))
+    plans = list(cur.execute(
+        """
+        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
+        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
+        """, (session["id"],)))
+
+    likes = list(cur.execute(
+        """
+        SELECT plan_id
+        FROM likes;
+        """))
+
+    # like数カウント
+    plan_id_num=[]
+    planid_like_dic = {}
+
+    for like in likes:
+        plan_id_num.append(like["plan_id"])
+    else:
+        for plan_id in plan_id_num:
+            planid_like_dic[plan_id] = int(plan_id_num.count(plan_id))
+
+    # like数をplansに加える
+    for plan_index, plan in enumerate(plans):
+        if plan["id"] in planid_like_dic.keys():
+            plans[plan_index]["likes"] = planid_like_dic[plan["id"]]
+
+    plans.reverse()
+
     
 
     # ユーザ情報を取得
@@ -668,7 +693,9 @@ def mypage(user_id):
       #ページネーション機能
     page_info = paginate(plans)
 
-    return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
+    return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], 
+                            status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], 
+                            user_id=session["id"], plans_sum=sum["plans_sum"])
 
 # mypageでいいね一覧を見る
 @app.route("/mypage_likes/<int:user_id>")
@@ -683,9 +710,34 @@ def mypage_likes(user_id):
 
     # userがいいねしたplanを取り出す
     plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time  
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days  
     FROM plans INNER JOIN likes ON plans.id = likes.plan_id WHERE likes.user_id = ?;
     """, (session["id"],)))
+
+    likes = list(cur.execute(
+        """
+        SELECT plan_id
+        FROM likes;
+        """))
+
+    # like数カウント
+    plan_id_num=[]
+    planid_like_dic = {}
+
+    for like in likes:
+        plan_id_num.append(like["plan_id"])
+    else:
+        for plan_id in plan_id_num:
+            planid_like_dic[plan_id] = int(plan_id_num.count(plan_id))
+
+    # like数をplansに加える
+    for plan_index, plan in enumerate(plans):
+        if plan["id"] in planid_like_dic.keys():
+            plans[plan_index]["likes"] = planid_like_dic[plan["id"]]
+
+    plans.reverse()
+
+
 
     # ユーザ情報を取得
     cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))

@@ -5,86 +5,169 @@ T-log mypage
 {% endblock %}
 
 {% block content %}
+<main class="site-content">
 
-<div class="container mt-3" >
-    <h1 class="text-center heading">My page</h1>
-    <div class="line-container">
-        <hr class="text-center heading-line">
+    <div class="container mt-3" >
+        <h1 class="text-center heading">My page</h1>
+        <div class="line-container">
+            <hr class="text-center heading-line">
+        </div>
+        <h4 class="header">登録データ</h4>
+        <hr width="200" align="left">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>email</td>
+                    <td>{{ email }}</td>
+                </tr>
+                <tr>
+                    <td>user name</td>
+                    <td>{{ user_name }}</td>
+                </tr>
+                <tr>
+                    <td>登録日</td>
+                    <td>{{ register_date }}</td>
+                </tr>
+                <tr>
+                    <td>いいね総数</td>
+                    <td>{{ likes_sum }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <a class="btn btn-primary right" href="/mypage/{{ user_id }}" role="button" >あなたの投稿一覧  ▶</a>
+
     </div>
-    <h4 class="header">登録データ</h4>
-    <hr width="200" align="left">
-    <table class="table">
-        <tbody>
-            <tr>
-                <td>email</td>
-                <td>{{ email }}</td>
-            </tr>
-            <tr>
-                <td>user name</td>
-                <td>{{ user_name }}</td>
-            </tr>
-            <tr>
-                <td>登録日</td>
-                <td>{{ register_date }}</td>
-            </tr>
-            <tr>
-                <td>いいね総数</td>
-                <td>{{ likes_sum }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <a class="btn btn-primary right" href="/mypage/{{ user_id }}" role="button" >あなたの投稿一覧  ▶</a>
-
-</div>
 
 
-<!-- planの表示 -->
-<div class="plans-body mt-5" >
-    <div class="container">
-        <h3 align="left" class="heading">いいねした投稿</h3>
-        <hr width="200" align="left" style="margin-bottom:0">
-    </div>
-    <div class="plan-grid-layout">
-        {% for plan in plans %}
-            <div class="plan-grid-item">
-                <!-- 以下に値を渡す -->
-                <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
-                    <div class="thumbnail">
-                        <img src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
-                    </div>
-                </a>
-                    <div class="plan-info">
-                        <div class="plan-user-info">
-                            <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+    <!-- planの表示 -->
+    <div class="plans-body mt-5" >
+        <div class="container">
+            <h3 align="left" class="heading">いいねした投稿</h3>
+            <hr width="200" align="left" style="margin-bottom:0">
+        </div>
+        <div class="plans-body plans-body-background">
+            <div class="plans-wrapper">
+                {% for plan in plans %}
+                    <!-- ここにそれぞれのプランが入る -->
+                    <div class="plans-plan-content fadeIn">
+                        <!-- サムネ -->
+                            <div class ="plans-plan-content-thumbnail">
+                                <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                                    <img class="plans-plan-content-thumbnail-img"src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
+                                </a>
+                            </div>
+
+                        <!-- プラン内容の説明 -->
+                        <div class = "plans-plan-description">
+
+
+                            <!-- タイトル -->
+                            <div class = "plans-plan-description-title">
+                                <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                                    <h3>{{ plan["title"] }}</h3>
+                                </a>
+                            </div> 
+
+                            <!-- プロフや価格 -->
+                            <div class="plans-plan-description-details">
+                                
+                                <!-- プロフとコメント -->
+                                <div class="plans-plan-left">
+                                    <!-- ユーザー情報 -->
+                                    <div class = "plans-plan-description-user-info">
+
+                                        <!-- ユーザーの写真 -->
+                                        <div class="plan-user-info">
+                                            <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                                        </div>
+                                        <!-- ユーザーネーム -->
+                                        <div  class= "plans-plan-description-username">
+                                            <p>{{plan["name"]}}</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- コメント -->
+                                    <div class="plans-plan-description-comment">
+                                        <p>{{plan["description"]}}</p>
+                                    </div>
+                                
+                                </div>
+
+
+                                <!-- 価格や日数、いいね数、共有リンク -->
+                                <div class="plans-plan-right">
+                                    <!-- 価格・日数 -->
+                                    <div class="plans-plan-description-price-days">
+                                        <h3>￥{{plan["costs"]}}円〜</h3>
+                                        <h4>{{plan["days"]}}</h4>
+                                    </div>
+
+                                    <!-- いいね数、共有リンク -->
+                                    <div class="plans-plan-description-like-link">
+                                        <input type="checkbox" id="like"><label class="plans-like-label" for="like"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></label>
+                                        <p class="plans-plan-description-like">{{ plan["likes"] }}</p>
+                                        <img src="../static/img/send (1).png" alt="share">
+                                        <!-- <p class="plans-plan-description-link">🔗</p> -->
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            
                         </div>
-                        <div class="plan-details">
-                        <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
-                            <h3>{{ plan["title"] }}</h3>
-                        </a>
-                        <p>{{plan["name"]}}</p>
-                        </div>
+                        
                     </div>
+                {% endfor %}
+
             </div>
-            
-        {% endfor %}
-    
-    </div>
-    <div class="pagination">
-        <!--(1)前のページ-->
-        {% if (CurPage - 1) > 0 %}
-        <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
-        {% endif %}
+        <!--<div class="plan-grid-layout">
+            {% for plan in plans %}
+                <div class="plan-grid-item">
+                    -- 以下に値を渡す --
+                    <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                        <div class="thumbnail">
+                            <img src="https://img.youtube.com/vi/{{ plan["video_id"] }}/maxresdefault.jpg" alt="picture">
+                        </div>
+                    </a>
+                        <div class="plan-info">
+                            <div class="plan-user-info">
+                                <img class="plan-profile__img" src="../static/img/profile01.jpeg" width ="45" height="45" alt="profile">
+                            </div>
+                            <div class="plan-details">
+                            <a href="{{ url_for('plan_content',user_id=plan["user_id"],post_id=plan["id"]) }}">
+                                <h3>{{ plan["title"] }}</h3>
+                            </a>
+                            <p>{{plan["name"]}}</p>
+                            </div>
+                        </div>
+                </div>
+                
+            {% endfor %}-->
+        
+        </div>
+        <div class="pagination">
+            <!--(1)前のページ-->
+            {% if (CurPage - 1) > 0 %}
+            <a href="plans?page={{ CurPage - 1}}" class="btn btn-outline-primary">{{ CurPage - 1}}</a>
+            {% endif %}
 
-        <!--(1)現在のページ-->
-        <li class="page-item active">
-            <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
-        </li>
-        <!--(2)次のページ-->
-        {% if (CurPage + 1) <= MaxPage %}
-        <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
-        {% endif %}
-    </div>
+            <!--(1)現在のページ-->
+            <li class="page-item active">
+                <a href="#" class="btn btn-outline-secondary">{{ CurPage }}</a>
+            </li>
+            <!--(2)次のページ-->
+            {% if (CurPage + 1) <= MaxPage %}
+            <a href="plans?page={{ CurPage + 1}}" class="btn btn-outline-primary">{{ CurPage + 1}}</a>
+            {% endif %}
+        </div>
 
-</div>
+    </div>
+</main>
+
+<script type="text/javascript" src="../static/javascripts/search.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzPnXBdTHVD7TPyVKGuaGjnwZjh2Jyif0&libraries=places&callback=initMap"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="../static/javascripts/animation.js"></script>
+
 
 {% endblock %}
