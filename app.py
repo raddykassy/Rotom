@@ -422,7 +422,7 @@ def search():
             plans = list(cur.execute(
                     """
                     SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-                    FROM plans INNER JOIN users ON plans.url = ?
+                    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.url = ?
                     """, (url,)))
 
             con.close()
@@ -437,7 +437,10 @@ def search():
             #ページネーション機能
             page_info = paginate(plans)
 
-            return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
+            if status:
+                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"])
+            else:
+                return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"])
 
         # 場所から検索
         elif place:
