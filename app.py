@@ -140,7 +140,7 @@ def index():
         con.row_factory = user_lit_factory
 
         cur = con.cursor()
-        
+
         plans = list(cur.execute("""
             SELECT * FROM plans WHERE plans.id IN
             (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
@@ -148,7 +148,7 @@ def index():
             (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
             LIMIT 3)
         """))
-        
+
         con.close()
 
         for index, plan in enumerate(plans):
@@ -225,8 +225,8 @@ def register():
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get('password')
-        confirmation = request.form.get('confirm-password')
-        username = request.form.get('user-name')
+        confirmation = request.form.get('confirm_password')
+        username = request.form.get('user_name')
 
         error_message = ""
 
@@ -269,9 +269,9 @@ def post():
 
         user = session["id"]
         # plansテーブル
-        plan_title = request.form.get("plan-title")
+        plan_title = request.form.get("plan_title")
         plan_description = request.form.get("description")
-        url = request.form.get("vlog-url")
+        url = request.form.get("vlog_url")
         costs = request.form.get("costs")
         days = request.form.get("days")
 
@@ -321,7 +321,7 @@ def post():
 @login_required
 # 場所別のレビューや予約URLのリンク貼り付けなど、詳細情報記入のページ
 def post_details():
-   
+
     # プラン投稿ボタンが押された時
     if request.method == 'POST':
         data = request.get_json(force=True)
@@ -348,7 +348,7 @@ def post_details():
         plan_id = "" #データベースからとってくる
         place_id = session["place_id"] #for文で回して取得
         place_names = session["place_names"] #for文で回して取得
-        
+
 
         # plan_detailテーブルにinsert
 
@@ -400,7 +400,7 @@ def search():
     global status
     if request.method == 'POST':
 
-        url = request.form.get("vlog-url")
+        url = request.form.get("vlog_url")
         place = request.form.get("place")
         place_id = request.form.get("place_id_box")
 
@@ -489,6 +489,7 @@ def plans():
     cur = conn.cursor()
 
     #plansを全て取得
+
     plans = list(cur.execute(
         """
         SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
@@ -517,14 +518,14 @@ def plans():
             plans[plan_index]["likes"] = planid_like_dic[plan["id"]]
 
     plans.reverse()
-    
+
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
     #ページネーション機能
     page_info = paginate(plans)
-    
+
     if status:
         return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
 
@@ -553,7 +554,7 @@ def plan_content(user_id, post_id):
         FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
         """
         , (post_id,)))
-    
+
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
@@ -583,7 +584,7 @@ def plan_content(user_id, post_id):
     if status:
         is_liked = False
         like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
-        
+
         #過去にlikeしていない場合
         if like_info == []:
             pass
@@ -599,7 +600,7 @@ def plan_content(user_id, post_id):
 
 @app.route('/like', methods=['GET', 'POST'])
 def like():
-    
+
     if request.method=="POST":
 
         dt_now = datetime.datetime.now()
@@ -644,10 +645,10 @@ def mypage(user_id):
 
     #ユーザが登録したplansを全て取得
     plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name  
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
     FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
     """, (session["id"],)))
-    
+
 
     # ユーザ情報を取得
     cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
@@ -665,7 +666,7 @@ def mypage(user_id):
 
     conn.close()
 
-      #ページネーション機能
+    #ページネーション機能
     page_info = paginate(plans)
 
     return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], user_id=session["id"], plans_sum=sum["plans_sum"])
@@ -683,7 +684,7 @@ def mypage_likes(user_id):
 
     # userがいいねしたplanを取り出す
     plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time  
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time
     FROM plans INNER JOIN likes ON plans.id = likes.plan_id WHERE likes.user_id = ?;
     """, (session["id"],)))
 
@@ -696,7 +697,7 @@ def mypage_likes(user_id):
     cur.execute("SELECT COUNT(*) AS counts FROM likes WHERE user_id = ?", (session["id"],))
     for row in cur.fetchall():
         sum = row
-    
+
 
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
@@ -709,8 +710,8 @@ def mypage_likes(user_id):
 
     return render_template('profile_likes.html',plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"],
                                                 status=status,
-                                                user_id=session["id"], user_name=session["user_name"], 
-                                                email=users["email"], register_date=users["date"], 
+                                                user_id=session["id"], user_name=session["user_name"],
+                                                email=users["email"], register_date=users["date"],
                                                 likes_sum=sum["counts"])
 
 # ページネーション機能
@@ -734,7 +735,7 @@ def paginate(plans):
 @login_required
 def delete(plan_id):
     """
-    GET: 
+    GET:
     POST: 選択したplanの削除
     """
     # plansテーブル、plan_placesテーブルから削除
@@ -746,7 +747,7 @@ def delete(plan_id):
     con.commit()
     con.close()
 
-    
+
     return redirect(url_for("mypage", user_id=session["id"]))
 
 

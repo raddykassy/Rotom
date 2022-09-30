@@ -494,6 +494,9 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
     margin: 0 auto;
     margin-top: 50px;
     padding-bottom: 50px;
+}
+
+.trip-route-content {
     opacity: 0;
     transition: .7s;
     position: relative;
@@ -549,13 +552,13 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
   }
 
   .content-userinfo-upper{
-    
+
     width:100%;
     position: relative;
     padding-top: 5px;
     display: flex;
     flex-direction: row;
-    
+
 
 
   }
@@ -653,7 +656,7 @@ ol li.list-item:after {
     border-radius: 2em;
     font-weight: 700;
   }
-  
+
 .plan-gray-line{
 
     margin-left: 25px;
@@ -718,12 +721,12 @@ ol li.list-item:after {
     transition: transform 0.4s;
     opacity: 0.7;
   }
-  
+
   /* アコーディオンが開いた時のスタイル */
   details[open] .accordion-icon {
     transform: rotateX(180deg);
   }
-  
+
   /* アイコンのバーのスタイル */
   .accordion-icon::before,
   .accordion-icon::after {
@@ -734,12 +737,12 @@ ol li.list-item:after {
     height: 3px;
     background: hsla(150, 61%, 48%, 1)
   }
-  
+
   .accordion-icon::before {
     left: 0;
     transform: rotate(45deg);
   }
-  
+
   .accordion-icon::after {
     right: 0;
     transform: rotate(-45deg);
@@ -1126,11 +1129,11 @@ ul li.plan-place-details-price::before{
     color: #fff;
 }
 
-
 /* post-detailsのcss */
 
 .post-plan-details-price{
     color: gray;
+
 }
 
 
@@ -1178,7 +1181,7 @@ ul li.plan-place-details-price::before{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    
+
 }
 
 .plans-plan-description-user-info{
@@ -1316,4 +1319,6 @@ input[type="checkbox"] {
     top: -10px;
     left: -4px;
     z-index: -100;
+
   }
+
