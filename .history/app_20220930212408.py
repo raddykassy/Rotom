@@ -456,7 +456,7 @@ def search():
                     """
                     SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
                     FROM plans INNER JOIN users ON plans.user_id = users.id
-                    JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?
+                    RIGHT JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?
                     """, (place_id,)))
 
 

@@ -455,8 +455,8 @@ def search():
             plans = list(cur.execute(
                     """
                     SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-                    FROM plans INNER JOIN users ON plans.user_id = users.id
-                    JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?
+                    FROM plans INNER JOIN users
+                    RIGHT JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?
                     """, (place_id,)))
 
 
