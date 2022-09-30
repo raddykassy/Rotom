@@ -780,8 +780,11 @@ ul li.plan-place-details-price::before{
 .plan-place-details-comment{
     color: gray;
     max-height: 150px;
-    overflow-y: scroll;
     margin-bottom: 0px;
+}
+
+.plan-place-details-comment .form-group textarea {
+    overflow-y: scroll;
 }
 
 .plan-place-details {
