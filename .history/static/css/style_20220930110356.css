@@ -416,17 +416,6 @@ footer {
 /* ----------end login.html---------- */
 
 
-
-.main-contents{
-    border-right: 100px solid #f8f8f8;
-    border-left: 100px solid #f8f8f8;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-
 .video-container{
     position: relative;
     overflow: hidden;
@@ -486,12 +475,11 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 
 .trip-route{
-    width: 100%;
+    width: 80%;
     margin: 0 auto;
-    margin-top: 50px;
-    padding-bottom: 50px;
+    margin-top: 30px;
+    padding-bottom: 30px;
 }
-
 
 
 /* プロフィール */
@@ -831,7 +819,7 @@ ul li.plan-place-details-price::before{
 .plan-page-map {
     /* width: 80%; */
     margin: auto;
-    width: 900px;
+    width: 1080px;
     height: 500px;
     border: 3px solid;
     padding: 10px;
@@ -1080,20 +1068,9 @@ textarea:focus:invalid {
 
 /* ここからcontent.htmlのリンク一覧 */
 .links-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     border-top: 1px solid rgba(0,0,0,0.1);
-    width: 1050px;
     padding-top: 30px;
     margin-bottom: 50px;
-    padding-left: 50px;
-    padding-right: 50px;
-
-}
-
-.links-container h2 {
-
 }
 
 .links-links{
@@ -1110,8 +1087,11 @@ textarea:focus:invalid {
 }
 
 .link-info{
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-left: 200px;
+    margin-right: 200px;
+
 }
 
 #icon-link{
@@ -1129,15 +1109,9 @@ textarea:focus:invalid {
     /* column-gap: 50px; */
 }
 
-.property-icon img{
-    width: 120px;
-    height: 120px;
-
-}
-
 .property-icon h2 {
     text-align: center;
-    font-size: 90px;
+    font-size: 100px;
 }
 
 .links-container{

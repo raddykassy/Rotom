@@ -418,8 +418,6 @@ footer {
 
 
 .main-contents{
-    border-right: 100px solid #f8f8f8;
-    border-left: 100px solid #f8f8f8;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -486,12 +484,11 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 
 .trip-route{
-    width: 100%;
+    width: 80%;
     margin: 0 auto;
-    margin-top: 50px;
-    padding-bottom: 50px;
+    margin-top: 30px;
+    padding-bottom: 30px;
 }
-
 
 
 /* プロフィール */
@@ -831,7 +828,7 @@ ul li.plan-place-details-price::before{
 .plan-page-map {
     /* width: 80%; */
     margin: auto;
-    width: 900px;
+    width: 1080px;
     height: 500px;
     border: 3px solid;
     padding: 10px;
@@ -1084,7 +1081,7 @@ textarea:focus:invalid {
     flex-direction: column;
     align-items: center;
     border-top: 1px solid rgba(0,0,0,0.1);
-    width: 1050px;
+    width: 80%;
     padding-top: 30px;
     margin-bottom: 50px;
     padding-left: 50px;
@@ -1127,12 +1124,6 @@ textarea:focus:invalid {
     justify-content: center;
     place-items: center;
     /* column-gap: 50px; */
-}
-
-.property-icon img{
-    width: 120px;
-    height: 120px;
-
 }
 
 .property-icon h2 {
