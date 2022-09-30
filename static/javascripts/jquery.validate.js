@@ -7,7 +7,6 @@ $().ready(function() {
       },
       password: {
         required: true,
-        password: true,
       }
     },
       messages: {
@@ -16,8 +15,7 @@ $().ready(function() {
           email: '正しいemail形式で入力してください'
         },
         password: {
-          required: '入力されていません',
-          password:'パスワードが入力されていません'
+          required: 'パスワードが入力されていません',
         },
       },
 
@@ -154,7 +152,7 @@ $().ready(function() {
         url:"URL形式で入力してください"
       },
       days: {
-        required: "旅行日数を選んでください",
+        required: "旅行日数を選択してください",
       },
       costs: {
         required: '予算を入力してください',
