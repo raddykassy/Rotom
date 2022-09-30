@@ -420,16 +420,28 @@ footer {
 /* ----------end login.html---------- */
 
 
+
+.main-contents{
+    border-right: 100px solid #f8f8f8;
+    border-left: 100px solid #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .video-container{
     position: relative;
     overflow: hidden;
     width: 100%;
     background: #000;
+    margin: 50px auto;
     /* margin-top: 70px; */
 
 }
 
-.video-container{aspect-ratio:16 / 9;width:100%;height:100%}
+.video-container{aspect-ratio:16 / 9;width:80%;height:100%}
 
 /* 縦横比率をレスポンシブに */
 iframe {aspect-ratio:16 / 9;width:100%;height:100%}
@@ -446,8 +458,6 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 }
 
 .column{
-    display: flex;
-    justify-content: space-between;
     margin: 20px;
     padding-bottom: 30px;
 }
@@ -455,20 +465,24 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 /* 境界線 */
 .title{
+    margin: 0 auto;
     position: relative;
-    width:660px;
+    width:1050px;
     display: flex;
     flex-direction: row;
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 
 .title h2{
+    text-align: left;
     max-width: 90%;
     padding-left: 0px;
     padding-bottom: 15px;
 }
 
 .user_info{
+    width: 100%;
+    margin: 0 auto;
     border-top: 1px solid rgba(0,0,0,0.1);
     border-bottom: 1px solid rgba(0,0,0,0.1);
 
@@ -476,9 +490,12 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
 
 
 .trip-route{
-    margin-top: 30px;
-    padding-bottom: 30px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding-bottom: 50px;
 }
+
 
 
 /* プロフィール */
@@ -528,10 +545,14 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
   }
 
   .content-userinfo-upper{
+
+    width:100%;
     position: relative;
     padding-top: 5px;
     display: flex;
     flex-direction: row;
+
+
 
   }
 
@@ -553,7 +574,7 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
     /* padding: 2rem; */
     height: auto;
     max-height: 130px;
-    width:660px;
+    width:1050px;
     overflow-y: scroll;
   }
 
@@ -752,7 +773,7 @@ ul li.plan-place-details-rate::before{
 }
 
 ul li.plan-place-details-price::before{
-    content:"価格: ";
+    content:"予算: ";
     color: gray;
 }
 
@@ -814,7 +835,7 @@ ul li.plan-place-details-price::before{
 .plan-page-map {
     /* width: 80%; */
     margin: auto;
-    width: 90%;
+    width: 975px;
     height: 500px;
     border: 3px solid;
     padding: 10px;
@@ -826,6 +847,7 @@ ul li.plan-place-details-price::before{
     margin-top: 20px;
 }
 
+
   /* マップとスケジュールを2分割 */
 @media ( min-width : 600px ){
 
@@ -834,7 +856,15 @@ ul li.plan-place-details-price::before{
     margin: 0 auto;
     display: -webkit-flex;
     display: flex;
+    flex-direction: column;
     }
+
+.schedule-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 
 .schedule-container,
 .map-container
@@ -856,8 +886,7 @@ ul li.plan-place-details-price::before{
     margin-right: 20px;
 }
 
-
-/* ここからプランページ一覧のcss */
+/* plans.html*/
 
 
 .submit-search-plans {
@@ -977,71 +1006,22 @@ ul li.plan-place-details-price::before{
     color: gray;
 }
 
-/* ここまでプランページ一覧のcss */
+.
 
 
-/*枠が虹色に！！！お遊び心に！！*/
-/* input:invalid {
-    border: 2px dashed red;
-}
 
-input:invalid:required {
-    background-image: linear-gradient(to right, pink, lightgreen);
-}
-
-input:valid {
-    border: 2px solid black;
-} */
-
-/* form {
-    font: 1em sans-serif;
-    max-width: 320px;
-  }
-
-  p > label {
-    display: block;
-  }
-
-  /*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
-/* input[type="text"],
-input[type="url"],
-textarea,
-fieldset {
-    width: 100%;
-    border: 1px solid #333;
-    box-sizing: border-box;
-} */
-
-/*投稿画面で未入力のところに赤線を引く*/
-/* input:invalid {
-    box-shadow: 0 0 5px 1px #ff9393;
-}
-textarea:invalid {
-    box-shadow: 0 0 5px 1px #ff9393;
-} */
-
-/*エラー検出時　https://code-kitchen.dev/css/invalid/*/
-/* input:focus:invalid {
-    box-shadow: none;
-}
-textarea:focus:invalid {
-    box-shadow: none;
-} */
-
-/*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
-/* input:-webkit-autofill {
-    box-shadow: 0 0 0 1000px white inset;
-} */
-
-
+/* end plans.html ------------------------ */
 
 /* ここからページネーション */
 
 
-.pagination{
+.pagination {
     margin-top: 30px;
     margin-bottom: 50px;
+}
 
+.plans-paginate {
+    margin-bottom: 60px;
 }
 
 .plans-body{
@@ -1054,9 +1034,20 @@ textarea:focus:invalid {
 
 /* ここからcontent.htmlのリンク一覧 */
 .links-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     border-top: 1px solid rgba(0,0,0,0.1);
+    width: 1050px;
     padding-top: 30px;
     margin-bottom: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
+
+}
+
+.links-container h2 {
+
 }
 
 .links-links{
@@ -1073,7 +1064,8 @@ textarea:focus:invalid {
 }
 
 .link-info{
-    margin-top: 30px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 #icon-link{
@@ -1091,9 +1083,15 @@ textarea:focus:invalid {
     /* column-gap: 50px; */
 }
 
+.property-icon img{
+    width: 120px;
+    height: 120px;
+
+}
+
 .property-icon h2 {
     text-align: center;
-    font-size: 100px;
+    font-size: 90px;
 }
 
 .links-container{
@@ -1297,5 +1295,6 @@ input[type="checkbox"] {
     top: -10px;
     left: -4px;
     z-index: -100;
+
   }
 

@@ -1,0 +1,1323 @@
+/* fonts */
+@import url('https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@700&display=swap');
+@import url('http://fonts.cdnfonts.com/css/ink-free');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap');
+/* end fonts */
+
+/* common ---------------------------------*/
+.wrapper {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+    box-sizing: border-box;
+}
+
+.spOnly {
+    display: none;
+}
+
+@media only screen and (max-width:749px) {
+    .pcOnly {
+        display: none;
+    }
+    .spOnly {
+        display: block;
+    }
+    img {
+        width: 100%;
+    }
+}
+
+ul {
+    list-style-type: none;
+}
+
+/* header */
+
+header {
+    position: absolute;
+    width: 100%;
+    height: 64px;
+    z-index: 999;
+    letter-spacing: 2px;
+}
+
+/* excepted index.html */
+.normal-hd {
+    position: relative !important;
+    border-bottom: 2px solid;
+    border-color: #efefef;
+}
+/* excepted index.html */
+
+.navbar-collapseEdit {
+    flex-grow: 0;
+}
+
+.hd-container {
+    padding: 0 7vw;
+}
+
+ul li.item:not(:first-of-type) {
+    padding-left: .8vw;
+}
+
+
+.catch-copy {
+    font-family: 'Ink Free', sans-serif;
+    font-size: 8vw;
+}
+
+.catch-phrase {
+    font-family: 'Zen Old Mincho', serif;
+    margin-bottom: 2rem;
+    font-size: calc(1.275rem + .3vw);
+}
+
+@media screen and (max-width: 768px) {
+    .catch-copy {
+        font-size: 12vw;
+    }
+
+    .catch-phrase {
+        font-size: 3vw;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .catch-copy {
+        font-size: 13vw;
+    }
+
+    .catch-phrase {
+        font-size: 4vw;
+    }
+}
+
+
+/* end header */
+
+/* head-underline */
+
+.head-text {
+    font-family: 'Noto Sans JP', sans-serif;
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+.head-text .under{
+    position: relative;
+}
+
+.head-text .under::after {
+    position: absolute;
+    content: "";
+    bottom: -25%;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: #c6c6c6;
+}
+
+/* head-underline */
+
+/* footer */
+footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+/* footer end */
+
+.error-container {
+    text-align: center;
+    background-color: #fbfbfb;
+}
+
+.error-container p {
+    margin: 0;
+    color: rgb(255, 11, 11);
+}
+
+/* common end -------------------------------------*/
+
+/* main(index.html) ------------------------------ */
+.mainContents {
+    width: 100%;
+    height: auto;
+    padding: 30vh 0;
+    text-align: center;
+    align-items: center;
+    background-image: url("../img/bg-img01.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    animation-name: fadeInAnime;
+    animation-duration: 3.5s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInAnime {
+    from {
+    opacity: 0;
+    }
+
+    to {
+    opacity: 1;
+    }
+}
+
+.headline {
+    z-index: 10;
+}
+
+.bg-img-blur {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.showPlan {
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
+}
+
+.active {
+    opacity: 1;
+    top: 0;
+}
+
+.search {
+    font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
+    /* background-color: #f8f8f8; */
+    font-weight: bold;
+}
+
+#place_box, .vlog-url-box {
+    border: 2px solid #ced4da;
+}
+
+.btn-search {
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 1.25rem;
+    background: linear-gradient(to right, #f173d6, #0468ff);
+    padding: 0.5rem 2.95rem;
+    border-color: aliceblue;
+}
+
+.submit-search {
+    color: #000000;
+    border: 2px solid #ced4da;
+    background-color: #FFFFFF;
+}
+
+.submit-search:hover {
+    color: #ffffff;
+    background-color: #2c2c2c;
+    border-color: #2c2c2c;;
+}
+
+/* main end  -------------------------------*/
+
+
+/* form-search(index.html) */
+.form-search {
+    width: 40%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.form-search > div > label {
+    padding-left: 0;
+}
+
+
+
+/* form-search end */
+
+/*------ post(post.html)------- */
+
+.post-wrapper {
+    font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
+    display: flex;
+    width: 100%;
+    min-height: 90vh;
+    height: auto;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.planning, .banner {
+    padding: 20px;
+}
+
+.banner {
+    padding-top: 0;
+    background: linear-gradient(114deg, #4c4b4b 0%, #555555 10%, #ffffff 50%, #ffffff 70%, #fff 100%);
+    width: 40%;
+}
+
+.post-banner-wrapper {
+    display: flex;
+    text-align: center;;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.post-logo {
+    width: 30%;
+    height: auto;
+}
+
+@media screen and (max-width: 1400px) {
+    .post-logo {
+        width: 35%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .post-logo {
+        width: 40%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .post-logo {
+        width: 50%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .post-logo {
+        width: 60%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .post-logo {
+        width: 70%;
+        height: auto;
+    }
+}
+
+
+
+
+.planning {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    background: #FFFFFF;
+    width: 60%;
+    padding-bottom: 3rem;
+}
+
+.planning-form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.place-label {
+    margin-bottom: 0.5rem;
+}
+
+.btn-wrapper {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.add-plan-btn {
+    border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 50%;
+    color: #000000;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+}
+
+.add-text {
+    font-weight: 400;
+    margin-left: 20px;
+}
+
+.delete-plan-btn {
+    color: #FFFFFF;
+    background-color: #ff0505e0;
+    border-color: #ff0505e0;
+}
+
+.delete-plan-btn:hover {
+    color: #FFFFFF;
+    background-color: #b40d0de0;
+    border-color: #b40d0de0;
+    padding: .475rem 1.1rem;
+}
+
+.submit-plan-btn {
+    border-radius: 1.5rem;
+    padding: .475rem 1.1rem;
+}
+
+.post-banner-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.btn:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.post-form-control {
+    border: 1px solid #000000;
+    border-radius: 0.35rem;
+}
+
+/* -------end post(post.html)------- */
+
+/* ----------login.html---------- */
+
+.heading {
+    font-size: 24px;
+    letter-spacing: 0.1em;
+}
+
+.line-container {
+    width: 20%;
+    margin: 0 auto;
+}
+
+.post-btn {
+    padding: .475rem 1.1rem;
+}
+
+.user-form {
+    width: 40%;
+}
+
+/* ----------end login.html---------- */
+
+
+.video-container{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    background: #000;
+    margin: 50px auto;
+    /* margin-top: 70px; */
+
+}
+
+.video-container{aspect-ratio:16 / 9;width:80%;height:100%}
+
+/* 縦横比率をレスポンシブに */
+iframe {aspect-ratio:16 / 9;width:100%;height:100%}
+
+.youtube-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.column{
+    margin: 20px;
+    padding-bottom: 30px;
+}
+
+
+/* 境界線 */
+.title{
+    margin: 0 auto;
+    position: relative;
+    width:1050px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.title h2{
+    text-align: left;
+    max-width: 90%;
+    padding-left: 0px;
+    padding-bottom: 15px;
+}
+
+.user_info{
+    width: 100%;
+    margin: 0 auto;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+
+}
+
+
+.trip-route{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding-bottom: 30px;
+}
+
+
+/* プロフィール */
+
+/* フォローボタン */
+
+.follow-button{
+    position: absolute;
+    right:15px;
+    margin-top: 15px;
+    width:200px;
+    height:60%;
+}
+
+.follow-button {
+    cursor: pointer;
+    outline: 0;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    color: #0d6efd;
+    border-color: #0d6efd;
+    :hover {
+        color: #fff;
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+
+}
+
+.profile__img {
+    margin-top: 10px;
+    margin-left: 10px;
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius:50%;
+    /* margin: 0 auto; */
+  }
+
+  .content-userinfo-upper{
+    
+    width:100%;
+    position: relative;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    
+
+
+  }
+
+  .content-plan-comment{
+    padding-left: 10px;
+    padding-right: 20px;
+    margin-top: 15px;
+    padding-bottom: 5px;
+  }
+
+  .plan-comment-box{
+    color: gray;
+  }
+
+  .user_info {
+    display: flex;
+    flex-direction: column;
+    background: #FFF;
+    /* padding: 2rem; */
+    height: auto;
+    max-height: 130px;
+    width:1050px;
+    overflow-y: scroll;
+  }
+
+  .user_name{
+    font-size: medium;
+    position:relative;
+    color: gray;
+    margin-left: 20px;
+    padding:25px 0;
+    height: 50px;
+    align-items: center;
+  }
+
+  .destination-num{
+    position: absolute;
+    left: 51px;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 3;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+    pointer-events: none;
+    background: #B8FFCC;
+  }
+
+
+.content-facade {
+    position: absolute;
+    height: 44px;
+    cursor: pointer;
+}
+
+
+/* ここからcontentのlist */
+ol {
+    counter-reset: item;
+    list-style-type: none;
+    line-height: 2.2;
+    margin-left: -40px;
+  }
+
+ol li.list-item {
+    font-size: 25px;
+    display: block;
+    position: relative;
+}
+
+ol li span {
+margin-left: 65px;
+}
+
+
+ol li.list-item:after {
+    margin-right: -100px;
+    content: counter(item) " ";
+    counter-increment: item;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    margin-top: -1em;
+    background: linear-gradient(90deg, hsla(145, 84%, 73%, 1) 0%, hsla(150, 61%, 48%, 1) 100%);
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    border-radius: 2em;
+    font-weight: 700;
+  }
+  
+.plan-gray-line{
+
+    margin-left: 25px;
+    position: relative;
+}
+
+.start-point li::marker{
+    /* content: "🚩"; */
+    font-size: 35px;
+}
+.end-point li::marker{
+    /* content: "🚩"; */
+    font-size: 35px;
+
+}
+/* ここまでcontentのlist */
+
+
+/* ここからcontent.htmlのアコーディオン */
+.plan-content-site-details{
+    max-height: 400px;
+    margin-left: 25px;
+    border-left: 2px solid #dedede;
+}
+
+/* 串のcss */
+.plan-content-site-details-summary li{
+    left: -27px;
+}
+
+/* Safariにおいては、display: list-itemではなく、::-webkit-details-marker 擬似要素によって表示される。 */
+.plan-content-site-details ::-webkit-details-marker,
+.plan-content-site-details summary::marker{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    content: "";
+}
+
+.list-item {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.plan-content-site-details p {
+    margin-left: 40px;
+}
+
+/* --------アコーディオンアイコン-------- */
+.accordion-icon {
+    display: block;
+    position: absolute;
+    right: 30px;
+    margin-top: 25px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transform-origin: 100% 10%;
+    transition: transform 0.4s;
+    opacity: 0.7;
+  }
+  
+  /* アコーディオンが開いた時のスタイル */
+  details[open] .accordion-icon {
+    transform: rotateX(180deg);
+  }
+  
+  /* アイコンのバーのスタイル */
+  .accordion-icon::before,
+  .accordion-icon::after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 15px;
+    height: 3px;
+    background: hsla(150, 61%, 48%, 1)
+  }
+  
+  .accordion-icon::before {
+    left: 0;
+    transform: rotate(45deg);
+  }
+  
+  .accordion-icon::after {
+    right: 0;
+    transform: rotate(-45deg);
+  }
+
+  .accordiong-placename-icon-container{
+    display: flex;
+    position: relative;
+  }
+
+  .plan-place-details{
+    /* max-height: 50px; */
+    min-height: 80px;
+    margin-left: 30px;
+    margin-bottom: 0px;
+  }
+
+  .plan-gray-line-inner{
+    margin-top: 0px;
+  }
+
+ /* li.place-details-price::marker {
+    content: 'Price';
+    color: gray;
+
+} */
+
+.plan-place-details-rate{
+    color: orange;
+}
+
+ul li.plan-place-details-rate::before{
+    content:"投稿者の評価: ";
+    color: gray;
+}
+
+ul li.plan-place-details-price::before{
+    content:"予算: ";
+    color: gray;
+}
+
+.plan-place-details-comment{
+    color: gray;
+    max-height: 150px;
+    overflow-y: scroll;
+    margin-bottom: 0px;
+}
+
+.plan-place-details {
+    width: 70%;
+}
+
+
+/* content.htmlのいいねボタン */
+
+  input[type="checkbox"] {
+    display: none;
+  }
+ .content-like-label {
+    right: 10px;
+    padding-left: 15px;
+    position: absolute;
+    cursor: pointer;
+  }
+  .content-like-label svg {
+    width: 50px;
+  }
+  input[type="checkbox"] + .content-like-label svg {
+    fill: #dedede;
+    transition: all .3s;
+  }
+  input[type="checkbox"]:checked + .content-like-label svg {
+    fill: #ff0033dd;
+    animation: like .8s ease-out;
+    transition: all .3s;
+  }
+
+  input[type="checkbox"]:checked + .content-like-label::after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ff0033dd;
+    border-radius: 50%;
+    animation: circle .8s ease-out;
+    opacity: 0;
+    top: -10px;
+    left: -4px;
+    z-index: -100;
+  }
+
+
+
+/* ここまでcontentのlist */
+
+
+.plan-page-map {
+    /* width: 80%; */
+    margin: auto;
+    width: 1080px;
+    height: 500px;
+    border: 3px solid;
+    padding: 10px;
+
+}
+
+
+.map-container{
+    margin-top: 20px;
+}
+
+
+  /* マップとスケジュールを2分割 */
+@media ( min-width : 600px ){
+
+    .flexbox {
+    width: 100%;
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    }
+
+.schedule-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.schedule-container,
+.map-container
+{
+
+    -webkit-flex: 1;
+    flex: 1;
+    background: none;
+}
+}
+
+.schedule-container{
+    margin-top: 13px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.map-container {
+    margin-right: 20px;
+}
+
+
+/* ここからプランページ一覧のcss */
+
+
+.submit-search-plans {
+    margin-left: 3%;
+}
+
+.search-input-wrapper-plans {
+    display: inline-block;
+    text-align: center;
+    width: 37%;
+    margin-right: 20px;
+}
+
+.plan-info{
+    display: flex;
+    flex-direction: row;
+}
+
+.plan-grid-layout{
+    margin: 30px 50px;
+}
+
+.plan-grid-layout{
+    display: grid;
+    /* 3カラムのグリッド */
+    grid-template-columns: 1fr 1fr 1fr;
+
+    /* column-gap: 50px; */
+}
+
+
+.plan-grid-layout>div{
+    margin-bottom: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.thumbnail img {aspect-ratio:16 / 9;width:100%;height:100%}
+
+
+.thumbnail img {
+    width: 100%;
+}
+
+.plan-user-info{
+    width: 45px;
+    height: 45px;
+}
+
+
+.plan-user-info img{
+    margin-left: 10px;
+    margin-top:10px;
+    /* display: block; */
+    /* height: ; */
+    width: 45px;
+    height: 45px;
+    border-radius:50%;
+}
+
+
+
+
+.plan-details{
+    height: 80px;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.plan-details h3 {
+    display: block;
+    text-align:left;
+    margin-left: 0%;
+    font-size: medium;
+    margin: auto;
+    table-layout: fixed;
+    /* height: 50%; */
+}
+
+.plan-details p{
+    color: gray;
+    font-size: small;
+    padding-top: 8px;
+    /* height: 50%; */
+}
+
+.plans-plan-description-comment{
+
+    margin-top: 10px;
+    margin-left: 20px;
+
+    text-decoration: none;
+    font-family: "Roboto","Arial",sans-serif;
+    max-height: 100px;
+    overflow: hidden;
+    display: block;
+    -webkit-line-clamp: 3;
+    display: box;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+    bottom: 30px;
+}
+.plans-plan-description-comment p{
+    color: gray;
+    font-size: 15px;
+}
+
+.plans-plan-description-price-days h3{
+    text-align: right;
+    font-weight: bold;
+}
+
+.plans-plan-description-price-days h4{
+    text-align: right;
+    color: gray;
+}
+
+/* ここまでプランページ一覧のcss */
+
+
+/*枠が虹色に！！！お遊び心に！！*/
+/* input:invalid {
+    border: 2px dashed red;
+}
+
+input:invalid:required {
+    background-image: linear-gradient(to right, pink, lightgreen);
+}
+
+input:valid {
+    border: 2px solid black;
+} */
+
+/* form {
+    font: 1em sans-serif;
+    max-width: 320px;
+  }
+
+  p > label {
+    display: block;
+  }
+
+  /*fieldset https://developer.mozilla.org/ja/docs/Web/HTML/Element/fieldset*/
+/* input[type="text"],
+input[type="url"],
+textarea,
+fieldset {
+    width: 100%;
+    border: 1px solid #333;
+    box-sizing: border-box;
+} */
+
+/*投稿画面で未入力のところに赤線を引く*/
+/* input:invalid {
+    box-shadow: 0 0 5px 1px #ff9393;
+}
+textarea:invalid {
+    box-shadow: 0 0 5px 1px #ff9393;
+} */
+
+/*エラー検出時　https://code-kitchen.dev/css/invalid/*/
+/* input:focus:invalid {
+    box-shadow: none;
+}
+textarea:focus:invalid {
+    box-shadow: none;
+} */
+
+/*フォームのオートコンプリート適用時、背景色が水色になるのを阻止*/
+/* input:-webkit-autofill {
+    box-shadow: 0 0 0 1000px white inset;
+} */ 
+
+
+
+/* ここからページネーション */
+
+
+.pagination{
+    margin-top: 30px;
+    margin-bottom: 50px;
+
+}
+
+.plans-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/* ここからcontent.htmlのリンク一覧 */
+.links-container{
+    border-top: 1px solid rgba(0,0,0,0.1);
+    width: 80%;
+    padding-top: 30px;
+    margin-bottom: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+
+}
+
+.links-links{
+    text-align: center;
+}
+
+.link-title h2 {
+    text-align: center;
+    color: #000;
+}
+
+.link-details p {
+    color: gray;
+}
+
+.link-info{
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+#icon-link{
+    text-decoration: none;
+}
+
+.links-grid-layout{
+    grid-gap: 45px;
+    margin-top: 20px;
+    display: grid;
+    /* 3カラムのグリッド */
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    place-items: center;
+    /* column-gap: 50px; */
+}
+
+.property-icon h2 {
+    text-align: center;
+    font-size: 90px;
+}
+
+.links-container{
+    margin-left: 40px;
+    margin-right: 40px;
+
+}
+
+
+/* flashメッセージ用 */
+.flash-messages{
+    margin-bottom: 0;
+    background-color: #333c5e;
+    color: #fff;
+}
+
+
+/* post-detailsのcss */
+
+.post-plan-details-price{
+    color: gray;
+}
+
+
+
+
+/* plan.htmlの内容 */
+.plans-wrapper{
+    display: flex;
+    flex-direction: column;
+    margin: 30px 100px;
+
+}
+
+.plans-plan-content{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    height: 270px;
+    border-radius: 10px;
+    background-color: white;
+    margin-top: 30px;
+
+}
+
+.plans-plan-description{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 10px;
+}
+
+
+.plans-plan-description-details{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+
+}
+
+.plans-plan-description-user-plan-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.plans-plan-description-user-info{
+    display: flex;
+    flex-direction: row;
+    max-width:50%;
+}
+
+.plans-plan-right{
+    margin-right: 50px;
+    width: 300px;
+    flex: 0 0 32%;
+    position: relative;
+
+}
+
+.plans-plan-left{
+    margin-left: 20px;
+}
+
+.plans-plan-content-thumbnail-img{
+    aspect-ratio:16 / 9;
+    height: 100%;
+    width: 450px;
+    border-radius: 10px 0 0 10px
+}
+
+.plans-body-background{
+    background-color: #f8f8f8;
+}
+
+
+.plans-plan-description-title{
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    max-height: 30%;
+}
+
+.plans-plan-description-title h3{
+    text-decoration: none;
+    font-family: "Roboto","Arial",sans-serif;
+    font-size: 1.7rem;
+    line-height: 2rem;
+    font-weight: 500;
+    max-height: 4rem;
+    overflow: hidden;
+    display: block;
+    -webkit-line-clamp: 2;
+    display: box;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+
+}
+
+.plans-plan-description-title a {
+    text-decoration: none;
+    color:black;
+}
+
+.plans-plan-description-title a:hover {
+    text-decoration: none;
+    opacity: 70%;
+}
+
+.plans-plan-description-username p {
+    font-size:large;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.plans-plan-description-like-link{
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    position: relative;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 30px;
+    right:-10px
+}
+
+
+.plans-plan-description-like-link p{
+    margin-right: 30px;
+    margin-top: 4px;
+    color: gray;
+    font-size: 18px;
+}
+
+.plans-plan-description-like-link img{
+    width: 25px;
+    height: 25px;
+    opacity: 20%;
+    margin-right: 20px;
+    margin-top: 5px;
+}
+
+
+
+/* plans.htmlのいいねボタン */
+
+input[type="checkbox"] {
+    display: none;
+  }
+ .plans-like-label {
+    right: 90px;
+    position: absolute;
+    cursor: pointer;
+  }
+  .plans-like-label svg {
+    width: 35px;
+  }
+  input[type="checkbox"] + .plans-like-label svg {
+    fill: #dedede;
+    transition: all .3s;
+  }
+  input[type="checkbox"]:checked + .plans-like-label svg {
+    fill: #ff0033dd;
+    animation: like .8s ease-out;
+    transition: all .3s;
+  }
+
+  input[type="checkbox"]:checked + .plans-like-label::after {
+    content: "";
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border: 5px solid #ff0033dd;
+    border-radius: 50%;
+    animation: circle .8s ease-out;
+    opacity: 0;
+    top: -10px;
+    left: -4px;
+    z-index: -100;
+  }
+
+  
