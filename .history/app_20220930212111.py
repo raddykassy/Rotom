@@ -448,13 +448,18 @@ def search():
             cur = con.cursor()
 
             # 入力された場所が含まれるプランを取得
+            plans = list(cur.execute("SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.days, plans.costs FROM plans JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?", (place_id,)))
+
+
 
             plans = list(cur.execute(
                     """
                     SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-                    FROM plans INNER JOIN users ON plans.user_id = users.id
+                    FROM plans INNER JOIN users ON plans.url = ?
                     JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?
                     """, (place_id,)))
+
+
 
             con.close()
 
