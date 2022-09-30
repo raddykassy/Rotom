@@ -193,8 +193,8 @@ footer {
 }
 
 .active {
-    opacity: 1;
-    top: 0;
+    opacity: 1 !important;
+    top: 0 !important;
 }
 
 .search {
@@ -494,6 +494,10 @@ iframe {aspect-ratio:16 / 9;width:100%;height:100%}
     margin: 0 auto;
     margin-top: 50px;
     padding-bottom: 50px;
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
 }
 
 
@@ -780,8 +784,11 @@ ul li.plan-place-details-price::before{
 .plan-place-details-comment{
     color: gray;
     max-height: 150px;
-    overflow-y: scroll;
     margin-bottom: 0px;
+}
+
+.plan-place-details-comment .form-group textarea {
+    overflow-y: scroll;
 }
 
 .plan-place-details {
@@ -845,6 +852,10 @@ ul li.plan-place-details-price::before{
 
 .map-container{
     margin-top: 20px;
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
 }
 
 
@@ -891,6 +902,13 @@ ul li.plan-place-details-price::before{
 
 .submit-search-plans {
     margin-left: 3%;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 1.25rem;
+    background: linear-gradient(to right, #ffd9f7, #4184e8);
+    padding: 0.5rem 2.45rem;
+    border-color: aliceblue;
 }
 
 .search-input-wrapper-plans {
@@ -1043,10 +1061,10 @@ ul li.plan-place-details-price::before{
     margin-bottom: 50px;
     padding-left: 50px;
     padding-right: 50px;
-
-}
-
-.links-container h2 {
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
 
 }
 
@@ -1134,7 +1152,10 @@ ul li.plan-place-details-price::before{
     border-radius: 10px;
     background-color: white;
     margin-top: 30px;
-
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
 }
 
 .plans-plan-description{
