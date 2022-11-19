@@ -1,10 +1,10 @@
 import requests
 import pprint
+import settings
 
 # 自分のAPIKEYを入力して下さい
-API_KEY = ""
 
-url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=ユニバーサル&components=country:jp&types=geocode&language=ja&types=geocode&key=" + API_KEY
+url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=ユニバーサル&components=country:jp&types=geocode&language=ja&types=geocode&key=" + settings.AP
 
 payload = {}
 headers = {}

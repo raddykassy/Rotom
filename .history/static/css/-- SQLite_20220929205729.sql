@@ -1,4 +1,0 @@
--- SQLite
--- UPDATE plans
--- SET days = "2泊3日", costs = 22000
--- WHERE id = 99;
