@@ -1,0 +1,138 @@
+.post-wrapper {
+    font-family: "游ゴシック体", YuGothic, "游ゴシック", "Yu Gothic", sans-serif;
+    display: flex;
+    width: 100%;
+    min-height: 90vh;
+    height: auto;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.planning, .banner {
+    padding: 20px;
+}
+
+.banner {
+    padding-top: 0;
+    background: linear-gradient(114deg, #4c4b4b 0%, #555555 10%, #ffffff 50%, #ffffff 70%, #fff 100%);
+    width: 40%;
+}
+
+.post-banner-wrapper {
+    display: flex;
+    text-align: center;;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.post-logo {
+    width: 30%;
+    height: auto;
+}
+
+@media screen and (max-width: 1400px) {
+    .post-logo {
+        width: 35%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .post-logo {
+        width: 40%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .post-logo {
+        width: 50%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .post-logo {
+        width: 60%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .post-logo {
+        width: 70%;
+        height: auto;
+    }
+}
+
+.planning {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    background: #FFFFFF;
+    width: 60%;
+    padding-bottom: 3rem;
+}
+
+.planning-form {
+    width: 60%;
+    margin: 0 auto;
+}
+
+.place-label {
+    margin-bottom: 0.5rem;
+}
+
+.btn-wrapper {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+.add-plan-btn {
+    border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 50%;
+    color: #000000;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+}
+
+.add-text {
+    font-weight: 400;
+    margin-left: 20px;
+}
+
+.delete-plan-btn {
+    color: #FFFFFF;
+    background-color: #ff0505e0;
+    border-color: #ff0505e0;
+}
+
+.delete-plan-btn:hover {
+    color: #FFFFFF;
+    background-color: #b40d0de0;
+    border-color: #b40d0de0;
+    padding: .475rem 1.1rem;
+}
+
+.submit-plan-btn {
+    border-radius: 1.5rem;
+    padding: .475rem 1.1rem;
+}
+
+.post-banner-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.btn:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.post-form-control {
+    border: 1px solid #000000;
+    border-radius: 0.35rem;
+}
