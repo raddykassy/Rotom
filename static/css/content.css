@@ -1,0 +1,553 @@
+.main-contents{
+    border-right: 100px solid #f8f8f8;
+    border-left: 100px solid #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-container{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    background: #000;
+    margin: 50px auto;
+    /* margin-top: 70px; */
+
+}
+
+.video-container{aspect-ratio:16 / 9;width:80%;height:100%}
+
+/* 縦横比率をレスポンシブに */
+iframe {aspect-ratio:16 / 9;width:100%;height:100%}
+
+.youtube-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.column{
+    margin: 20px;
+    padding-bottom: 30px;
+}
+
+
+/* 境界線 */
+.title{
+    margin: 0 auto;
+    position: relative;
+    width:1050px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.title h2{
+    text-align: left;
+    max-width: 90%;
+    padding-left: 0px;
+    padding-bottom: 15px;
+}
+
+.user_info{
+    width: 100%;
+    margin: 0 auto;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.trip-route{
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding-bottom: 50px;
+}
+
+.trip-route-content {
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
+}
+
+.profile-label-likes svg {
+    position: relative;
+    margin-right: 30px;
+}
+
+.like-summary {
+    position: absolute;
+    right: 69%;
+    margin-right: 0 !important;
+}
+
+
+/* プロフィール */
+
+/* フォローボタン */
+
+.follow-button{
+    position: absolute;
+    right:15px;
+    margin-top: 15px;
+    width:200px;
+    height:60%;
+}
+
+.follow-button {
+    cursor: pointer;
+    outline: 0;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    color: #0d6efd;
+    border-color: #0d6efd;
+    :hover {
+        color: #fff;
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+
+}
+
+.profile__img {
+    margin-top: 10px;
+    margin-left: 10px;
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius:50%;
+    /* margin: 0 auto; */
+  }
+
+  .content-userinfo-upper{
+
+    width:100%;
+    position: relative;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+
+
+
+  }
+
+  .content-plan-comment{
+    padding-left: 10px;
+    padding-right: 20px;
+    margin-top: 15px;
+    padding-bottom: 5px;
+  }
+
+  .plan-comment-box{
+    color: gray;
+  }
+
+  .user_info {
+    display: flex;
+    flex-direction: column;
+    background: #FFF;
+    /* padding: 2rem; */
+    height: auto;
+    max-height: 130px;
+    width:1050px;
+    overflow-y: scroll;
+  }
+
+  .user_name{
+    font-size: medium;
+    position:relative;
+    color: gray;
+    margin-left: 20px;
+    padding:25px 0;
+    height: 50px;
+    align-items: center;
+  }
+
+  .destination-num{
+    position: absolute;
+    left: 51px;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    z-index: 3;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+    pointer-events: none;
+    background: #B8FFCC;
+  }
+
+
+.content-facade {
+    position: absolute;
+    height: 44px;
+    cursor: pointer;
+}
+
+
+/* ここからcontentのlist */
+ol {
+    counter-reset: item;
+    list-style-type: none;
+    line-height: 2.2;
+    margin-left: -40px;
+  }
+
+ol li.list-item {
+    font-size: 25px;
+    display: block;
+    position: relative;
+}
+
+ol li span {
+margin-left: 65px;
+}
+
+
+ol li.list-item:after {
+    margin-right: -100px;
+    content: counter(item) " ";
+    counter-increment: item;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    margin-top: -1em;
+    background: linear-gradient(90deg, hsla(145, 84%, 73%, 1) 0%, hsla(150, 61%, 48%, 1) 100%);
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    border-radius: 2em;
+    font-weight: 700;
+  }
+
+.plan-gray-line{
+
+    margin-left: 25px;
+    position: relative;
+}
+
+.start-point li::marker{
+    /* content: "🚩"; */
+    font-size: 35px;
+}
+.end-point li::marker{
+    /* content: "🚩"; */
+    font-size: 35px;
+
+}
+/* ここまでcontentのlist */
+
+
+/* ここからcontent.htmlのアコーディオン */
+.plan-content-site-details{
+    max-height: 400px;
+    margin-left: 25px;
+    border-left: 2px solid #dedede;
+}
+
+/* 串のcss */
+.plan-content-site-details-summary li{
+    left: -27px;
+}
+
+/* Safariにおいては、display: list-itemではなく、::-webkit-details-marker 擬似要素によって表示される。 */
+.plan-content-site-details ::-webkit-details-marker,
+.plan-content-site-details summary::marker{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    content: "";
+}
+
+.list-item {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.plan-content-site-details p {
+    margin-left: 40px;
+}
+
+/* --------アコーディオンアイコン-------- */
+.accordion-icon {
+    display: block;
+    position: absolute;
+    right: 30px;
+    margin-top: 25px;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transform-origin: 100% 10%;
+    transition: transform 0.4s;
+    opacity: 0.7;
+  }
+
+  /* アコーディオンが開いた時のスタイル */
+  details[open] .accordion-icon {
+    transform: rotateX(180deg);
+  }
+
+  /* アイコンのバーのスタイル */
+  .accordion-icon::before,
+  .accordion-icon::after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 15px;
+    height: 3px;
+    background: hsla(150, 61%, 48%, 1)
+  }
+
+  .accordion-icon::before {
+    left: 0;
+    transform: rotate(45deg);
+  }
+
+  .accordion-icon::after {
+    right: 0;
+    transform: rotate(-45deg);
+  }
+
+  .accordiong-placename-icon-container{
+    display: flex;
+    position: relative;
+  }
+
+  .plan-place-details{
+    /* max-height: 50px; */
+    min-height: 80px;
+    margin-left: 30px;
+    margin-bottom: 0px;
+  }
+
+  .plan-gray-line-inner{
+    margin-top: 0px;
+  }
+
+ /* li.place-details-price::marker {
+    content: 'Price';
+    color: gray;
+
+} */
+
+.plan-place-details-rate{
+    color: orange;
+}
+
+ul li.plan-place-details-rate::before{
+    content:"投稿者の評価: ";
+    color: gray;
+}
+
+ul li.plan-place-details-price::before{
+    content:"予算: ";
+    color: gray;
+}
+
+.plan-place-details-comment{
+    color: gray;
+    max-height: 150px;
+    margin-bottom: 0px;
+}
+
+.plan-place-details-comment .form-group textarea {
+    overflow-y: scroll;
+}
+
+.plan-place-details {
+    width: 70%;
+}
+
+
+/* content.htmlのいいねボタン */
+
+  input[type="checkbox"] {
+    display: none;
+  }
+ .content-like-label {
+    right: 10px;
+    padding-left: 15px;
+    position: absolute;
+    cursor: pointer;
+  }
+  .content-like-label svg {
+    width: 50px;
+  }
+  input[type="checkbox"] + .content-like-label svg {
+    fill: #dedede;
+    transition: all .3s;
+  }
+  input[type="checkbox"]:checked + .content-like-label svg {
+    fill: #ff0033dd;
+    animation: like .8s ease-out;
+    transition: all .3s;
+  }
+
+  input[type="checkbox"]:checked + .content-like-label::after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ff0033dd;
+    border-radius: 50%;
+    animation: circle .8s ease-out;
+    opacity: 0;
+    top: -10px;
+    left: -4px;
+    z-index: -100;
+  }
+
+
+
+/* ここまでcontentのlist */
+
+
+.plan-page-map {
+    /* width: 80%; */
+    margin: auto;
+    width: 975px;
+    height: 500px;
+    border: 3px solid;
+    padding: 10px;
+
+}
+
+
+.map-container{
+    margin-top: 20px;
+    opacity: 0;
+    transition: .7s;
+    position: relative;
+    top: 50px;
+}
+
+
+  /* マップとスケジュールを2分割 */
+@media ( min-width : 600px ){
+
+    .flexbox {
+    width: 100%;
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    }
+
+.schedule-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.schedule-container,
+.map-container
+{
+
+    -webkit-flex: 1;
+    flex: 1;
+    background: none;
+}
+}
+
+.schedule-container{
+    margin-top: 13px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.map-container {
+    margin-right: 20px;
+}
+
+/* ここからcontent.htmlのリンク一覧 */
+.links-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  width: 1050px;
+  padding-top: 30px;
+  margin-bottom: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+  opacity: 0;
+  transition: .7s;
+  position: relative;
+  top: 50px;
+
+}
+
+.links-links{
+  text-align: center;
+}
+
+.link-title h2 {
+  text-align: center;
+  color: #000;
+}
+
+.link-details p {
+  color: gray;
+}
+
+.link-info{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+#icon-link{
+  text-decoration: none;
+}
+
+.links-grid-layout{
+  grid-gap: 45px;
+  margin-top: 20px;
+  display: grid;
+  /* 3カラムのグリッド */
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: center;
+  place-items: center;
+  /* column-gap: 50px; */
+}
+
+.property-icon img{
+  width: 120px;
+  height: 120px;
+
+}
+
+.property-icon h2 {
+  text-align: center;
+  font-size: 90px;
+}
+
+.links-container{
+  margin-left: 40px;
+  margin-right: 40px;
+
+}

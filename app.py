@@ -9,9 +9,12 @@ import requests
 import json
 from flask_paginate import Pagination, get_page_parameter
 import datetime
+import settings
+
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
+map_api_key = settings.AP
 
 # ログインしているかどうか判別するグローバル変数
 # False = logout状態, True = login状態
@@ -132,7 +135,7 @@ def index():
                 plan["video_id"] = plan["url"].split("/")[3]
 
         session["user_name"] = user_info[0][0]
-        return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id, plans=plans)
+        return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id, plans=plans, map_api_key = map_api_key)
 
     else:
         dbname = "Rotom.db"
@@ -154,7 +157,7 @@ def index():
         for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
 
-        return render_template('index2.html', status=status, plans=plans)
+        return render_template('index2.html', status=status, plans=plans,  map_api_key = map_api_key)
 
 
 # loginページ
@@ -315,7 +318,7 @@ def post():
         return redirect("/post-details")
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"])
+        return render_template("post.html", status=status, user_name=session["user_name"],  map_api_key = map_api_key)
 
 @app.route("/post-details", methods=["GET", "POST"])
 @login_required
@@ -378,7 +381,7 @@ def post_details():
         for n  in range(len(session["place_names"])):
             place_info_li.append({"place_name": session["place_names"][n]})
 
-        return render_template('post-details.html', plan_info = plan_info, place_info_li = place_info_li,)
+        return render_template('post-details.html', plan_info = plan_info, place_info_li = place_info_li, map_api_key = map_api_key)
 
 @app.route('/inquiry')
 def inquiry():
@@ -487,7 +490,7 @@ def search():
 
 @app.route('/content')
 def content():
-    return render_template('content.html')
+    return render_template('content.html',  map_api_key = map_api_key)
 
 
 @app.route('/plans')
@@ -540,10 +543,10 @@ def plans():
     page_info = paginate(plans)
 
     if status:
-        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"])
+        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status, user_name=session["user_name"], user_id=session["id"],  map_api_key = map_api_key)
 
     else:
-        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status)
+        return render_template('plans.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], status=status,  map_api_key = map_api_key)
 
 #下二行のパラメーターのuser_idは、動画を投稿した人のuser_id
 @app.route('/plan_content/<user_id>/<int:post_id>')
@@ -571,7 +574,7 @@ def plan_content(user_id, post_id):
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
-        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyD-qMjCOwiUgvYY5vfl22f104RiFCxAEOs').json()
+        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key={map_api_key}').json()
         try:
             place_info_li[index]["url"] = response["result"]["website"]
         except KeyError:
@@ -605,10 +608,10 @@ def plan_content(user_id, post_id):
         else:
             is_liked = True
         #過去のlike状況をフロント側に伝える
-        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked, status=status, user_name=session["user_name"])
+        return render_template('content.html', plan_info = plan_info, user_id = session["id"], place_info_li = place_info_li, is_liked=is_liked, status=status, user_name=session["user_name"],  map_api_key = map_api_key)
 
     else:
-        return render_template('content.html', plan_info = plan_info, place_info_li = place_info_li,)
+        return render_template('content.html', plan_info = plan_info, place_info_li = place_info_li,  map_api_key = map_api_key)
 
 
 @app.route('/like', methods=['GET', 'POST'])
@@ -709,7 +712,7 @@ def mypage(user_id):
 
     return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], 
                             status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], 
-                            user_id=session["id"], plans_sum=sum["plans_sum"])
+                            user_id=session["id"], plans_sum=sum["plans_sum"],  map_api_key = map_api_key)
 
 # mypageでいいね一覧を見る
 @app.route("/mypage_likes/<int:user_id>")
@@ -777,7 +780,7 @@ def mypage_likes(user_id):
                                                 status=status,
                                                 user_id=session["id"], user_name=session["user_name"],
                                                 email=users["email"], register_date=users["date"],
-                                                likes_sum=sum["counts"])
+                                                likes_sum=sum["counts"],  map_api_key = map_api_key)
 
 # ページネーション機能
 def paginate(plans):
