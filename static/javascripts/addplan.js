@@ -11,7 +11,6 @@ addPlanBtn.addEventListener('click', function() {
     InsertInputTag(placeBox);
 });
 
-// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 // 場所選択ボックスの作成
 function getInputTag() {

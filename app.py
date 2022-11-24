@@ -571,7 +571,7 @@ def plan_content(user_id, post_id):
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
         #place_idから情報を取得
-        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyDSB9wJUooZ1GlQFPqjUUBZmFLp7Y04HzI').json()
+        response = requests.get(f'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_info["place_id"]}&key=AIzaSyD-qMjCOwiUgvYY5vfl22f104RiFCxAEOs').json()
         try:
             place_info_li[index]["url"] = response["result"]["website"]
         except KeyError:
