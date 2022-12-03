@@ -381,7 +381,7 @@ def post_details():
         for n  in range(len(session["place_names"])):
             place_info_li.append({"place_name": session["place_names"][n]})
 
-        return render_template('post-details.html', plan_info = plan_info, place_info_li = place_info_li, map_api_key = map_api_key)
+        return render_template('post-details.html', plan_info = plan_info, place_info_li = place_info_li, map_api_key = map_api_key, user_id=session["id"], status=status, user_name=session["user_name"])
 
 @app.route('/inquiry')
 def inquiry():
