@@ -318,7 +318,7 @@ def post():
         return redirect("/post-details")
 
     else:
-        return render_template("post.html", status=status, user_name=session["user_name"],  map_api_key = map_api_key)
+        return render_template("post.html", status=status, user_name=session["user_name"],  map_api_key = map_api_key, user_id=session["id"])
 
 @app.route("/post-details", methods=["GET", "POST"])
 @login_required
