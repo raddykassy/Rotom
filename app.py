@@ -109,10 +109,17 @@ def index():
     # index2.htmlにemailを渡して、表示する
     if status:
         user_id = session["id"]
-        con = sqlite3.connect('Rotom.db')
+        # PostgreSQL Server へ接続
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
+
         cur = con.cursor()
         # ここnameにしてもいいかも
-        cur.execute("SELECT name FROM users WHERE id = ?", (user_id,))
+        cur.execute("SELECT name FROM users WHERE id = %s", (user_id,))
         user_info =  cur.fetchall()
         con.close()
 
@@ -196,10 +203,7 @@ def login():
                     con.close()
                     session["id"] = row[1]
                     status = True
-                    # return redirect("/")
-                    return render_template("login.html", error_message=error_message)
-
-
+                    return redirect("/")                   
                     # return render_template("index2.html", status=status)
                 else:
                     con.close()
@@ -361,10 +365,24 @@ def post_details():
         costs = session["costs"]
 
         # plansテーブルにinsert
+        """
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""INSERT INTO plans (user_id, title, description, url, days, costs) VALUES (?,?,?,?,?,?)""", (user_id, title, description, url, days, costs,))
+        cur.execute("INSERT INTO plans (user_id, title, description, url, days, costs) VALUES (?,?,?,?,?,?)", (user_id, title, description, url, days, costs,))
         con.commit()
+        """
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
+
+        dt = datetime.datetime.now()
+        with con:
+            with con.cursor() as cur:
+                cur.execute("INSERT INTO plans (user_id, title, description, url, posted_at, days, costs) VALUES (%s,%s,%s,%s,%s,%s,%s)", (user_id, title, description, url, dt, days, costs,))
+            con.commit
 
         # plan_placesに格納する情報
         plan_id = "" #データベースからとってくる
@@ -375,19 +393,20 @@ def post_details():
         # plan_detailテーブルにinsert
 
         #plan_idを取ってくる
-        cur.execute("""SELECT id FROM plans WHERE title = ? """, (title,))
-        for row in cur.fetchall():
-            plan_id = row
+        with con:
+            with con.cursor() as cur:
+                cur.execute("SELECT id FROM plans WHERE title = %s ", (title,))
+        
+                for row in cur.fetchall():
+                    plan_id = row
 
 
         #場所ごとにplan_placesに格納
-        for n  in range(len(session["place_names"])):
-            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number, description, place_review, booking_url, price) VALUES(?,?,?,?,?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1, place_description[n], place_review[n], booking_url[n], price[n],))
-
-
-        con.commit()
-        con.close()
-
+        with con:
+            with con.cursor() as cur:
+                for n  in range(len(session["place_names"])):
+                    cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number, description, place_review, booking_url, price) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (plan_id[0], place_id[n], place_names[n], n+1, place_description[n], place_review[n], booking_url[n], price[n],))
+            con.commit()
         flash("投稿が完了しました。")
         return "post_details()での処理が完了"
 
