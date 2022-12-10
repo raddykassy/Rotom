@@ -10,11 +10,13 @@ import json
 from flask_paginate import Pagination, get_page_parameter
 import datetime
 import settings
+import psycopg2
 
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 map_api_key = settings.AP
+pas = settings.PASS
 
 # ログインしているかどうか判別するグローバル変数
 # False = logout状態, True = login状態
@@ -176,12 +178,17 @@ def login():
 
         error_message = ""
 
-        con = sqlite3.connect('Rotom.db')
-        cur = con.cursor()
-        # SELECT * より修正 9/20 passwordのみからpassword, idに変更
-        cur.execute("SELECT password, id FROM users WHERE email = ?", (email,))
-        user_data = cur.fetchall()
+        # PostgreSQL Server へ接続
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
 
+        cur = con.cursor()
+        cur.execute("SELECT password, id FROM users WHERE email = %s", (email,))
+        user_data = cur.fetchall()
         # メールアドレス：ユーザーデータは1:1でないといけない（新規登録画面でその処理書いてくれると嬉しいです！（既に同じメールアドレスが存在している場合はエラーメッセージを渡す等））
         if len(user_data) == 1:
             for row in user_data:
@@ -189,7 +196,10 @@ def login():
                     con.close()
                     session["id"] = row[1]
                     status = True
-                    return redirect("/")
+                    # return redirect("/")
+                    return render_template("login.html", error_message=error_message)
+
+
                     # return render_template("index2.html", status=status)
                 else:
                     con.close()
@@ -200,7 +210,6 @@ def login():
             # ↓現段階では登録されていない or メールアドレスが重複して登録されている
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
-
     else:
         return render_template("login.html")
 
@@ -237,23 +246,33 @@ def register():
             error_message = "確認用パスワードと一致しませんでした。"
             # エラーメッセージ付きでregister.htmlに渡す
             return render_template("register.html", error_message=error_message)
+        # --------------------------------------------------------------------------------
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
 
-        con = sqlite3.connect('Rotom.db')
-        cur = con.cursor()
-        cur.execute("SELECT email FROM users")
-        email_data = cur.fetchall()
+        dt = datetime.datetime.now()
+        with con:
+            with con.cursor() as cur:
+                
+                cur.execute('SELECT * FROM users;')
+                # print(cur.fetchall())
+                email_data = cur.fetchall()
 
-        # emailが登録済みか確認する
-        for row in email_data:
-            if row[0] == email:
-                con.close
-                error_message = "そのemailアドレスは登録済みです"
-                # エラーメッセージ付きでregister.htmlに渡す
-                return render_template("register.html", error_message=error_message)
-        # ユーザ情報をusersテーブルに登録
-        cur.execute("""INSERT INTO users (email, password, name) values (?,?,?)""", (email, generate_password_hash(password), username,))
-        con.commit()
-        con.close()
+                for row in email_data:
+                    print(row)
+                    if row[1] == email:
+                        error_message = "そのemailアドレスは登録済みです"
+                        # エラーメッセージ付きでregister.htmlに渡す
+                        return render_template("register.html", error_message=error_message)
+
+                cur.execute("INSERT INTO users(email, password, name, registered_at) VALUES(%s, %s, %s, %s);", (email, generate_password_hash(password), username, dt))
+            con.commit
+        # ------------------------------------------------------------------------
+
         # 新規登録後はlogin画面へ
         return redirect ("/login")
 
