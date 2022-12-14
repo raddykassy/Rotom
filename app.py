@@ -143,10 +143,10 @@ def index():
             (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
             plans.id = likes.plan_id WHERE plans.id IN
             (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
-            LIMIT 3);
-        """)
+            LIMIT 3)
+        """,)
         # 引数*sqlだとpsycopg2.ProgrammingError: can't execute an empty queryになった
-        plans = get_dict_resultset(sql)
+        plans = get_dict_resultset(*sql)
 
         for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
@@ -161,10 +161,10 @@ def index():
             (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
             plans.id = likes.plan_id WHERE plans.id IN
             (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
-            LIMIT 3);
-        """)
+            LIMIT 3)
+        """,)
         # 引数*sqlだとpsycopg2.ProgrammingError: can't execute an empty queryになった
-        plans = get_dict_resultset(sql)
+        plans = get_dict_resultset(*sql)
 
         for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
@@ -662,9 +662,9 @@ def mypage(user_id):
     sql = ("""
         SELECT plan_id
         FROM likes;
-        """
+        """,
     )
-    likes = get_dict_resultset(sql)
+    likes = get_dict_resultset(*sql)
     # like数カウント
     plan_id_num=[]
     planid_like_dic = {}
@@ -719,8 +719,8 @@ def mypage_likes(user_id):
         """
         SELECT plan_id
         FROM likes;
-        """)
-    likes = get_dict_resultset(sql)
+        """,)
+    likes = get_dict_resultset(*sql)
 
     # like数カウント
     plan_id_num=[]
