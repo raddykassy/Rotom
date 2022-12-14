@@ -433,20 +433,14 @@ def search():
             return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
         # VlogのURLから検索
         elif url:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
 
-            cur = con.cursor()
+            sql = ("""
+                    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, plans.costs, plans.days, users.name
+                    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.url = %s
+                    """, (url,))
 
-            plans = list(cur.execute(
-                    """
-                    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-                    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.url = ?
-                    """, (url,)))
-
-            con.close()
-
+            plans = get_dict_resultset(*sql)
+            
             if not plans:
                 error_message = url + "に関するプランは存在しません"
                 return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
@@ -464,22 +458,15 @@ def search():
 
         # 場所から検索
         elif place:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
-
-            cur = con.cursor()
 
             # 入力された場所が含まれるプランを取得
-
-            plans = list(cur.execute(
-                    """
-                    SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
+            sql = ("""
+                    SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, plans.costs, plans.days, users.name
                     FROM plans INNER JOIN users ON plans.user_id = users.id
-                    JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?
-                    """, (place_id,)))
+                    JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = %s
+                    """, (place_id,))
 
-            con.close()
+            plans = get_dict_resultset(*sql)
 
             if not plans:
                 error_message = place + "を含んだプランは存在しません"
@@ -513,27 +500,24 @@ def content():
 @app.route('/plans')
 def plans():
     global status
-    #データベースから情報を取ってきて、plans.htmlに渡す。
-    #渡す情報　plan_places, plans
-    dbname = "Rotom.db"
-    conn = sqlite3.connect(dbname)
-    conn.row_factory = user_lit_factory
+    # plan一覧表示
 
-    cur = conn.cursor()
+    # plan取得
+    sql = ("""
+           SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url,
+           plans.posted_at, plans.costs, plans.days, users.name FROM plans
+           INNER JOIN users ON plans.user_id = users.id
+           """,)
 
-    #plansを全て取得
-
-    plans = list(cur.execute(
-        """
-        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-        FROM plans INNER JOIN users ON plans.user_id = users.id;
-        """))
-
-    likes = list(cur.execute(
-        """
-        SELECT plan_id
-        FROM likes;
-        """))
+    plans = get_dict_resultset(*sql)
+    
+    # likes取得
+    sql = ("""
+            SELECT plan_id
+            FROM likes;
+            """,)
+    
+    likes = get_dict_resultset(*sql)
 
     # like数カウント
     plan_id_num=[]
