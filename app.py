@@ -10,11 +10,14 @@ import json
 from flask_paginate import Pagination, get_page_parameter
 import datetime
 import settings
+import psycopg2
+import psycopg2.extras
 
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 map_api_key = settings.AP
+pas = settings.PASS
 
 # ログインしているかどうか判別するグローバル変数
 # False = logout状態, True = login状態
@@ -96,6 +99,26 @@ emoji_array = {
     "lodging":"🏨",
 }
 
+# postgresのクエリを辞書形式で返すためのfunction
+# 引数にクエリを渡す
+def get_dict_resultset(sql, *args):
+    conn = psycopg2_connect()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute (sql, (args))
+    results = cur.fetchall()
+    dict_result = []
+    for row in results:
+        dict_result.append(dict(row))
+    return dict_result
+
+def psycopg2_connect():
+    conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
+    return conn
 
 @app.route('/')
 def index():
@@ -107,10 +130,17 @@ def index():
     # index2.htmlにemailを渡して、表示する
     if status:
         user_id = session["id"]
-        con = sqlite3.connect('Rotom.db')
+        # PostgreSQL Server へ接続
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,           #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))     #データベース名
+
         cur = con.cursor()
         # ここnameにしてもいいかも
-        cur.execute("SELECT name FROM users WHERE id = ?", (user_id,))
+        cur.execute("SELECT name FROM users WHERE id = %s", (user_id,))
         user_info =  cur.fetchall()
         con.close()
 
@@ -176,12 +206,17 @@ def login():
 
         error_message = ""
 
-        con = sqlite3.connect('Rotom.db')
-        cur = con.cursor()
-        # SELECT * より修正 9/20 passwordのみからpassword, idに変更
-        cur.execute("SELECT password, id FROM users WHERE email = ?", (email,))
-        user_data = cur.fetchall()
+        # PostgreSQL Server へ接続
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,           #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))     #データベース名
 
+        cur = con.cursor()
+        cur.execute("SELECT password, id FROM users WHERE email = %s", (email,))
+        user_data = cur.fetchall()
         # メールアドレス：ユーザーデータは1:1でないといけない（新規登録画面でその処理書いてくれると嬉しいです！（既に同じメールアドレスが存在している場合はエラーメッセージを渡す等））
         if len(user_data) == 1:
             for row in user_data:
@@ -189,7 +224,7 @@ def login():
                     con.close()
                     session["id"] = row[1]
                     status = True
-                    return redirect("/")
+                    return redirect("/")                   
                     # return render_template("index2.html", status=status)
                 else:
                     con.close()
@@ -200,7 +235,6 @@ def login():
             # ↓現段階では登録されていない or メールアドレスが重複して登録されている
             error_message = "入力されたメールアドレスは登録されていません"
             return render_template("login.html", error_message=error_message)
-
     else:
         return render_template("login.html")
 
@@ -237,23 +271,33 @@ def register():
             error_message = "確認用パスワードと一致しませんでした。"
             # エラーメッセージ付きでregister.htmlに渡す
             return render_template("register.html", error_message=error_message)
+        # --------------------------------------------------------------------------------
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
 
-        con = sqlite3.connect('Rotom.db')
-        cur = con.cursor()
-        cur.execute("SELECT email FROM users")
-        email_data = cur.fetchall()
+        dt = datetime.datetime.now()
+        with con:
+            with con.cursor() as cur:
+                
+                cur.execute('SELECT * FROM users;')
+                # print(cur.fetchall())
+                email_data = cur.fetchall()
 
-        # emailが登録済みか確認する
-        for row in email_data:
-            if row[0] == email:
-                con.close
-                error_message = "そのemailアドレスは登録済みです"
-                # エラーメッセージ付きでregister.htmlに渡す
-                return render_template("register.html", error_message=error_message)
-        # ユーザ情報をusersテーブルに登録
-        cur.execute("""INSERT INTO users (email, password, name) values (?,?,?)""", (email, generate_password_hash(password), username,))
-        con.commit()
-        con.close()
+                for row in email_data:
+                    print(row)
+                    if row[1] == email:
+                        error_message = "そのemailアドレスは登録済みです"
+                        # エラーメッセージ付きでregister.htmlに渡す
+                        return render_template("register.html", error_message=error_message)
+
+                cur.execute("INSERT INTO users(email, password, name, registered_at) VALUES(%s, %s, %s, %s);", (email, generate_password_hash(password), username, dt))
+            con.commit
+        # ------------------------------------------------------------------------
+
         # 新規登録後はlogin画面へ
         return redirect ("/login")
 
@@ -305,7 +349,6 @@ def post():
         #セッション情報に登録
         session["place_names"] = place_names
         session["place_id"] = place_id
-
         session["place_sum"] = place_sum
         session["plan_title"] = plan_title
         session["plan_description"] = plan_description
@@ -342,10 +385,24 @@ def post_details():
         costs = session["costs"]
 
         # plansテーブルにinsert
+        """
         con = sqlite3.connect('Rotom.db')
         cur = con.cursor()
-        cur.execute("""INSERT INTO plans (user_id, title, description, url, days, costs) VALUES (?,?,?,?,?,?)""", (user_id, title, description, url, days, costs,))
+        cur.execute("INSERT INTO plans (user_id, title, description, url, days, costs) VALUES (?,?,?,?,?,?)", (user_id, title, description, url, days, costs,))
         con.commit()
+        """
+        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
+
+        dt = datetime.datetime.now()
+        with con:
+            with con.cursor() as cur:
+                cur.execute("INSERT INTO plans (user_id, title, description, url, posted_at, days, costs) VALUES (%s,%s,%s,%s,%s,%s,%s)", (user_id, title, description, url, dt, days, costs,))
+            con.commit
 
         # plan_placesに格納する情報
         plan_id = "" #データベースからとってくる
@@ -356,19 +413,20 @@ def post_details():
         # plan_detailテーブルにinsert
 
         #plan_idを取ってくる
-        cur.execute("""SELECT id FROM plans WHERE title = ? """, (title,))
-        for row in cur.fetchall():
-            plan_id = row
+        with con:
+            with con.cursor() as cur:
+                cur.execute("SELECT id FROM plans WHERE title = %s ", (title,))
+        
+                for row in cur.fetchall():
+                    plan_id = row
 
 
         #場所ごとにplan_placesに格納
-        for n  in range(len(session["place_names"])):
-            cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number, description, place_review, booking_url, price) VALUES(?,?,?,?,?,?,?,?)", (plan_id[0], place_id[n], place_names[n], n+1, place_description[n], place_review[n], booking_url[n], price[n],))
-
-
-        con.commit()
-        con.close()
-
+        with con:
+            with con.cursor() as cur:
+                for n  in range(len(session["place_names"])):
+                    cur.execute("INSERT INTO plan_places(plan_id, place_id, place_name, number, description, place_review, booking_url, price) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)", (plan_id[0], place_id[n], place_names[n], n+1, place_description[n], place_review[n], booking_url[n], price[n],))
+            con.commit()
         flash("投稿が完了しました。")
         return "post_details()での処理が完了"
 
@@ -416,20 +474,14 @@ def search():
             return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
         # VlogのURLから検索
         elif url:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
 
-            cur = con.cursor()
+            sql = ("""
+                    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, plans.costs, plans.days, users.name
+                    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.url = %s
+                    """, (url,))
 
-            plans = list(cur.execute(
-                    """
-                    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-                    FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.url = ?
-                    """, (url,)))
-
-            con.close()
-
+            plans = get_dict_resultset(*sql)
+            
             if not plans:
                 error_message = url + "に関するプランは存在しません"
                 return render_template('plans.html', error_message=error_message, CurPage=1, MaxPage=1)
@@ -447,22 +499,15 @@ def search():
 
         # 場所から検索
         elif place:
-            dbname = "Rotom.db"
-            con = sqlite3.connect(dbname)
-            con.row_factory = user_lit_factory
-
-            cur = con.cursor()
 
             # 入力された場所が含まれるプランを取得
-
-            plans = list(cur.execute(
-                    """
-                    SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
+            sql = ("""
+                    SELECT DISTINCT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, plans.costs, plans.days, users.name
                     FROM plans INNER JOIN users ON plans.user_id = users.id
-                    JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = ?
-                    """, (place_id,)))
+                    JOIN plan_places ON plans.id = plan_places.plan_id WHERE place_id = %s
+                    """, (place_id,))
 
-            con.close()
+            plans = get_dict_resultset(*sql)
 
             if not plans:
                 error_message = place + "を含んだプランは存在しません"
@@ -496,27 +541,24 @@ def content():
 @app.route('/plans')
 def plans():
     global status
-    #データベースから情報を取ってきて、plans.htmlに渡す。
-    #渡す情報　plan_places, plans
-    dbname = "Rotom.db"
-    conn = sqlite3.connect(dbname)
-    conn.row_factory = user_lit_factory
+    # plan一覧表示
 
-    cur = conn.cursor()
+    # plan取得
+    sql = ("""
+           SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url,
+           plans.posted_at, plans.costs, plans.days, users.name FROM plans
+           INNER JOIN users ON plans.user_id = users.id
+           """,)
 
-    #plansを全て取得
-
-    plans = list(cur.execute(
-        """
-        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-        FROM plans INNER JOIN users ON plans.user_id = users.id;
-        """))
-
-    likes = list(cur.execute(
-        """
-        SELECT plan_id
-        FROM likes;
-        """))
+    plans = get_dict_resultset(*sql)
+    
+    # likes取得
+    sql = ("""
+            SELECT plan_id
+            FROM likes;
+            """,)
+    
+    likes = get_dict_resultset(*sql)
 
     # like数カウント
     plan_id_num=[]
@@ -557,19 +599,17 @@ def plan_content(user_id, post_id):
 #     booking_url = data["url_li"] #場所ごとの予約URL
 #     price = data["price_li"] #場所ごとの価格
 
-    dbname = "Rotom.db"
-    conn = sqlite3.connect(dbname)
-    conn.row_factory = user_lit_factory
+    sql = ("SELECT * FROM plan_places WHERE plan_id = %s", (post_id,))
+    place_info_li =  get_dict_resultset(*sql)
 
-    cur = conn.cursor()
+    sql = (
+        """
+        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, users.name
+        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=%s;
+        """
+        , (post_id,))
 
-    place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
-    plan_info = list(cur.execute(
-        """
-        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
-        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
-        """
-        , (post_id,)))
+    plan_info = get_dict_resultset(*sql)
 
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
@@ -599,7 +639,8 @@ def plan_content(user_id, post_id):
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:
         is_liked = False
-        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
+        sql = ("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],))
+        like_info = get_dict_resultset(*sql)
 
         #過去にlikeしていない場合
         if like_info == []:
@@ -624,25 +665,24 @@ def like():
         plan_id = request.json['plan_id']
         user_id = session["id"]
 
-        #データベースから情報を取ってくる
-        dbname = "Rotom.db"
-        conn = sqlite3.connect(dbname)
-        conn.row_factory = user_lit_factory
-        cur = conn.cursor()
+        sql = ("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,))
+        like_info = get_dict_resultset(*sql)
 
-        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+        conn = psycopg2_connect()
+        cur = conn.cursor()
 
         #過去にLikeしたことがない場合、新たに列を追加
         if like_info == []:
-            cur.execute("INSERT INTO likes (plan_id, user_id, created_at) VALUES (?, ?, ?)", (plan_id, user_id, dt_now,))
-            like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+            cur.execute("INSERT INTO likes (plan_id, user_id, created_at) VALUES (%s, %s, %s)", (plan_id, user_id, dt_now,))
             conn.commit()
             conn.close()
 
+            sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", (plan_id, user_id,))
+            like_info = get_dict_resultset(*sql)
+
         #過去にLikeしたことがある場合、データベースから削除
         else:
-            cur.execute("DELETE FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,))
-            # like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id)))
+            cur.execute("DELETE FROM likes WHERE plan_id = %s AND user_id = %s", (plan_id, user_id,))
             conn.commit()
             conn.close()
 
@@ -807,14 +847,13 @@ def delete(plan_id):
     POST: 選択したplanの削除
     """
     # plansテーブル、plan_placesテーブルから削除
-    con = sqlite3.connect('Rotom.db')
+    con = psycopg2_connect()
     cur = con.cursor()
-    cur.execute("""DELETE FROM plans WHERE id = ?""", (plan_id,) )
-    cur.execute("""DELETE FROM plan_places WHERE plan_id = ?""", (plan_id,) )
-    cur.execute("""DELETE FROM likes WHERE plan_id = ?""", (plan_id,))
+    cur.execute("""DELETE FROM plans WHERE id = %s""", (plan_id,) )
+    cur.execute("""DELETE FROM plan_places WHERE plan_id = %s""", (plan_id,) )
+    cur.execute("""DELETE FROM likes WHERE plan_id = %s""", (plan_id,))
     con.commit()
     con.close()
-
 
     return redirect(url_for("mypage", user_id=session["id"]))
 
