@@ -11,6 +11,7 @@ from flask_paginate import Pagination, get_page_parameter
 import datetime
 import settings
 import psycopg2
+import psycopg2.extras
 
 
 app = Flask(__name__)
@@ -98,6 +99,26 @@ emoji_array = {
     "lodging":"🏨",
 }
 
+# postgresのクエリを辞書形式で返すためのfunction
+# 引数にクエリを渡す
+def get_dict_resultset(sql, *args):
+    conn = psycopg2_connect()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    cur.execute (sql, (args))
+    results = cur.fetchall()
+    dict_result = []
+    for row in results:
+        dict_result.append(dict(row))
+    return dict_result
+
+def psycopg2_connect():
+    conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+                user="postgres",        #ユーザ
+                password=pas,  #パスワード
+                host="localhost",       #ホスト名
+                port="5432",            #ポート
+                dbname="postgres"))    #データベース名
+    return conn
 
 @app.route('/')
 def index():
@@ -112,10 +133,10 @@ def index():
         # PostgreSQL Server へ接続
         con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
                 user="postgres",        #ユーザ
-                password=pas,  #パスワード
+                password=pas,           #パスワード
                 host="localhost",       #ホスト名
                 port="5432",            #ポート
-                dbname="postgres"))    #データベース名
+                dbname="postgres"))     #データベース名
 
         cur = con.cursor()
         # ここnameにしてもいいかも
@@ -188,10 +209,10 @@ def login():
         # PostgreSQL Server へ接続
         con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
                 user="postgres",        #ユーザ
-                password=pas,  #パスワード
+                password=pas,           #パスワード
                 host="localhost",       #ホスト名
                 port="5432",            #ポート
-                dbname="postgres"))    #データベース名
+                dbname="postgres"))     #データベース名
 
         cur = con.cursor()
         cur.execute("SELECT password, id FROM users WHERE email = %s", (email,))
@@ -328,7 +349,6 @@ def post():
         #セッション情報に登録
         session["place_names"] = place_names
         session["place_id"] = place_id
-
         session["place_sum"] = place_sum
         session["plan_title"] = plan_title
         session["plan_description"] = plan_description
@@ -595,19 +615,17 @@ def plan_content(user_id, post_id):
 #     booking_url = data["url_li"] #場所ごとの予約URL
 #     price = data["price_li"] #場所ごとの価格
 
-    dbname = "Rotom.db"
-    conn = sqlite3.connect(dbname)
-    conn.row_factory = user_lit_factory
+    sql = ("SELECT * FROM plan_places WHERE plan_id = %s", (post_id,))
+    place_info_li =  get_dict_resultset(*sql)
 
-    cur = conn.cursor()
+    sql = (
+        """
+        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, users.name
+        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=%s;
+        """
+        , (post_id,))
 
-    place_info_li = list(cur.execute("SELECT * FROM plan_places WHERE plan_id = ?", (post_id,)))
-    plan_info = list(cur.execute(
-        """
-        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, users.name
-        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE plans.id=?;
-        """
-        , (post_id,)))
+    plan_info = get_dict_resultset(*sql)
 
     #place_idから緯度経度、URLを取得
     for index, place_info in enumerate(place_info_li):
@@ -637,7 +655,8 @@ def plan_content(user_id, post_id):
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:
         is_liked = False
-        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],)))
+        sql = ("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],))
+        like_info = get_dict_resultset(*sql)
 
         #過去にlikeしていない場合
         if like_info == []:
@@ -662,25 +681,24 @@ def like():
         plan_id = request.json['plan_id']
         user_id = session["id"]
 
-        #データベースから情報を取ってくる
-        dbname = "Rotom.db"
-        conn = sqlite3.connect(dbname)
-        conn.row_factory = user_lit_factory
-        cur = conn.cursor()
+        sql = ("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,))
+        like_info = get_dict_resultset(*sql)
 
-        like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+        conn = psycopg2_connect()
+        cur = conn.cursor()
 
         #過去にLikeしたことがない場合、新たに列を追加
         if like_info == []:
-            cur.execute("INSERT INTO likes (plan_id, user_id, created_at) VALUES (?, ?, ?)", (plan_id, user_id, dt_now,))
-            like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,)))
+            cur.execute("INSERT INTO likes (plan_id, user_id, created_at) VALUES (%s, %s, %s)", (plan_id, user_id, dt_now,))
             conn.commit()
             conn.close()
 
+            sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", (plan_id, user_id,))
+            like_info = get_dict_resultset(*sql)
+
         #過去にLikeしたことがある場合、データベースから削除
         else:
-            cur.execute("DELETE FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,))
-            # like_info = list(cur.execute("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id)))
+            cur.execute("DELETE FROM likes WHERE plan_id = %s AND user_id = %s", (plan_id, user_id,))
             conn.commit()
             conn.close()
 
@@ -845,14 +863,13 @@ def delete(plan_id):
     POST: 選択したplanの削除
     """
     # plansテーブル、plan_placesテーブルから削除
-    con = sqlite3.connect('Rotom.db')
+    con = psycopg2_connect()
     cur = con.cursor()
-    cur.execute("""DELETE FROM plans WHERE id = ?""", (plan_id,) )
-    cur.execute("""DELETE FROM plan_places WHERE plan_id = ?""", (plan_id,) )
-    cur.execute("""DELETE FROM likes WHERE plan_id = ?""", (plan_id,))
+    cur.execute("""DELETE FROM plans WHERE id = %s""", (plan_id,) )
+    cur.execute("""DELETE FROM plan_places WHERE plan_id = %s""", (plan_id,) )
+    cur.execute("""DELETE FROM likes WHERE plan_id = %s""", (plan_id,))
     con.commit()
     con.close()
-
 
     return redirect(url_for("mypage", user_id=session["id"]))
 
