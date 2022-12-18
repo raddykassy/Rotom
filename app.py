@@ -111,13 +111,24 @@ def get_dict_resultset(sql, *args):
         dict_result.append(dict(row))
     return dict_result
 
+# 開発用
+# def psycopg2_connect():
+#     conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+#                 user="postgres",        #ユーザ
+#                 password=pas,  #パスワード
+#                 host="localhost",       #ホスト名
+#                 port="5432",            #ポート
+#                 dbname="postgres"))    #データベース名
+#     return conn
+
+# デプロイ用
 def psycopg2_connect():
     conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user="postgres",        #ユーザ
+                user="rotom_qtnb_user",        #ユーザ
                 password=pas,  #パスワード
-                host="localhost",       #ホスト名
+                host="dpg-cefa7r1gp3jk7mh3d7qg-a",       #ホスト名
                 port="5432",            #ポート
-                dbname="postgres"))    #データベース名
+                dbname="rotom_qtnb"))    #データベース名
     return conn
 
 @app.route('/')
@@ -131,35 +142,22 @@ def index():
     if status:
         user_id = session["id"]
         # PostgreSQL Server へ接続
-        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user="postgres",        #ユーザ
-                password=pas,           #パスワード
-                host="localhost",       #ホスト名
-                port="5432",            #ポート
-                dbname="postgres"))     #データベース名
-
+        con =  psycopg2_connect()
         cur = con.cursor()
-        # ここnameにしてもいいかも
         cur.execute("SELECT name FROM users WHERE id = %s", (user_id,))
         user_info =  cur.fetchall()
         con.close()
-
-        #一度閉じてもう一度接続しなおさないとエラーでた。なぜ？？
-        dbname = "Rotom.db"
-        con = sqlite3.connect(dbname)
-        con.row_factory = user_lit_factory
-
-        cur = con.cursor()
-
-        plans = list(cur.execute("""
+        
+        # いいねが高いものを取得
+        sql = ("""
             SELECT * FROM plans WHERE plans.id IN
             (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
             plans.id = likes.plan_id WHERE plans.id IN
             (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
             LIMIT 3)
-        """))
-
-        con.close()
+        """,)
+        # 引数*sqlだとpsycopg2.ProgrammingError: can't execute an empty queryになった
+        plans = get_dict_resultset(*sql)
 
         for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
@@ -167,22 +165,17 @@ def index():
         session["user_name"] = user_info[0][0]
         return render_template('index2.html', status=status, user_name=session["user_name"], user_id=user_id, plans=plans, map_api_key = map_api_key)
 
-    else:
-        dbname = "Rotom.db"
-        con = sqlite3.connect(dbname)
-        con.row_factory = user_lit_factory
-
-        cur = con.cursor()
-
-        plans = list(cur.execute("""
+    else:        
+        # いいねが高いものを取得
+        sql = ("""
             SELECT * FROM plans WHERE plans.id IN
             (SELECT DISTINCT plan_id FROM plans INNER JOIN likes ON
             plans.id = likes.plan_id WHERE plans.id IN
             (SELECT plan_id FROM likes GROUP BY plan_id ORDER BY COUNT(plan_id) DESC LIMIT 3)
             LIMIT 3)
-        """))
-
-        con.close()
+        """,)
+        # 引数*sqlだとpsycopg2.ProgrammingError: can't execute an empty queryになった
+        plans = get_dict_resultset(*sql)
 
         for index, plan in enumerate(plans):
                 plan["video_id"] = plan["url"].split("/")[3]
@@ -207,13 +200,7 @@ def login():
         error_message = ""
 
         # PostgreSQL Server へ接続
-        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user="postgres",        #ユーザ
-                password=pas,           #パスワード
-                host="localhost",       #ホスト名
-                port="5432",            #ポート
-                dbname="postgres"))     #データベース名
-
+        con = psycopg2_connect()
         cur = con.cursor()
         cur.execute("SELECT password, id FROM users WHERE email = %s", (email,))
         user_data = cur.fetchall()
@@ -272,16 +259,10 @@ def register():
             # エラーメッセージ付きでregister.htmlに渡す
             return render_template("register.html", error_message=error_message)
         # --------------------------------------------------------------------------------
-        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user="postgres",        #ユーザ
-                password=pas,  #パスワード
-                host="localhost",       #ホスト名
-                port="5432",            #ポート
-                dbname="postgres"))    #データベース名
-
+        conn = psycopg2_connect()    #データベース名
         dt = datetime.datetime.now()
-        with con:
-            with con.cursor() as cur:
+        with conn:
+            with conn.cursor() as cur:
                 
                 cur.execute('SELECT * FROM users;')
                 # print(cur.fetchall())
@@ -295,7 +276,7 @@ def register():
                         return render_template("register.html", error_message=error_message)
 
                 cur.execute("INSERT INTO users(email, password, name, registered_at) VALUES(%s, %s, %s, %s);", (email, generate_password_hash(password), username, dt))
-            con.commit
+            conn.commit
         # ------------------------------------------------------------------------
 
         # 新規登録後はlogin画面へ
@@ -385,18 +366,7 @@ def post_details():
         costs = session["costs"]
 
         # plansテーブルにinsert
-        """
-        con = sqlite3.connect('Rotom.db')
-        cur = con.cursor()
-        cur.execute("INSERT INTO plans (user_id, title, description, url, days, costs) VALUES (?,?,?,?,?,?)", (user_id, title, description, url, days, costs,))
-        con.commit()
-        """
-        con =  psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user="postgres",        #ユーザ
-                password=pas,  #パスワード
-                host="localhost",       #ホスト名
-                port="5432",            #ポート
-                dbname="postgres"))    #データベース名
+        con =  psycopg2_connect()    #データベース名
 
         dt = datetime.datetime.now()
         with con:
@@ -639,7 +609,7 @@ def plan_content(user_id, post_id):
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:
         is_liked = False
-        sql = ("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (post_id, session["id"],))
+        sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", (post_id, session["id"],))
         like_info = get_dict_resultset(*sql)
 
         #過去にlikeしていない場合
@@ -665,7 +635,7 @@ def like():
         plan_id = request.json['plan_id']
         user_id = session["id"]
 
-        sql = ("SELECT * FROM likes WHERE plan_id = ? AND user_id = ?", (plan_id, user_id,))
+        sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", (plan_id, user_id,))
         like_info = get_dict_resultset(*sql)
 
         conn = psycopg2_connect()
@@ -693,25 +663,19 @@ def like():
 @login_required
 def mypage(user_id):
     global status
-    dbname = "Rotom.db"
-    conn = sqlite3.connect(dbname)
-    conn.row_factory = user_lit_factory
 
-    cur = conn.cursor()
+    sql = ("""
+        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, plans.costs, plans.days, users.name
+        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = %s;
+        """, (session["id"],))
+    plans = get_dict_resultset(*sql)
 
-    #ユーザが登録したplansを全て取得
-    plans = list(cur.execute(
-        """
-        SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days, users.name
-        FROM plans INNER JOIN users ON plans.user_id = users.id WHERE users.id = ?;
-        """, (session["id"],)))
-
-    likes = list(cur.execute(
-        """
+    sql = ("""
         SELECT plan_id
         FROM likes;
-        """))
-
+        """,
+    )
+    likes = get_dict_resultset(*sql)
     # like数カウント
     plan_id_num=[]
     planid_like_dic = {}
@@ -730,52 +694,44 @@ def mypage(user_id):
     plans.reverse()
 
     
-
     # ユーザ情報を取得
-    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
-    for row in cur.fetchall():
-        users = row
-
+    sql = ("SELECT email, registered_at FROM users WHERE id = %s", (session["id"],))
+    users = get_dict_resultset(*sql)
     # 投稿総数を取得
-    cur.execute("SELECT COUNT(*) AS plans_sum FROM plans WHERE user_id = ?", (session["id"],))
-    for row in cur.fetchall():
-        sum = row
-
+    sql = ("SELECT COUNT(*) AS plans_sum FROM plans WHERE user_id = %s", (session["id"],))
+    sum = get_dict_resultset(*sql)
     #urlからyoutubeIDを取得
     for index, plan in enumerate(plans):
         plan["video_id"] = plan["url"].split("/")[3]
 
-    conn.close()
+    # conn.close()
 
     #ページネーション機能
     page_info = paginate(plans)
-
+    print(users)
+    print(likes)
     return render_template('profile.html', plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"], 
-                            status=status, user_name=session["user_name"], email=users["email"], register_date=users["date"], 
-                            user_id=session["id"], plans_sum=sum["plans_sum"],  map_api_key = map_api_key)
+                            status=status, user_name=session["user_name"], email=users[0]["email"], register_date=users[0]["registered_at"], 
+                            user_id=session["id"], plans_sum=sum[0]["plans_sum"],  map_api_key = map_api_key)
 
 # mypageでいいね一覧を見る
 @app.route("/mypage_likes/<int:user_id>")
 @login_required
 def mypage_likes(user_id):
     global status
-    dbname = "Rotom.db"
-    conn = sqlite3.connect(dbname)
-    conn.row_factory = user_lit_factory
 
-    cur = conn.cursor()
+    sql = ("""
+    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.posted_at, plans.costs, plans.days  
+    FROM plans INNER JOIN likes ON plans.id = likes.plan_id WHERE likes.user_id = %s;
+    """, (session["id"],))
+    plans = get_dict_resultset(*sql)
 
-    # userがいいねしたplanを取り出す
-    plans = list(cur.execute("""
-    SELECT plans.id, plans.user_id, plans.title, plans.description, plans.url, plans.time, plans.costs, plans.days  
-    FROM plans INNER JOIN likes ON plans.id = likes.plan_id WHERE likes.user_id = ?;
-    """, (session["id"],)))
-
-    likes = list(cur.execute(
+    sql = (
         """
         SELECT plan_id
         FROM likes;
-        """))
+        """,)
+    likes = get_dict_resultset(*sql)
 
     # like数カウント
     plan_id_num=[]
@@ -794,17 +750,12 @@ def mypage_likes(user_id):
 
     plans.reverse()
 
-
-
     # ユーザ情報を取得
-    cur.execute("SELECT email, date FROM users WHERE id = ?", (session["id"],))
-    for row in cur.fetchall():
-        users = row
-
-    # ユーザのいいね数の取得
-    cur.execute("SELECT COUNT(*) AS counts FROM likes WHERE user_id = ?", (session["id"],))
-    for row in cur.fetchall():
-        sum = row
+    sql = ("SELECT email, registered_at FROM users WHERE id = %s", (session["id"],))
+    users = get_dict_resultset(*sql)
+    # いいね総数を取得
+    sql = ("SELECT COUNT(*) AS counts FROM likes WHERE user_id = %s", (session["id"],))
+    sum = get_dict_resultset(*sql)
 
 
     #urlからyoutubeIDを取得
@@ -814,13 +765,13 @@ def mypage_likes(user_id):
     #ページネーション機能
     page_info = paginate(plans)
 
-    conn.close()
+    # conn.close()
 
     return render_template('profile_likes.html',plans=page_info["plans"], CurPage=page_info["CurPage"], MaxPage=page_info["MaxPage"],
                                                 status=status,
                                                 user_id=session["id"], user_name=session["user_name"],
-                                                email=users["email"], register_date=users["date"],
-                                                likes_sum=sum["counts"],  map_api_key = map_api_key)
+                                                email=users[0]["email"], register_date=users[0]["registered_at"],
+                                                likes_sum=sum[0]["counts"],  map_api_key = map_api_key)
 
 # ページネーション機能
 def paginate(plans):
