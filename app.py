@@ -112,24 +112,24 @@ def get_dict_resultset(sql, *args):
     return dict_result
 
 # 開発用
-# def psycopg2_connect():
-#     conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-#                 user="postgres",        #ユーザ
-#                 password=pas,  #パスワード
-#                 host="localhost",       #ホスト名
-#                 port="5432",            #ポート
-#                 dbname="postgres"))    #データベース名
-#     return conn
-
-# デプロイ用
 def psycopg2_connect():
     conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-                user="rotom_qtnb_user",        #ユーザ
+                user="postgres",        #ユーザ
                 password=pas,  #パスワード
-                host="dpg-cefa7r1gp3jk7mh3d7qg-a",       #ホスト名
+                host="localhost",       #ホスト名
                 port="5432",            #ポート
-                dbname="rotom_qtnb"))    #データベース名
+                dbname="postgres"))    #データベース名
     return conn
+
+# デプロイ用
+#def psycopg2_connect():
+#    conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+#                user="rotom_qtnb_user",        #ユーザ
+#                 password=pas,  #パスワード
+#                 host="dpg-cefa7r1gp3jk7mh3d7qg-a",       #ホスト名
+#                 port="5432",            #ポート
+#                 dbname="rotom_qtnb"))    #データベース名
+#     return conn
 
 @app.route('/')
 def index():
@@ -610,10 +610,10 @@ def plan_content(user_id, post_id):
     if status:
         is_liked = False
         sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", post_id, session["id"],)
-        like_info = get_dict_resultset(*sql)
+        like_infomation = get_dict_resultset(*sql)
 
         #過去にlikeしていない場合
-        if like_info == []:
+        if like_infomation == []:
             pass
         #過去にlikeしている場合
         else:
@@ -800,9 +800,9 @@ def delete(plan_id):
     # plansテーブル、plan_placesテーブルから削除
     con = psycopg2_connect()
     cur = con.cursor()
-    cur.execute("""DELETE FROM plans WHERE id = %s""", (plan_id,) )
+    cur.execute("""DELETE FROM likes WHERE id = %s""", (plan_id,) )
     cur.execute("""DELETE FROM plan_places WHERE plan_id = %s""", (plan_id,) )
-    cur.execute("""DELETE FROM likes WHERE plan_id = %s""", (plan_id,))
+    cur.execute("""DELETE FROM plans WHERE plan_id = %s""", (plan_id,))
     con.commit()
     con.close()
 
