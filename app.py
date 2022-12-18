@@ -609,7 +609,7 @@ def plan_content(user_id, post_id):
     #ログインしている場合、データベースから情報を取って来て過去にlikeしているかを判定
     if status:
         is_liked = False
-        sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", (post_id, session["id"],))
+        sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", post_id, session["id"],)
         like_info = get_dict_resultset(*sql)
 
         #過去にlikeしていない場合
@@ -635,7 +635,7 @@ def like():
         plan_id = request.json['plan_id']
         user_id = session["id"]
 
-        sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", (plan_id, user_id,))
+        sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", plan_id, user_id,)
         like_info = get_dict_resultset(*sql)
 
         conn = psycopg2_connect()
@@ -647,7 +647,7 @@ def like():
             conn.commit()
             conn.close()
 
-            sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", (plan_id, user_id,))
+            sql = ("SELECT * FROM likes WHERE plan_id = %s AND user_id = %s", plan_id, user_id,)
             like_info = get_dict_resultset(*sql)
 
         #過去にLikeしたことがある場合、データベースから削除
