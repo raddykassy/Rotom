@@ -800,9 +800,9 @@ def delete(plan_id):
     # plansテーブル、plan_placesテーブルから削除
     con = psycopg2_connect()
     cur = con.cursor()
-    cur.execute("""DELETE FROM plans WHERE id = %s""", (plan_id,) )
+    cur.execute("""DELETE FROM likes WHERE id = %s""", (plan_id,) )
     cur.execute("""DELETE FROM plan_places WHERE plan_id = %s""", (plan_id,) )
-    cur.execute("""DELETE FROM likes WHERE plan_id = %s""", (plan_id,))
+    cur.execute("""DELETE FROM plans WHERE plan_id = %s""", (plan_id,))
     con.commit()
     con.close()
 
