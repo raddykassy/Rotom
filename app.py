@@ -112,14 +112,14 @@ def get_dict_resultset(sql, *args):
     return dict_result
 
 # 開発用
-# def psycopg2_connect():
-#     conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
-#                 user="postgres",        #ユーザ
-#                 password=pas,  #パスワード
-#                 host="localhost",       #ホスト名
-#                 port="5432",            #ポート
-#                 dbname="postgres"))    #データベース名
-#     return conn
+#def psycopg2_connect():
+#    conn = psycopg2.connect('postgresql://{user}:{password}@{host}:{port}/{dbname}'.format( 
+#                user="postgres",        #ユーザ
+#                password=pas,  #パスワード
+#                host="localhost",       #ホスト名
+#                port="5432",            #ポート
+#                dbname="postgres"))    #データベース名
+#    return conn
 
 # デプロイ用
 def psycopg2_connect():
@@ -800,9 +800,9 @@ def delete(plan_id):
     # plansテーブル、plan_placesテーブルから削除
     con = psycopg2_connect()
     cur = con.cursor()
-    cur.execute("""DELETE FROM likes WHERE id = %s""", (plan_id,) )
-    cur.execute("""DELETE FROM plan_places WHERE plan_id = %s""", (plan_id,) )
-    cur.execute("""DELETE FROM plans WHERE plan_id = %s""", (plan_id,))
+    cur.execute("""DELETE FROM likes WHERE id = %s""", str(plan_id))
+    cur.execute("""DELETE FROM plan_places WHERE plan_id = %s""", str(plan_id))
+    cur.execute("""DELETE FROM plans WHERE id = %s""", str(plan_id))
     con.commit()
     con.close()
 
